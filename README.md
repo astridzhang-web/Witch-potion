@@ -1,0 +1,49 @@
+# 月夜魔法药剂室 · Moonlit Alchemy
+
+A quiet, mobile-first potion sorting game. Milestone 1: a playable foundation built with React, TypeScript, Vite and SVG. All gameplay runs locally in the browser.
+
+## Cloud development
+
+Use the existing repository checkout. Node.js **22.12+** is required (validated with Node 24.19.0).
+
+```sh
+cd /workspace/Witch-potion
+npm ci --cache /workspace/.npm-cache
+npm run dev -- --port 5173 --strictPort
+```
+
+The development server listens on port 5173. No backend, credentials, environment variables or external assets are needed. No local software installation on your own device is required for this cloud workflow.
+
+## Validation
+
+```sh
+npm test
+npm run build
+npm run test:e2e
+```
+
+Browser tests use `/usr/bin/chromium` when available in the cloud. Set `CHROMIUM_PATH` to another installed Chromium executable if needed; otherwise Playwright uses its own installed browser. Tests start and stop an isolated Vite server on port 4173. Test artifacts are in ignored `test-results/`.
+
+`npm run preview -- --port 4174 --strictPort` serves the production build for local verification. Public deployment is not configured or authorized.
+
+## How to play
+
+Tap a bottle, then an empty bottle or one with the same top color and available space. The maximum contiguous top group transfers at once. Sort seven colors into seven full bottles, leaving two empty. Tap the selected bottle again to deselect. Undo, restart and new puzzle controls are available; restart/new puzzle ask before discarding ongoing progress.
+
+Progress, undo history and optional color symbols are saved in this browser's localStorage. Blocked storage does not prevent play, but displays a warning. Clearing browser data removes progress. Corrupt or incompatible saves start a fresh verified puzzle. This version keeps one active puzzle, not a cloud account or multi-device sync.
+
+## Puzzle reliability
+
+Four fixed presets in `src/game/presets.json` each include a complete legal solution witness. Tests replay every step using the actual game rules and verify color conservation and victory. New puzzles cycle the presets and bijectively relabel the colors, preserving their solutions. They are not unrestricted random shuffles. The solutions prove reachability, not shortest possible play; a player's later choices may require undo or restart.
+
+## Architecture and continuation
+
+- `src/game/rules.ts`: pure board validation, legal pour planning, transfer metadata and victory.
+- `src/game/puzzles.ts`, `presets.json`: verified puzzle templates and safe variation.
+- `src/game/session.ts`: immutable transactions, history, undo and restart.
+- `src/game/storage.ts`: versioned persistence and legal-history validation.
+- `src/components/Bottle.tsx`: local SVG placeholder glass and color palette.
+- `src/App.tsx`, `src/styles.css`: Chinese UI, responsive layout and controls.
+- `src/game/game.test.ts`, `tests/game.spec.ts`: unit and real browser checks.
+
+Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Stop after milestone 1 until the user asks for milestone 2. Full workshop artwork, pouring animation and installable/offline PWA behavior belong to later milestones. No service worker or installability is claimed in this version.
