@@ -52,7 +52,7 @@ Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Production JS ≈23
 - Reusable `install_script` and `start_skill` have been saved to the cloud environment configuration draft. They cover frozen dependency install, tests/build, restarting Vite and functional readiness checks. Draft saving does not publish or validate restoration in a fresh task.
 - The cloud configuration's original `main` reference was for an empty repository. The final environment save records the inspected checkout's exact committed HEAD at mount path `Witch-potion` so future restoration uses the implemented project.
 - Review/save the environment settings and publish the cloud environment snapshot when desired. This is separate from publicly deploying the game.
-- Live servers do not survive restoration. Start them from the instructions below. Browser screenshots and traces live in ignored `test-results/`; one production screenshot also lives at `/workspace/scratch/moonlit/milestone1-mobile.png` in this instance.
+- Live servers do not survive restoration. Start them from the instructions below. Browser test screenshots and traces live in ignored `test-results/`. The verified milestone 1 mobile screenshot is committed at `docs/screenshots/milestone1-mobile.png` and can be viewed on GitHub from the `work` branch. The original local PNG was validated and copied byte-for-byte; this screenshot-access fix does not change gameplay.
 
 ## Important code and architecture
 
