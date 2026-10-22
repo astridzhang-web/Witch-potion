@@ -85,6 +85,15 @@ Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2A produc
 - Visual review: all three rows rest on wood, original moon carving and hanging crystals remain visible, controls sit inside the painted side insets, and the flying bottle/stream appear above the artwork without shelf clipping. Long screens intentionally retain dark surrounding space rather than cropping the image. Very short landscape screens may scroll to preserve usable controls.
 - Remaining visual limits: existing simple SVG glass contrasts with the richer illustration; tilted liquid follows the bottle instead of gravity, and the deliberately unchanged 920 ms timing can feel brisk. Physical iOS/Safari and low-end device performance remain unverified. No 2B, new systems, audio, PWA or public deployment work was done.
 
+## Tall-phone cabinet asset preparation / 长屏木柜素材准备 (2026-10-22)
+
+- Completed only the requested asset preparation; the active Milestone 2A scene, interaction, animation and game logic are unchanged. No cabinet replacement or Milestone 2B work was started.
+- New upload `shelf.zip` → `shelf.png` preserved byte-for-byte as `assets/source/shelf-tall.png`: **841×1870**, ratio **841:1870 ≈ 9:20**, 2,204,564 bytes. Original SHA-256: `27dc4bbf95937a27f19f5873c8a72ddc6f488cb00098112a930d64fc1709598f`.
+- Generated independent `public/assets/shelf-tall.webp`: same dimensions, quality 90, no resize/crop, **302,590 bytes** (about 86.3% smaller). The original and optimized old cabinet remain untouched. The game continues to reference `/assets/shelf.webp`; the new asset is not wired into the UI.
+- `assets/README.md` records provenance, exact dimensions/ratio, export command and future calibration scope: all nine bottle centers/sizes and three shelf contact planes; left/right panel bounds/anchors/hitboxes with the center kept decorative; shared aspect ratio, safe-area clearance and animation alignment. The redrawn layout requires fresh measurements rather than stretching the old coordinates; no coordinates were changed now.
+- Validation for this asset-only task: source bytes matched the ZIP member; both new images decoded successfully at 841×1870; prior cabinet files and `src/` remained identical to the preceding commit; production build and `git diff --check` passed. Gameplay/browser suites were not rerun because no application code or active assets changed; the 33/46 results above describe the prior Milestone 2A validation.
+- Stop here. Wait for explicit authorization before replacing the cabinet or beginning 2B.
+
 ## Git and cloud handoff
 
 - Connected repository: `astridzhang-web/Witch-potion`; branch **`work`**, tracking `origin/work`.
@@ -120,7 +129,7 @@ Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2A produc
 
 ## Exact next task (only after the user asks)
 
-Wait for user feedback on the Milestone 2A cabinet and committed mobile screenshots. Do not automatically begin Milestone 2B, final bottle art, animation timing/physics, rewards, sound, PWA or deployment.
+The redrawn long-screen cabinet is prepared but unused. Wait for an explicit request before replacing the active scene or calibrating its positions. Do not automatically begin Milestone 2B, final bottle art, animation timing/physics, rewards, sound, PWA or deployment.
 
 ## Resume in a fresh Codex session
 
