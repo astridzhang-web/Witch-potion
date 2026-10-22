@@ -1,6 +1,6 @@
 # 月夜魔法药剂室 · Moonlit Alchemy
 
-A quiet, mobile-first potion sorting game. Milestone 1: a playable foundation built with React, TypeScript, Vite and SVG. All gameplay runs locally in the browser.
+A quiet, mobile-first potion sorting game. Milestone 2A: a playable wooden cabinet scene built with React, TypeScript, Vite and independent SVG bottles. All gameplay runs locally in the browser.
 
 ## Cloud development
 
@@ -12,7 +12,7 @@ npm ci --cache /workspace/.npm-cache
 npm run dev -- --port 5173 --strictPort
 ```
 
-The development server listens on port 5173. No backend, credentials, environment variables or external assets are needed. No local software installation on your own device is required for this cloud workflow.
+The development server listens on port 5173. No backend, credentials, environment variables or external asset downloads are needed. No local software installation on your own device is required for this cloud workflow.
 
 ## Validation
 
@@ -43,13 +43,23 @@ Four fixed presets in `src/game/presets.json` each include a complete legal solu
 - `src/game/session.ts`: immutable transactions, history, undo and restart.
 - `src/game/storage.ts`: versioned persistence and legal-history validation.
 - `src/components/Bottle.tsx`: local SVG placeholder glass and color palette.
-- `src/App.tsx`, `src/styles.css`: Chinese UI, responsive layout and controls.
+- `src/App.tsx`, `src/styles.css`: Chinese UI, shared portrait scene and controls.
+- `src/scene/cabinetLayout.ts`: source-image coordinates for shelves, bottles and panel hitboxes.
+- `assets/source/shelf.png`, `public/assets/shelf.webp`: supplied original and optimized local scene; see [asset notes](assets/README.md).
 - `src/game/game.test.ts`, `tests/game.spec.ts`: unit and real browser checks.
 
-Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Stop after milestone 1 until the user asks for milestone 2. Full workshop artwork, pouring animation and installable/offline PWA behavior belong to later milestones. No service worker or installability is claimed in this version.
+Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 2A is complete; stop for feedback before 2B. Final bottle art, animation timing/physics refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
 
 ## Small floating-pour prototype
 
-The current `work` branch includes the separately authorized ~0.92-second animation experiment: source lift/travel, inward tilt, matching-color stream, synchronized liquid transfer and return. It reuses the existing game rules and SVGs; controls lock briefly during the flight. Reduced motion performs the transfer immediately. No full milestone art/PWA work or public deployment is included.
+The current `work` branch includes the separately authorized ~0.92-second animation experiment: source lift/travel, inward tilt, matching-color stream, synchronized liquid transfer and return. It reuses the existing game rules and SVGs; controls lock briefly during the flight. Reduced motion performs the transfer immediately. Its timing and implementation are retained in the cabinet scene. No PWA work or public deployment is included.
 
-Run the existing development command and try bottle 1 → empty bottle 8 from a fresh first puzzle, followed by bottle 7 → bottle 1. See [the short animation capture](docs/screenshots/floating-pour-prototype.gif), [downward pour](docs/screenshots/floating-pour-down.png) and [upward pour](docs/screenshots/floating-pour-up.png). The GIF is a 20 fps visual reference; the live renderer uses requestAnimationFrame. Full checks now comprise 33 unit tests and 36 browser tests. Detailed behavior and limitations are recorded in `PROGRESS.md`.
+Run the existing development command and try bottle 1 → empty bottle 8 from a fresh first puzzle, followed by bottle 7 → bottle 1. See [the short animation capture](docs/screenshots/floating-pour-prototype.gif), [downward pour](docs/screenshots/floating-pour-down.png) and [upward pour](docs/screenshots/floating-pour-up.png). The GIF is a 20 fps visual reference; the live renderer uses requestAnimationFrame. Full checks now comprise 33 unit tests and 46 browser tests. Detailed behavior and limitations are recorded in `PROGRESS.md`.
+
+## Milestone 2A cabinet scene
+
+The supplied cabinet artwork is preserved, with a 290 KiB WebP served locally. All nine interactive bottles and the two bottom-panel buttons share its 941 × 1672 coordinate system. Undo is on the left, restart on the right; the middle inset remains decorative. Puzzle number, moves and new puzzle stay in the compact top bar.
+
+[390 × 844 full-page screenshot](docs/screenshots/milestone2a-cabinet-mobile.png) · [Floating-pour frame in the cabinet](docs/screenshots/milestone2a-cabinet-pour.png)
+
+The scene keeps its original aspect ratio without cropping: taller phones show some surrounding dark space, and desktop centers the portrait scene. Tests verify complete framing at 390×844, 360×640, 320×568 and 1280×900, shelf contact points, panel touch targets and the existing gameplay/animation. Short landscape screens may scroll vertically to keep controls usable. Bottle art and tilted liquid remain the existing prototype; physical iOS/Safari performance is not yet verified. No Milestone 2B work is included.

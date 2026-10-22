@@ -4,6 +4,7 @@ import Icon from './components/Icon'
 import PourAnimation, { measureBottle, type Flight } from './components/PourAnimation'
 import type { Session } from './game/session'
 import Modal from './components/Modal'
+import { bottlePosition, panelPosition } from './scene/cabinetLayout'
 import { hasLegalMove, isComplete, isVictory } from './game/rules'
 import { createPuzzle, nextPuzzle, PRESETS } from './game/puzzles'
 import { createSession, pourSession, restart, undo } from './game/session'
@@ -97,43 +98,32 @@ export default function App() {
   }
 
   return <main className="app-shell">
-    <header className="header">
-      <div className="header-top"><span className="eyebrow">A LITTLE EVERYDAY MAGIC</span><button className="icon-button" aria-label="玩法说明" disabled={busy} onClick={() => setModal('help')}><Icon name="help" /></button></div>
-      <div className="brand">
-        <svg className="moon-mark" width="48" height="48" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-          <circle cx="32" cy="32" r="29" stroke="currentColor" strokeOpacity=".2" />
-          <path d="M39 12a21 21 0 1 0 12 34A22 22 0 0 1 39 12Z" fill="currentColor" />
-          <path d="m46 17 1.5 5 5 1.5-5 1.5-1.5 5-1.5-5-5-1.5 5-1.5Z" fill="currentColor" />
-        </svg>
-        <div><h1>月夜魔法药剂室</h1><p className="brand-en">MOONLIT ALCHEMY</p></div>
-      </div>
-      <p className="subtitle">让纷繁的色彩，慢慢归于宁静。</p>
-    </header>
-
-    <section className="game-panel" aria-label="药剂调配台">
-      <div className="game-stats">
-        <div className="chapter"><span className="chapter-icon" aria-hidden="true">☾</span><div><span className="stat-caption">今夜的配方</span><strong>月光手记 <span className="chapter-number">{String(puzzleNumber).padStart(2, '0')}</span></strong></div></div>
-        <div className="stat"><span className="stat-caption">已归位</span><strong data-testid="completed">{completed}<span> / 7</span></strong></div>
-        <div className="stat"><span className="stat-caption">步数</span><strong data-testid="moves">{session.history.length}</strong></div>
-      </div>
+    <h1 className="sr-only">月夜魔法药剂室</h1>
+    <section className="cabinet-scene" aria-label="月夜魔药展柜">
+      <img className="cabinet-art" src="/assets/shelf.webp" width="941" height="1672" alt="" fetchPriority="high" draggable={false} />
+      <header className="scene-hud">
+        <div className="puzzle-id"><span aria-hidden="true">☾</span><span>手记 <strong>{String(puzzleNumber).padStart(2, '0')}</strong></span></div>
+        <div className="move-stat"><span>步数</span><strong data-testid="moves">{session.history.length}</strong></div>
+        <span className="sr-only" data-testid="completed">{completed} / 7</span>
+        <button className="new-puzzle" disabled={busy} onClick={() => request('new')}><Icon name="new" /><span>{won ? '下一份配方' : '新谜题'}</span></button>
+        <button className="icon-button" aria-label="玩法说明" disabled={busy} onClick={() => setModal('help')}><Icon name="help" /></button>
+      </header>
       <div className="board" role="group" aria-label="九只药瓶，三行三列" aria-busy={busy}>
-        {session.board.map((liquid, index) => <Bottle key={index} liquid={liquid} index={index} selected={selected === index} showSymbols={showSymbols} won={won} busy={busy} animating={flight?.pour.from === index || flight?.pour.to === index} receiving={flight?.pour.to === index} onClick={() => selectBottle(index)} />)}
+        {session.board.map((liquid, index) => <Bottle key={index} liquid={liquid} index={index} style={bottlePosition(index)} selected={selected === index} showSymbols={showSymbols} won={won} busy={busy} animating={flight?.pour.from === index || flight?.pour.to === index} receiving={flight?.pour.to === index} onClick={() => selectBottle(index)} />)}
       </div>
       <div className={`board-message ${won ? 'victory' : ''}`} role="status" aria-live="polite" aria-atomic="true">
         {won && !busy ? <><Icon name="sparkle" /><div><strong>月夜调配完成</strong><span>七色各归其位 · 共用了 {session.history.length} 步</span></div><Icon name="sparkle" /></> : <><span className="message-star" aria-hidden="true">✧</span><span>{busy ? '魔法调配中…' : stuck ? '暂时没有可行的倒法，试试撤销或重新开始' : notice}</span></>}
       </div>
-    </section>
 
-    <div className="controls" aria-label="游戏操作">
-      <button className="control-button" disabled={busy || !session.history.length} onClick={() => { if (busyRef.current) return; setGame({ ...game, session: undo(session) }); setSelected(null); setNotice('已撤销上一步，灵感可以重来') }}><Icon name="undo" /><span>撤销</span></button>
-      <button className="control-button" disabled={busy} onClick={() => request('restart')}><Icon name="restart" /><span>重来</span></button>
-      <button className="control-button primary" disabled={busy} onClick={() => request('new')}><Icon name="new" /><span>{won ? '下一份配方' : '新谜题'}</span></button>
-    </div>
-    <footer className="footer">
-      <label className="symbols-toggle"><input type="checkbox" disabled={busy} checked={showSymbols} onChange={(event) => setGame({ ...game, showSymbols: event.target.checked })} /><span>颜色符号</span></label>
-      <span className={`save-status ${saved ? '' : 'save-error'}`} role="status">{saved ? <><Icon name="check" />进度已存于此设备</> : '无法自动保存，请保持此页面打开'}</span>
-    </footer>
-    <p className="closing-note"><span aria-hidden="true">✦</span> 不赶时间，魔法自会发生 <span aria-hidden="true">✦</span></p>
+      <div className="controls" aria-label="木柜底座操作">
+        <button className="panel-button undo-panel" style={panelPosition('undo')} disabled={busy || !session.history.length} onClick={() => { if (busyRef.current) return; setGame({ ...game, session: undo(session) }); setSelected(null); setNotice('已撤销上一步，灵感可以重来') }}><Icon name="undo" /><span>撤销</span></button>
+        <button className="panel-button restart-panel" style={panelPosition('restart')} disabled={busy} onClick={() => request('restart')}><Icon name="restart" /><span>重来</span></button>
+      </div>
+      <footer className="footer">
+        <label className="symbols-toggle"><input type="checkbox" disabled={busy} checked={showSymbols} onChange={(event) => setGame({ ...game, showSymbols: event.target.checked })} /><span>颜色符号</span></label>
+        <span className={`save-status ${saved ? '' : 'save-error'}`} role="status">{saved ? <><Icon name="check" />进度已存于此设备</> : '无法自动保存，请保持此页面打开'}</span>
+      </footer>
+    </section>
 
     {flight && <PourAnimation flight={flight} showSymbols={showSymbols} onCommit={commitPour} onFinish={finishPour} />}
 

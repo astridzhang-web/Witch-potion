@@ -34,6 +34,11 @@ async function begin(page: Page, step: number) {
 for (const [name, step] of [['upper to lower', 0], ['lower to upper', 1], ['adjacent same row, tilt left', 10], ['adjacent same row, tilt right', 12]] as const) {
   test(`floating pour: ${name}`, async ({ page }) => {
     await open(page, step)
+    const source = page.getByTestId(`bottle-${preset.solution[step][0]}`).locator('svg')
+    const resting = await source.evaluate((svg: SVGSVGElement) => {
+      const m = svg.getScreenCTM()!
+      return { x: m.e, y: m.f, scale: m.a }
+    })
     const { from, to } = await begin(page, step)
     const overlay = page.getByTestId('pour-animation')
     await expect(overlay).toHaveAttribute('data-phase', 'lift')
@@ -65,6 +70,13 @@ for (const [name, step] of [['upper to lower', 0], ['lower to upper', 1], ['adja
     await page.clock.runFor(310)
     await expect(overlay).toHaveCount(0)
     await expect(page.getByTestId(`bottle-${from}`)).toHaveAttribute('data-liquid', expected.after[from].join(','))
+    const landed = await source.evaluate((svg: SVGSVGElement) => {
+      const m = svg.getScreenCTM()!
+      return { x: m.e, y: m.f, scale: m.a }
+    })
+    expect(landed.x).toBeCloseTo(resting.x, 1)
+    expect(landed.y).toBeCloseTo(resting.y, 1)
+    expect(landed.scale).toBeCloseTo(resting.scale, 3)
     await page.getByRole('button', { name: '撤销', exact: true }).dispatchEvent('click')
     await expect(page.getByTestId(`bottle-${from}`)).toHaveAttribute('data-liquid', before[from].join(','))
     await expect(page.getByTestId('moves')).toHaveText(String(step))

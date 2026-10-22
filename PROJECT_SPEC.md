@@ -20,7 +20,7 @@ A personal, non-commercial, mobile-first potion sorting game. Primary UI languag
 - Pure game rules independent of UI and rendering. A legal pour produces a transfer description so later animations can consume the same transaction.
 - Immutable board snapshots for undo; versioned, validated localStorage saves.
 - Vitest for rules, state transitions, saves, and replaying every puzzle solution; Playwright with local Chromium for actual browser interactions and mobile layout.
-- No runtime external fonts, assets, or APIs. Rendering assets are original local SVG/CSS.
+- No runtime external fonts, assets, or APIs. Rendering assets are local SVG/CSS plus the user-supplied cabinet image (original PNG retained, optimized WebP served).
 - Use existing checkout in `/workspace/Witch-potion`; cloud tasks are already isolated. Do not create Git worktrees unless explicitly requested.
 - Keep dependency lockfile committed and use `npm ci` in fresh environments.
 
@@ -34,7 +34,7 @@ Future workshop artwork: wooden workbench, ingredient shelves, books, parchment,
 
 ## Milestones and scope
 
-1. **Stable playable foundation — this session only.** App structure, complete rules, responsive 3 × 3 board, attractive placeholder glass, controls, saves, verified puzzles, useful automated tests, build, checkpoint commits and push when permitted.
+1. **Stable playable foundation — complete.** App structure, complete rules, responsive 3 × 3 board, attractive placeholder glass, controls, saves, verified puzzles, useful automated tests, build, checkpoint commits and push when permitted.
 2. **Workshop artwork — requires a new instruction.** Atmospheric background, refined bottle variations, luminous liquids, dense tiny sparkles; small-screen legibility/performance checks; commit.
 3. **Pouring animation.** Lift, tilt, stream, flowing sparkles, consistent liquid levels, ripples and return. Lock conflicting input, respect reduced motion, optimize and commit. Do not implement before stable core gameplay.
 4. **Finished PWA.** Manifest, installable icons, offline cache, launch appearance, persistence/install/responsiveness verification, deployment configuration and documentation; commit. Ask before public deployment.
@@ -43,10 +43,18 @@ The eventual PWA must work without internet after caching, support portrait touc
 
 ## Quota-safe continuation
 
-Complete one stable milestone at a time. Keep working builds and frequent meaningful Git checkpoints, push committed work when allowed. Maintain this spec and `PROGRESS.md` with actual checks, limitations, architecture and the exact next task. Inspect and preserve existing changes on resume. Never claim unimplemented or untested behavior works. Stop after milestone 1 until the user requests milestone 2.
+Complete one stable milestone at a time. Keep working builds and frequent meaningful Git checkpoints, push committed work when allowed. Maintain this spec and `PROGRESS.md` with actual checks, limitations, architecture and the exact next task. Inspect and preserve existing changes on resume. Never claim unimplemented or untested behavior works. Follow only the currently authorized scope; after Milestone 2A, stop for feedback before 2B.
 
 ## Authorized narrow experiment: floating pour prototype (2026-10-22)
 
 After milestone 1, the user explicitly authorized a **small animation prototype**, independent of the full milestone sequence. Keep the rules, nine-bottle layout, controls, count and save schema intact. Reuse the current SVG art; no workshop redesign, rewards, audio, new levels, PWA or deployment work.
 
 One legal transaction may lift into a foreground body portal, travel near the destination, tilt, show a short top-color stream with synchronized fractional liquid levels, then return. Target duration is about 0.9 seconds. Lock conflicting input until return, respect reduced motion, and settle safely if viewport geometry changes. The existing pure pour transaction remains authoritative; save only a complete board, never fractional visual state. Validate same-row, cross-row, upward/downward, undo and rapid input. Commit/push the prototype with viewable visual evidence, then stop for user feedback. This does not complete milestone 2 or the full milestone 3.
+
+## Authorized Milestone 2A: cabinet scene integration (2026-10-22)
+
+Use the supplied empty wooden cabinet as a static, aspect-preserving background; retain its illustration rather than redrawing it. Keep nine independent existing SVG bottles in three rows, bottoms aligned to the wooden shelves. The artwork, bottle positions and wooden-panel hit regions must share one coordinate system. Left panel is undo, right is restart, center is decorative. Keep a compact top puzzle/move display and a subtle new-puzzle entry.
+
+Preserve the current ~920 ms floating-pour system, gameplay, saves, victory feedback and reduced motion. Verify same-row and cross-row pouring, accurate return, input locks, panel clicks and complete framing at 390×844, 360×640, 320×568 and desktop. Keep the original source image and optimize the browser asset. Deliver a full 390×844 screenshot in `docs/screenshots/`, update progress, run tests/build, commit and push `work`.
+
+This stage does not authorize final bottle variations, new animation timing/physics/particles, audio, home transitions, rewards/shop, new level systems, PWA work or public deployment. Stop after 2A; do not begin 2B automatically.

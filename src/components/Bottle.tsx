@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useId, type CSSProperties } from 'react'
 import { isComplete, type Bottle as BottleState } from '../game/rules'
 
 export const COLORS = [
@@ -15,6 +15,7 @@ const silhouette = 'M39 15 L39 41 C39 51 20 52 18 75 L16 109 Q15 133 39 134 L61 
 
 interface Props {
   liquid: BottleState
+  style?: CSSProperties
   index: number
   selected: boolean
   showSymbols: boolean
@@ -24,11 +25,12 @@ interface Props {
   receiving?: boolean
   onClick(): void
 }
-export default function Bottle({ liquid, index, selected, showSymbols, won, busy, animating, receiving, onClick }: Props) {
+export default function Bottle({ liquid, index, selected, showSymbols, won, busy, animating, receiving, style, onClick }: Props) {
   const complete = isComplete(liquid)
   const contents = liquid.length ? `从上到下：${[...liquid].reverse().map((c) => COLORS[c].name).join('、')}` : '空瓶'
   return <button
     className={`bottle ${selected ? 'is-selected' : ''} ${complete ? 'is-complete' : ''} ${animating ? 'is-animating' : ''} ${receiving ? 'is-receiving' : ''}`}
+    style={style}
     type="button"
     data-testid={`bottle-${index}`}
     data-liquid={liquid.join(',')}
