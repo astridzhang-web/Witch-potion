@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Bottle, { COLORS } from './components/Bottle'
 import Icon from './components/Icon'
+import PourAnimation, { measureBottle, type Flight } from './components/PourAnimation'
+import type { Session } from './game/session'
 import Modal from './components/Modal'
 import { hasLegalMove, isComplete, isVictory } from './game/rules'
 import { createPuzzle, nextPuzzle, PRESETS } from './game/puzzles'
@@ -21,6 +23,16 @@ export default function App() {
   const [notice, setNotice] = useState('轻点一瓶药剂，开始今夜的调配')
   const [saved, setSaved] = useState(true)
   const [modal, setModal] = useState<'help' | 'restart' | 'new' | null>(null)
+  const [flight, setFlight] = useState<Flight | null>(null)
+  const busyRef = useRef(false)
+  const busy = flight !== null
+  const commitPour = useCallback((session: Session) => {
+    setGame((previous) => ({ ...previous, session }))
+  }, [])
+  const finishPour = useCallback(() => {
+    busyRef.current = false
+    setFlight(null)
+  }, [])
   const { session, showSymbols } = game
   const won = isVictory(session.board)
   const completed = session.board.filter(isComplete).length
@@ -41,7 +53,7 @@ export default function App() {
   }, [])
 
   function selectBottle(index: number) {
-    if (won || modal) return
+    if (won || modal || busyRef.current) return
     if (selected === index) {
       setSelected(null)
       setNotice('已放下药瓶，慢慢来就好')
@@ -58,13 +70,20 @@ export default function App() {
         setNotice('暂时不能倒入：需要空位，且顶层颜色相同或为空瓶')
         return
       }
-      setGame({ ...game, session: result.session })
+      const source = measureBottle(selected)
+      const target = measureBottle(index)
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && source && target) {
+        // A synchronous lock also catches repeated clicks before React renders disabled controls.
+        busyRef.current = true
+        setFlight({ ...result, source, target })
+      } else commitPour(result.session)
       setSelected(null)
-      setNotice(`已倒入 ${result.pour.amount} 格${COLORS[result.pour.color].name}药剂`)
+      setNotice(`调配 ${result.pour.amount} 格${COLORS[result.pour.color].name}药剂`)
     }
   }
 
   function perform(action: 'restart' | 'new') {
+    if (busyRef.current) return
     setGame({ ...game, session: action === 'restart' ? restart(session) : createSession(nextPuzzle(session.puzzle.presetId)) })
     setSelected(null)
     setModal(null)
@@ -72,13 +91,14 @@ export default function App() {
   }
 
   function request(action: 'restart' | 'new') {
+    if (busyRef.current) return
     if (session.history.length && !won) setModal(action)
     else perform(action)
   }
 
   return <main className="app-shell">
     <header className="header">
-      <div className="header-top"><span className="eyebrow">A LITTLE EVERYDAY MAGIC</span><button className="icon-button" aria-label="玩法说明" onClick={() => setModal('help')}><Icon name="help" /></button></div>
+      <div className="header-top"><span className="eyebrow">A LITTLE EVERYDAY MAGIC</span><button className="icon-button" aria-label="玩法说明" disabled={busy} onClick={() => setModal('help')}><Icon name="help" /></button></div>
       <div className="brand">
         <svg className="moon-mark" width="48" height="48" viewBox="0 0 64 64" fill="none" aria-hidden="true">
           <circle cx="32" cy="32" r="29" stroke="currentColor" strokeOpacity=".2" />
@@ -96,24 +116,26 @@ export default function App() {
         <div className="stat"><span className="stat-caption">已归位</span><strong data-testid="completed">{completed}<span> / 7</span></strong></div>
         <div className="stat"><span className="stat-caption">步数</span><strong data-testid="moves">{session.history.length}</strong></div>
       </div>
-      <div className="board" role="group" aria-label="九只药瓶，三行三列">
-        {session.board.map((liquid, index) => <Bottle key={index} liquid={liquid} index={index} selected={selected === index} showSymbols={showSymbols} won={won} onClick={() => selectBottle(index)} />)}
+      <div className="board" role="group" aria-label="九只药瓶，三行三列" aria-busy={busy}>
+        {session.board.map((liquid, index) => <Bottle key={index} liquid={liquid} index={index} selected={selected === index} showSymbols={showSymbols} won={won} busy={busy} animating={flight?.pour.from === index || flight?.pour.to === index} receiving={flight?.pour.to === index} onClick={() => selectBottle(index)} />)}
       </div>
       <div className={`board-message ${won ? 'victory' : ''}`} role="status" aria-live="polite" aria-atomic="true">
-        {won ? <><Icon name="sparkle" /><div><strong>月夜调配完成</strong><span>七色各归其位 · 共用了 {session.history.length} 步</span></div><Icon name="sparkle" /></> : <><span className="message-star" aria-hidden="true">✧</span><span>{stuck ? '暂时没有可行的倒法，试试撤销或重新开始' : notice}</span></>}
+        {won && !busy ? <><Icon name="sparkle" /><div><strong>月夜调配完成</strong><span>七色各归其位 · 共用了 {session.history.length} 步</span></div><Icon name="sparkle" /></> : <><span className="message-star" aria-hidden="true">✧</span><span>{busy ? '魔法调配中…' : stuck ? '暂时没有可行的倒法，试试撤销或重新开始' : notice}</span></>}
       </div>
     </section>
 
     <div className="controls" aria-label="游戏操作">
-      <button className="control-button" disabled={!session.history.length} onClick={() => { setGame({ ...game, session: undo(session) }); setSelected(null); setNotice('已撤销上一步，灵感可以重来') }}><Icon name="undo" /><span>撤销</span></button>
-      <button className="control-button" onClick={() => request('restart')}><Icon name="restart" /><span>重来</span></button>
-      <button className="control-button primary" onClick={() => request('new')}><Icon name="new" /><span>{won ? '下一份配方' : '新谜题'}</span></button>
+      <button className="control-button" disabled={busy || !session.history.length} onClick={() => { if (busyRef.current) return; setGame({ ...game, session: undo(session) }); setSelected(null); setNotice('已撤销上一步，灵感可以重来') }}><Icon name="undo" /><span>撤销</span></button>
+      <button className="control-button" disabled={busy} onClick={() => request('restart')}><Icon name="restart" /><span>重来</span></button>
+      <button className="control-button primary" disabled={busy} onClick={() => request('new')}><Icon name="new" /><span>{won ? '下一份配方' : '新谜题'}</span></button>
     </div>
     <footer className="footer">
-      <label className="symbols-toggle"><input type="checkbox" checked={showSymbols} onChange={(event) => setGame({ ...game, showSymbols: event.target.checked })} /><span>颜色符号</span></label>
+      <label className="symbols-toggle"><input type="checkbox" disabled={busy} checked={showSymbols} onChange={(event) => setGame({ ...game, showSymbols: event.target.checked })} /><span>颜色符号</span></label>
       <span className={`save-status ${saved ? '' : 'save-error'}`} role="status">{saved ? <><Icon name="check" />进度已存于此设备</> : '无法自动保存，请保持此页面打开'}</span>
     </footer>
     <p className="closing-note"><span aria-hidden="true">✦</span> 不赶时间，魔法自会发生 <span aria-hidden="true">✦</span></p>
+
+    {flight && <PourAnimation flight={flight} showSymbols={showSymbols} onCommit={commitPour} onFinish={finishPour} />}
 
     {modal && <Modal title={modal === 'help' ? '一瓶一色，便是魔法' : modal === 'restart' ? '重新调配这份药剂？' : '翻开新的月光手记？'} onClose={() => setModal(null)}>
       {modal === 'help' ? <>

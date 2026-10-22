@@ -2,9 +2,9 @@
 
 ## Current milestone
 
-**Milestone 1 — COMPLETE. Stop here until a new instruction.**
+**Milestone 1 — COMPLETE. Authorized floating-pour prototype — COMPLETE. Stop for feedback.**
 
-A playable, verified foundation is implemented. Milestones 2–4 have not started. No public deployment has been performed or authorized.
+A playable foundation and the explicitly requested small floating-pour experiment are implemented. This is not a full milestone 2/3 implementation. No public deployment has been performed or authorized.
 
 ## Implemented and working
 
@@ -28,7 +28,7 @@ All final checks passed; **no known blocking gameplay bugs**.
 | Preset solvability | All 4 full witnesses replayed; color conservation checked after every move |
 | Puzzle variation | 200 seeded color permutations replayed to victory |
 | `npm run build` | TypeScript and production bundle passed |
-| `npm run test:e2e` | **16 passed**, no skips/failures; desktop Chromium and emulated mobile touch |
+| `npm run test:e2e` | **36 passed**, no skips/failures; 16 gameplay cases plus 20 animation cases, desktop Chromium and emulated mobile touch |
 | Browser gameplay | Actual taps/clicks to full victory; invalid move, undo, restart/new confirmation, saved win/undo, reload and settings checked |
 | Storage resilience | Corrupt save recovery and blocked localStorage checked in browser; quota errors checked in unit tests |
 | Layout/accessibility basics | 320×568, 360×640, 390×844, 844×390 and 1280×900; 3 columns, 9 targets ≥44 px, no horizontal overflow; keyboard and reduced motion checked |
@@ -37,13 +37,42 @@ All final checks passed; **no known blocking gameplay bugs**.
 | Development server | Started on 5173; HTTP response and app entry verified; functional tests use the same Vite workflow on isolated 4173 |
 | `git diff --check` | Passed |
 
-Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Production JS ≈235 kB (≈75 kB gzip), CSS ≈7.6 kB (≈2.7 kB gzip). No external fonts, assets, backend or API keys.
+Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Prototype production JS ≈239 kB (≈76 kB gzip), CSS ≈8.3 kB (≈2.9 kB gzip). No external fonts, assets, backend or API keys.
 
 ### Resolved setup issues
 
 - Default home npm cache was unwritable. Use `--cache /workspace/.npm-cache` in this environment.
 - Playwright's Node ESM loader required `with { type: 'json' }` for the test fixture import. Fixed; all browser cases now execute.
 - GitHub rejected the initial push with GH007 private-email protection. Configured this repository's Git email to `astridzhang-web@users.noreply.github.com`, amended the still-unpublished initial commit and successfully pushed `work`. No private email was published by that failed push.
+
+## Floating-pour prototype / 悬浮倒药原型
+
+### Scope and implementation
+
+- Reuses the existing SVG art; no new runtime dependencies and no changes to `src/game/` rules, sessions, presets or save format.
+- `src/components/PourAnimation.tsx` is a small isolated presentation component. `createPortal(document.body)` plus a fixed foreground layer escapes the board's clipping and stacking contexts.
+- Measures the real SVG viewBox with `getScreenCTM()`, including the selected lift, so sprites align on mobile/desktop. The source travels/tilts **260 ms**, pours **380 ms**, returns **280 ms**: **920 ms total**. At screen edges it tilts inward.
+- Two temporary SVG sprites show the source losing and the target gaining exactly the planned amount. Only these sprites update per animation frame; the nine-bottle board is not rendered every frame.
+- The full immutable transaction commits once when pouring finishes (640 ms), updating count, undo history and auto-save together. The sprites then return/reveal the committed board. Partial liquid levels are presentation only and are never saved.
+- All bottles, undo/restart/new puzzle, help and symbol settings are locked until the source returns. Rapid extra input is ignored, not queued. The original selected-bottle lift/highlight is retained.
+- Reduced-motion users get the same legal pour immediately. Scroll, resize, page hiding, or enabling reduced motion settle the transaction once and release the lock. A bounded timer fallback prevents a suspended frame loop from trapping input. Refresh before commit restores the previous full board; refresh after commit restores the new board.
+
+### Verification and visual evidence
+
+- `npm test`: **33 passed**. `npm run build`: passed.
+- `npm run test:e2e`: **36 passed**. Full animated solutions complete in both desktop and mobile projects.
+- `tests/animation.spec.ts`: same-row adjacent bottles in both directions, top-to-bottom and bottom-to-top, source/target fractional volume conservation, correct stream color, viewport bounds, one commit/save, undo, four rapid consecutive moves with conflicting clicks, resize/scroll/hidden recovery, refresh before commit and reduced motion.
+- Mobile pouring frames were visually inspected. The path visibly leaves the original slot, reaches the highlighted destination, pours and returns. Animation screenshots must be **viewport-only**: a full-page screenshot can resize the viewport and intentionally trigger safe settlement.
+- Committed previews: `docs/screenshots/floating-pour-down.png`, `floating-pour-up.png`, and `floating-pour-prototype.gif`. GIF is a 20 fps browser-frame capture of two consecutive moves (upper→lower, lower→upper), not a claim about device rendering FPS. View these from GitHub's `work` branch.
+- Development server: `npm run dev -- --port 5173 --strictPort`. To try it from a fresh first puzzle, select bottle 1 then empty bottle 8; after it returns, select bottle 7 then bottle 1. These exercise downward and upward movement. Existing saves may be mid-game; use a fresh browser context or the normal restart/new controls as appropriate.
+
+### Prototype limitations
+
+- Tilted liquid layers remain attached to the bottle rather than simulating gravity/free surfaces. The thin neck stream and surface ring are deliberately simple. The path can temporarily cross other bottles in the foreground.
+- No wooden workshop scene is present; foreground layering was verified against the current clipped board, not new shelf artwork.
+- Geometry changes finish the current move instead of retargeting a flight mid-air. No animation preference switch was added; the OS reduced-motion preference is supported.
+- Tested in desktop Chromium and emulated mobile touch. Physical iOS/Safari and low-end device frame-rate profiling remain untested.
+- Browser preview is running in the cloud, but the connected tools do not provide a user-accessible hosted preview URL. The onboarding UI does not support localhost links; no public deployment was performed. The committed GIF/screenshots provide a viewable reference.
 
 ## Git and cloud handoff
 
@@ -60,7 +89,7 @@ Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Production JS ≈23
 - `src/game/session.ts`: immutable snapshots; move count = history length. Restart preserves the original puzzle; undo restores exactly one prior board.
 - `src/game/presets.json`, `puzzles.ts`: verified templates and safe color permutations. Do not replace these with unverified random mixing.
 - `src/game/storage.ts`: schema/key v1; validates the initial template and legal move history. Limits: 5,000 moves / 2 MB. Failed writes display a warning instead of claiming a save.
-- `src/App.tsx`: selection, dialogs, status, settings and persistence; no animation state machine yet.
+- `src/App.tsx`: selection, dialogs, status, settings, persistence and a single pending animation transaction. A synchronous ref lock blocks conflicting input before disabled controls render.
 - `src/components/Bottle.tsx`: local SVG glass, palette and optional symbols. `src/styles.css`: responsive layout and reduced-motion CSS.
 - `src/game/game.test.ts`: rules, state, puzzle and save tests. `tests/game.spec.ts`, `playwright.config.ts`: real-browser regression tests.
 - `PROJECT_SPEC.md`: fixed requirements and milestone boundaries. `README.md`: commands, rules and limitations.
@@ -68,7 +97,7 @@ Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Production JS ≈23
 ## Known limitations / deliberately deferred
 
 - No detailed workshop scene, bottle variations or dense internal sparkle particles: milestone 2.
-- Transfers update immediately. Full lift/tilt/stream/ripple animations and an interaction lock are milestone 3.
+- A small floating-pour prototype is now implemented (see below). Final liquid physics, polished particles and final animation artwork remain deferred.
 - No service worker, PWA manifest, install flow, offline cache or deployment configuration: milestone 4. Do not claim installability/offline readiness.
 - Tested with Chromium and mobile emulation, not physical iOS/Safari devices or low-end-device performance benchmarks.
 - Four puzzle structures with color variations; user choices can lead to dead ends, so undo/restart may be needed. No hint system or uniqueness guarantee across repeated sessions.
@@ -78,9 +107,7 @@ Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Production JS ≈23
 
 ## Exact next task (only after the user asks)
 
-**Milestone 2 — Alchemy workshop artwork.** Read the spec and existing code, preserve tested rules/saves, then improve the atmospheric workshop background (workbench, shelves, books, candle/moonlight), subtly vary open bottle silhouettes, refine the seven luminous liquids and add dense tiny white sparkles with bounded particle counts. Keep the board readable, test narrow-screen layout and rendering performance, update this file, test/build and commit/push. Do not implement full pouring animation or PWA functionality in that milestone.
-
-Suggested next request: “继续里程碑 2：先阅读 PROJECT_SPEC.md 和 PROGRESS.md，在保留现有玩法和存档的基础上完成炼金工坊美术；测试并提交后停止。”
+Ask the user to evaluate the floating-pour direction using the current game and committed preview GIF. Adjust only timing/path/readability if requested. Do not automatically begin workshop art, final fluid simulation, rewards, sound, PWA or deployment. The previously planned milestone 2 remains available only on a new instruction.
 
 ## Resume in a fresh Codex session
 

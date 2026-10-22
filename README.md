@@ -47,3 +47,9 @@ Four fixed presets in `src/game/presets.json` each include a complete legal solu
 - `src/game/game.test.ts`, `tests/game.spec.ts`: unit and real browser checks.
 
 Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Stop after milestone 1 until the user asks for milestone 2. Full workshop artwork, pouring animation and installable/offline PWA behavior belong to later milestones. No service worker or installability is claimed in this version.
+
+## Small floating-pour prototype
+
+The current `work` branch includes the separately authorized ~0.92-second animation experiment: source lift/travel, inward tilt, matching-color stream, synchronized liquid transfer and return. It reuses the existing game rules and SVGs; controls lock briefly during the flight. Reduced motion performs the transfer immediately. No full milestone art/PWA work or public deployment is included.
+
+Run the existing development command and try bottle 1 → empty bottle 8 from a fresh first puzzle, followed by bottle 7 → bottle 1. See [the short animation capture](docs/screenshots/floating-pour-prototype.gif), [downward pour](docs/screenshots/floating-pour-down.png) and [upward pour](docs/screenshots/floating-pour-up.png). The GIF is a 20 fps visual reference; the live renderer uses requestAnimationFrame. Full checks now comprise 33 unit tests and 36 browser tests. Detailed behavior and limitations are recorded in `PROGRESS.md`.

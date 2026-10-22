@@ -15,6 +15,7 @@ async function bottle(page: Page, index: number, info: TestInfo) {
   const target = page.getByTestId(`bottle-${index}`)
   if (info.project.name === 'mobile') await target.tap()
   else await target.click()
+  await expect(page.getByTestId('pour-animation')).toHaveCount(0)
 }
 async function board(page: Page) {
   return page.locator('[data-liquid]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('data-liquid')))
@@ -85,6 +86,7 @@ test('restart and new puzzle protect progress, then reset correctly', async ({ p
 })
 
 test('plays a complete verified puzzle to victory, restores victory, and undoes it', async ({ page }, info) => {
+  test.setTimeout(90_000)
   await openGame(page)
   for (const [from, to] of presets[0].solution) {
     await bottle(page, from, info)
