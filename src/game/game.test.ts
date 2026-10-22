@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { boardsEqual, hasLegalMove, isBoard, isVictory, planPour, type Board, type Color } from './rules'
 import { createPuzzle, isVerifiedPuzzle, nextPuzzle, PRESETS } from './puzzles'
 import { createSession, pourSession, restart, undo } from './session'
+import { createGame } from './progress'
 import { decodeSave, loadSave, saveProgress, SAVE_KEY } from './storage'
 
 const solved: Board = [...Array.from({ length: 7 }, (_, c) => Array<Color>(4).fill(c as Color)), [], []]
@@ -132,9 +133,9 @@ describe('versioned local saves', () => {
     const session = pourSession(start(), ...PRESETS[0].solution[0])!.session
     const memory = new Map<string, string>()
     const storage = { getItem: (key: string) => memory.get(key) ?? null, setItem: (key: string, value: string) => { memory.set(key, value) } }
-    expect(saveProgress(storage, { session, showSymbols: true })).toBe(true)
+    expect(saveProgress(storage, createGame(session, true))).toBe(true)
     expect(memory.has(SAVE_KEY)).toBe(true)
-    expect(loadSave(storage)).toEqual({ session, showSymbols: true })
+    expect(loadSave(storage)).toEqual(createGame(session, true))
     expect(boardsEqual(undo(loadSave(storage)!.session).board, puzzle.initial)).toBe(true)
   })
   it.each([null, '{', '{}', 'null', '{"version":2}', '[]'])('safely rejects corrupt/unknown data: %s', (raw) => {
@@ -152,7 +153,7 @@ describe('versioned local saves', () => {
   it('handles denied storage and quota errors without crashing', () => {
     const unavailable = { getItem: () => { throw new Error('denied') }, setItem: () => { throw new Error('quota') } }
     expect(loadSave(unavailable)).toBeNull()
-    expect(saveProgress(unavailable, { session: start(), showSymbols: false })).toBe(false)
+    expect(saveProgress(unavailable, createGame(start()))).toBe(false)
   })
   it('can restore a completed puzzle with its undo history', () => {
     let session = start()

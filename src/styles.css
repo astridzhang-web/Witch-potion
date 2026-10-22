@@ -20,16 +20,10 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .cabinet-scene { position: relative; isolation: isolate; container-type: inline-size; width: min(100%, 480px, max(280px, calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * .4497326203))); aspect-ratio: 841 / 1870; flex: none; box-shadow: 0 0 65px #07080d66; }
 .cabinet-art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; user-select: none; pointer-events: none; }
 .scene-hud { position: absolute; z-index: 2; top: 1%; left: 9%; right: 9%; min-height: 44px; display: flex; align-items: center; gap: 8px; color: #f1ddba; text-shadow: 0 1px 5px #000, 0 0 12px #050915; }
-.puzzle-id { display: flex; align-items: center; gap: 5px; margin-right: auto; white-space: nowrap; font-size: clamp(10px, 2.7cqw, 12px); }
-.puzzle-id > span:first-child { color: var(--gold); font-size: 22px; }
-.puzzle-id strong { font-family: Georgia, serif; font-size: 17px; font-weight: normal; margin-left: 3px; }
-.move-stat { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 27px; font-size: 9px; }
 .move-stat strong { font-family: Georgia, serif; font-size: 18px; font-weight: normal; font-variant-numeric: tabular-nums; }
-.new-puzzle { display: flex; align-items: center; justify-content: center; gap: 3px; border: 0; background: transparent; min-width: 44px; min-height: 44px; padding: 0 3px; font-size: 10px; text-shadow: inherit; white-space: nowrap; }
-.new-puzzle svg { width: 14px; height: 14px; }
 .icon-button { background: transparent; border: 0; padding: 10px; display: grid; place-items: center; color: #e4cea8; width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; }
-.icon-button:hover, .new-puzzle:hover { color: #fff1ce; }
-.icon-button:disabled, .new-puzzle:disabled { opacity: .45; }
+.icon-button:hover { color: #fff1ce; }
+.icon-button:disabled { opacity: .45; }
 .board, .controls { position: absolute; inset: 0; pointer-events: none; }
 .bottle { position: absolute; min-width: 44px; min-height: 44px; border: 0; border-radius: 45%; background: transparent; padding: 0; isolation: isolate; pointer-events: auto; }
 .bottle-art { display: block; width: 100%; height: 100%; overflow: visible; transition: transform .18s ease, filter .18s ease; }
@@ -58,12 +52,6 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .victory strong, .victory span { display: block; }
 .victory strong { font-size: clamp(12px, 3.2cqw, 15px); font-weight: 500; letter-spacing: .1em; }
 .victory span { font-size: 9px; }
-.footer { position: absolute; bottom: 1%; left: 10%; right: 10%; height: 20px; display: flex; justify-content: space-between; align-items: flex-end; gap: 6px; color: #dfd3bd; font-size: clamp(8px, 2.2cqw, 10px); text-shadow: 0 1px 4px #000, 0 0 7px #000; }
-.symbols-toggle { display: flex; align-items: flex-end; min-height: 44px; gap: 4px; cursor: pointer; padding-bottom: 1px; white-space: nowrap; }
-.symbols-toggle input { accent-color: #d6bc90; width: 12px; height: 12px; margin: 0; }
-.save-status { display: flex; align-items: center; gap: 3px; }
-.save-status svg { width: 12px; height: 12px; }
-.save-error { color: #ffd3b6; max-width: 60%; text-align: right; }
 .eyebrow { font-size: 9px; letter-spacing: .2em; color: #cbb58f; }
 
 .modal { position: fixed; width: min(400px, calc(100% - 32px)); max-height: calc(100svh - 48px); padding: 30px 24px 24px; border: 1px solid #dbc38b50; border-radius: 23px; background: #1e253b; color: #eeebdf; box-shadow: 0 15px 100px #0008; }
@@ -87,3 +75,39 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .pour-overlay .bottle-art { display: block; width: 100%; height: 100%; transition: none; }
 .potion-stream { position: absolute; inset: 0; overflow: visible; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+
+/* Milestone 2C: compact lifetime HUD and quiet persistence. */
+.completion-stat { display: flex; align-items: center; gap: 5px; margin-right: auto; white-space: nowrap; font-size: clamp(10px, 2.7cqw, 12px); }
+.completion-stat > span:first-child { color: var(--gold); font-size: 22px; }
+.completion-stat strong { font-family: Georgia, serif; font-size: 17px; font-weight: normal; margin-left: 3px; font-variant-numeric: tabular-nums; }
+.move-stat { display: flex; align-items: center; flex-direction: row; gap: 5px; font-size: 10px; white-space: nowrap; }
+.symbols-toggle { display: flex; min-height: 44px; gap: 5px; cursor: pointer; align-items: center; padding: 6px 0; margin: 0 0 14px; font-size: 13px; color: #e4d8c1; }
+.symbols-toggle input { accent-color: #d6bc90; width: 18px; height: 18px; margin-right: 5px; }
+.save-error { position: absolute; bottom: 1%; left: 8%; right: 8%; max-width: none; margin: 0; padding: 6px; color: #ffdbc1; background: #281213e8; border: 1px solid #e1a88266; border-radius: 6px; text-align: center; font-size: 11px; }
+
+/* An opaque wood recess covers the baked-in star even when the turning board is edge-on. */
+.center-panel { position: absolute; min-height: 44px; perspective: 600px; background: linear-gradient(#10080499, #10080499), url('/assets/panel-wood.webp') center / 100% 100%; box-shadow: inset 0 0 5px #120703; }
+.panel-rotor { width: 100%; height: 100%; min-height: 44px; position: relative; transform-style: preserve-3d; transition: transform 550ms cubic-bezier(.4, 0, .2, 1); }
+.center-panel.is-revealed .panel-rotor { transform: rotateX(180deg); }
+.panel-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; background-size: 100% 100%; background-repeat: no-repeat; }
+.panel-front { background-image: url('/assets/panel-star.webp'); transform: translateZ(.2px); }
+.panel-back { background-image: url('/assets/panel-back.webp'); transform: rotateX(180deg) translateZ(.2px); }
+.new-puzzle-panel { width: 100%; height: 100%; min-height: 44px; padding: 0; border: 0; background: transparent; color: #f7dfad; display: flex; align-items: center; justify-content: center; gap: 3px; font: clamp(11px, 3.3cqw, 16px) 'Songti SC', 'SimSun', serif; letter-spacing: .05em; text-shadow: 0 1px 3px #160804; pointer-events: auto; }
+.new-puzzle-panel:disabled { pointer-events: none; }
+.new-puzzle-panel > span[aria-hidden] { font-size: 9px; opacity: .7; }
+.new-puzzle-panel:hover:not(:disabled) { color: #fff1cd; }
+.new-puzzle-panel:focus-visible { outline: none; color: #fff1cd; text-decoration: underline; text-underline-offset: 4px; background: radial-gradient(ellipse, #ecc98e26, transparent 70%); }
+
+.settlement { position: fixed; inset: 0; width: min(360px, calc(100% - 28px)); max-height: calc(100svh - 32px); padding: 36px 16px 28px; border: 0; overflow: auto; color: #e9dfcf; text-align: center; background: radial-gradient(ellipse, #25203dce, #11132266 65%, transparent 76%); }
+.settlement::backdrop { background: #070b1ac9; backdrop-filter: blur(3px); }
+.settlement-close { position: absolute; right: 0; top: 0; }
+.settlement-close:focus-visible { outline-offset: -4px; }
+.settlement-kicker { font-size: 9px; letter-spacing: .22em; color: #cdb788; }
+.settlement h2 { font: 27px 'Songti SC', 'SimSun', serif; font-weight: normal; letter-spacing: .22em; margin: 20px 0 12px; color: #f2dfb5; }
+.settlement-moves { font-size: 12px; color: #c8bed8; margin: 0; }
+.settlement-moves strong { font: 21px Georgia, serif; margin-left: 7px; color: #ede0ff; }
+.settlement-crystal { width: min(220px, 58vw); height: auto; display: block; margin: 4px auto; }
+.crystal-gem { animation: crystal-hover 3s ease-in-out infinite alternate; }
+.settlement-copy { font-size: 12px; margin: 6px 0 18px; color: #e1d2b9; }
+#settlement-hint { font-size: 10px; color: #b9b2c8; line-height: 1.6; margin: 0; }
+@keyframes crystal-hover { from { transform: translateY(0); } to { transform: translateY(-5px); } }

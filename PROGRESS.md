@@ -2,42 +2,42 @@
 
 ## Current milestone
 
-**Milestone 2B cabinet integration and contact-shadow visual correction — COMPLETE. Stop for user feedback.**
+**Milestone 2C HUD and completion interaction — COMPLETE. Stop for user feedback.**
 
-The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement are implemented. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
 
 ## Implemented and working
 
 - React + TypeScript + Vite; Chinese mobile-first interface with exactly nine bottles in a 3 × 3 grid.
 - Seven colors, four units each, capacity four; seven initially mixed full bottles and two empty bottles.
 - Select/deselect and maximal contiguous top-color pours. Invalid moves preserve the board and move count.
-- Undo, exact-puzzle restart, new puzzle, move counter, completion counter and victory feedback. Undo remains available after winning.
+- Undo, exact-puzzle restart, manually started new puzzles after settlement, move counter, lifetime completed-puzzle counter and crystal victory feedback. Undo remains available after winning.
 - Four fixed puzzle templates with complete solution witnesses (34, 25, 27, 31 moves; not shortest-path claims). New puzzles cycle templates with bijective color relabeling.
 - Open SVG glass bottles with basic luminous gradients, midnight/champagne UI and moon motif. Intentionally milestone 1 placeholder art.
-- Automatic versioned localStorage saves: current puzzle, board, full undo history and optional color-symbol setting. The loader validates the verified initial arrangement and every history transition.
-- Confirmation dialogs protect in-progress games; mouse, touch and native keyboard controls; reduced-motion support. Clear feedback when browser storage is unavailable.
+- Automatic versioned localStorage saves: current puzzle, board, full undo history, optional color-symbol setting, lifetime completion count, current-instance credit and settlement dismissal. The loader validates the verified initial arrangement and every history transition.
+- A restart confirmation protects in-progress games; mouse, touch and native keyboard controls; reduced-motion support. Clear feedback when browser storage is unavailable.
 
-## Verification results (latest: Milestone 2B contact-shadow correction)
+## Verification results (latest: Milestone 2C)
 
 All final checks passed; **no known blocking gameplay bugs**.
 
 | Check | Result |
 | --- | --- |
 | `npm ci --cache /workspace/.npm-cache` | Passed; frozen lockfile install reproduced |
-| `npm test` | **33 passed**, no skips/failures |
+| `npm test` | **48 passed**, no skips/failures |
 | Preset solvability | All 4 full witnesses replayed; color conservation checked after every move |
 | Puzzle variation | 200 seeded color permutations replayed to victory |
 | `npm run build` | TypeScript and production bundle passed |
-| `npm run test:e2e` | **48 passed**, no skips/failures; 16 gameplay, 22 animation/shadow and 10 cabinet cases, desktop Chromium and emulated mobile touch |
-| Browser gameplay | Actual taps/clicks to full victory; invalid move, undo, restart/new confirmation, saved win/undo, reload and settings checked |
+| `npm run test:e2e` | **62 passed**, no skips/failures; 16 gameplay, 22 animation/shadow, 10 cabinet and 14 completion/HUD cases, desktop Chromium and emulated mobile touch |
+| Browser gameplay | Actual taps/clicks to full animated victory; invalid move, undo, restart confirmation, settlement/flip/new puzzle, reload and help settings checked |
 | Storage resilience | Corrupt save recovery and blocked localStorage checked in browser; quota errors checked in unit tests |
 | Layout/accessibility basics | 320×568, 360×640, 390×844, 844×390 and 1280×900; 3 columns, 9 targets ≥44 px, no horizontal overflow; keyboard and reduced motion checked |
-| Typical mobile viewport | Full 390×844 page saved and visually inspected; whole cabinet, nine bottles and both panels visible |
-| Production browser capture | Latest build on 4176 confirmed against dist/index.html; full/detail/selected/in-flight captures with no page errors. Actual touch play/reload/undo covered by the browser suite |
+| Typical mobile viewport | Full 390×844 and 360×640 pages saved and visually inspected; whole cabinet, nine bottles and three base panels visible |
+| Production browser capture | Latest build on 4177 confirmed against dist/index.html; normal/settlement/completed/panel captures with no page errors. Actual touch play/reload/undo covered by the browser suite |
 | Development server | Started on 5173; HTTP response and app entry verified; functional tests use the same Vite workflow on isolated 4173 |
 | `git diff --check` | Passed |
 
-Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2B production JS ≈239 kB (≈76 kB gzip), CSS ≈7.5 kB (≈2.6 kB gzip), active tall cabinet WebP ≈303 kB. No runtime external fonts/assets, backend or API keys.
+Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2C production JS ≈243 kB (≈77 kB gzip), CSS ≈9.5 kB (≈3.2 kB gzip), active tall cabinet WebP ≈303 kB. No runtime external fonts/assets, backend or API keys.
 
 ### Resolved setup issues
 
@@ -150,10 +150,37 @@ Historical preparation checkpoint `9ab4eb9`; the later authorized replacement is
 
 This is a static contact treatment, not a dynamic projection or liquid-physics system. The original warm wood highlights, simple SVG glass and brisk animation remain. Physical iOS/Safari verification is still outstanding. No HUD, middle-board, rewards, settlement, home, audio, PWA or deployment work was undertaken. Stop after this visual correction.
 
+## Milestone 2C / HUD 与通关交互 (2026-10-22)
+
+### Continuation and scope
+
+Resumed the existing uncommitted implementation on `work` at baseline `3be09b2925f8d78a2fb034933a66878a1494d49a`. The earlier completion/storage work, 48 passing units and extracted panel art were intact; none was lost or reimplemented. The unrelated untracked `docs/PROJECT_REPORT.md` was preserved byte-for-byte and excluded from this commit.
+
+- Top HUD now shows “☾ 已完成 N”, horizontal moves and a 44px help control. Removed the permanent top new-puzzle entry. The symbol checkbox moved into help and retains persistence; successful saves are silent, failed saves still warn.
+- The first win per puzzle instance commits its one lifetime credit together with board/history. Undo, restart, repeated callbacks and rewinning preserve that credit; only manually starting a new instance resets eligibility. No linear levels, reward balance or economy was introduced.
+- Version-2 payloads keep the original `moonlit-alchemy.save.v1` storage key and full verified-history validation. Valid unfinished v1 saves retain the exact board/history/settings and start at count 0. Currently won v1 saves migrate with one credit and a pending settlement. Prior wins were not recorded by v1 and cannot be recovered. Successful migration rewrites the same single record; no split statistics keys.
+- Settlement appears only after the final existing pour returns (or safely settles after interruption), showing actual moves and a restrained violet SVG crystal. Any tap, clear close control or Escape dismisses it. The native dialog traps focus; its closed state persists. Rewinning the same dismissed puzzle does not reopen it.
+- After dismissal, the won board remains and the center panel turns for 550ms around its horizontal axis. Separate star/wooden-brass faces and an opaque wood recess cover the baked-in star throughout the turn. Input enables after completion, with keyboard focus transferred after the button becomes enabled. New-puzzle input is guarded against queued duplicate clicks. Reduced motion swaps immediately; new puzzle/undo/restart restore the decorative face.
+- Both original cabinet pairs, bottle positions/shape/liquid/palette/contact shadow, rules, presets, session implementation and the existing 920ms pouring system are unchanged. New textures are lossless crops of the existing tall WebP, with provenance in `assets/README.md`.
+
+### Checks and visual evidence
+
+- `npm test`: **48 passed**. `npm run build`: **passed**. `npm run test:e2e`: **62 passed** in desktop Chromium and emulated mobile touch, with no skips/retries/failures.
+- After softening the center button’s keyboard focus from a box outline to text emphasis, the production build and all **14 completion/HUD browser cases** were rerun successfully; final screenshots use that build.
+- New completion browser cases cover horizontal HUD/non-overlap, help target, inert unfinished panel, final-pour/settlement ordering, focus/readiness, pending/dismissed reload, duplicate new-puzzle clicks, v1 migration, undo/restart/full replay without recounting, second-puzzle credit, reduced motion, keyboard control, before/after-commit refresh, repeated resize, separate opaque faces and ≥44px center target at all four required viewports.
+- Existing full animated solutions, foreground pouring in both directions/same row, precise return, rapid input, contact shadows, layout, blocked storage and help settings remain passing. Unit coverage includes quota failures, atomic records, invalid metadata and repeat migration/commit protection.
+- Production build served internally on 4177 and matched `dist/index.html`. Real browser captures use a fixed 390×844 or 360×640 viewport and preset `moon-1` with its original colors; the solved state uses its valid 34-move witness. No artwork composites or fake game screens.
+- Screenshot index: [Milestone 2C browser evidence](docs/screenshots/milestone2c-preview.md). Normal 390×844/360×640, crystal settlement, completed cabinet and panel details are committed. The flip GIF consists of real Chromium frames sampled at 50ms of the actual CSS transition via the Web Animations API; endpoint holds aid inspection, so it is a visual reference rather than a device-FPS benchmark.
+- Visual review: compact HUD stays above the carved moon, star front blends with the source art, the back uses warm wood and brass, its text remains upright, and the opaque recess hides the baked-in star during rotation. Whole cabinet and controls remain visible at 390×844/360×640; the existing short-screen scroll policy remains intact.
+
+### Limits and stop point
+
+The reverse panel reuses the neighboring panel texture, fitted to the central face; it is not bespoke final carved artwork. The flip is a thin CSS plane over a shallow wood recess rather than a volumetric hinge. The crystal is a lightweight illustration without rewards. Actual iOS/Safari and physical-device performance remain unverified. No bottle/animation polish, rewards/shop, home, sound, PWA or public deployment work was performed. Stop after this handoff.
+
 ## Git and cloud handoff
 
 - Connected repository: `astridzhang-web/Witch-potion`; branch **`work`**, tracking `origin/work`.
-- Foundation and animation checkpoints were pushed successfully. This document accompanies the Milestone 2B contact-shadow correction handoff. Use `git log -1` and `git ls-remote origin refs/heads/work` to compare the latest tips.
+- Foundation and animation checkpoints were pushed successfully. This document accompanies the Milestone 2C handoff. Use `git log -1` and `git ls-remote origin refs/heads/work` to compare the latest tips.
 - Reusable `install_script` and `start_skill` have been saved to the cloud environment configuration draft. They cover frozen dependency install, tests/build, restarting Vite and functional readiness checks. Draft saving does not publish or validate restoration in a fresh task.
 - The cloud configuration's original `main` reference was for an empty repository. The final environment save records the inspected checkout's exact committed HEAD at mount path `Witch-potion` so future restoration uses the implemented project.
 - Review/save the environment settings and publish the cloud environment snapshot when desired. This is separate from publicly deploying the game.
@@ -164,7 +191,9 @@ This is a static contact treatment, not a dynamic projection or liquid-physics s
 - `src/game/rules.ts`: pure board invariants, `planPour`, `isVictory`. Liquid arrays are **bottom to top**. A pour transaction includes source, destination, color, amount, before and after; later animation can consume it without rewriting rules.
 - `src/game/session.ts`: immutable snapshots; move count = history length. Restart preserves the original puzzle; undo restores exactly one prior board.
 - `src/game/presets.json`, `puzzles.ts`: verified templates and safe color permutations. Do not replace these with unverified random mixing.
-- `src/game/storage.ts`: schema/key v1; validates the initial template and legal move history. Limits: 5,000 moves / 2 MB. Failed writes display a warning instead of claiming a save.
+- `src/game/storage.ts`: schema v2 under the unchanged v1 key, with validated v1 migration; validates the initial template and legal move history. Limits: 5,000 moves / 2 MB. Failed writes display a warning instead of claiming a save.
+- `src/game/progress.ts`: atomic session/completion transitions, per-instance credit and settlement dismissal.
+- `src/components/CenterPanel.tsx`, `Settlement.tsx`: independent panel flip/input readiness and accessible crystal dialog.
 - `src/App.tsx`: selection, dialogs, status, settings, persistence and a single pending animation transaction. A synchronous ref lock blocks conflicting input before disabled controls render.
 - `src/components/Bottle.tsx`: local SVG glass, palette and optional symbols. `src/styles.css`: responsive cabinet stage and reduced-motion CSS.
 - `src/scene/cabinetLayout.ts`: shared image-space coordinates for bottle contact planes and panel hitboxes. `assets/README.md`: source provenance and reproducible WebP export.
@@ -185,7 +214,7 @@ This is a static contact treatment, not a dynamic projection or liquid-physics s
 
 ## Exact next task (only after the user asks)
 
-Milestone 2B replacement/calibration and contact-shadow correction are complete. Wait for user feedback on the same-state visual comparisons and actual game. Do not automatically begin HUD changes, the center-panel flip, final bottle art, animation timing/physics, rewards, sound, PWA or deployment.
+Milestone 2C is complete. Wait for user feedback on the HUD, crystal settlement and wooden flip. Do not automatically begin final bottle art, perspective compensation, animation timing/physics, reward balances/shop, home, sound, PWA or deployment.
 
 ## Resume in a fresh Codex session
 

@@ -90,7 +90,7 @@ test('rapid repeated input cannot queue conflicting moves or undo while pouring'
     await page.getByTestId(`bottle-${to}`).dispatchEvent('click')
     await page.getByTestId('bottle-8').dispatchEvent('click')
     await page.getByRole('button', { name: '撤销', exact: true }).dispatchEvent('click')
-    await page.getByRole('button', { name: '新谜题', exact: true }).dispatchEvent('click')
+    await page.locator('.new-puzzle-panel').dispatchEvent('click')
     await expect(page.getByRole('dialog')).toHaveCount(0)
     await page.clock.runFor(1_200)
     await expect(page.getByTestId('pour-animation')).toHaveCount(0)

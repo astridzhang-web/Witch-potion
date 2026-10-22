@@ -85,22 +85,22 @@ for (const [width, height] of [[390, 844], [360, 640], [320, 568], [1280, 900]])
       const content = await page.locator(`${region.selector} > *`).evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().toJSON()))
       expect(Math.abs((content[0].x + content[1].x + content[1].width) / 2 - hit.x - hit.width / 2)).toBeLessThan(1)
     }
-    await expect(page.locator('.controls button')).toHaveCount(2)
+    await expect(page.locator('.controls').getByRole('button')).toHaveCount(2)
     const middleIsButton = await page.evaluate(({ x, y }) => !!document.elementFromPoint(x, y)?.closest('button'), {
       x: stage.x + stage.width / 2, y: stage.y + stage.height * 1608 / 1870,
     })
     expect(middleIsButton).toBe(false)
-    await expect(page.locator('.scene-hud').getByRole('button', { name: '新谜题', exact: true })).toBeVisible()
-    for (const selector of ['.puzzle-id', '.move-stat', '.new-puzzle', '.scene-hud .icon-button']) {
+    await expect(page.locator('.scene-hud').getByRole('button', { name: '新谜题', exact: true })).toHaveCount(0)
+    for (const selector of ['.completion-stat', '.move-stat', '.scene-hud .icon-button']) {
       const hud = (await page.locator(selector).boundingBox())!
       expect(hud.x).toBeGreaterThanOrEqual(stage.x)
       expect(hud.x + hud.width).toBeLessThanOrEqual(stage.x + stage.width)
       expect(hud.y).toBeGreaterThanOrEqual(0)
       expect(hud.y + hud.height).toBeLessThanOrEqual(height)
     }
-    await page.locator('.footer').scrollIntoViewIfNeeded()
-    await expect(page.getByRole('checkbox', { name: '颜色符号' })).toBeInViewport()
-    await expect(page.locator('.save-status')).toBeInViewport()
+    await expect(page.getByRole('checkbox', { name: '颜色符号' })).toHaveCount(0)
+    await expect(page.locator('.save-status')).toHaveCount(0)
+    await page.locator('.board-message').scrollIntoViewIfNeeded()
     await expect(page.getByRole('button', { name: '重来', exact: true })).toBeInViewport()
   })
 }

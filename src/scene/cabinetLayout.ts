@@ -7,6 +7,7 @@ export const CABINET = { width: 841, height: 1870 } as const
 export const SHELF_Y = [668, 1088, 1500] as const
 export const BOTTLE_X = [250, 420.5, 591] as const
 export const BOTTLE_SIZE = { width: 170, height: 255 } as const
+export const CENTER_PANEL = { x: 300, y: 1540, width: 241, height: 138 } as const
 export const PANELS = {
   undo: { x: 77, y: 1542, width: 200, height: 132 },
   restart: { x: 564, y: 1542, width: 200, height: 132 },
