@@ -38,7 +38,7 @@ h1 { font-family: "Songti SC", "Noto Serif CJK SC", "SimSun", serif; font-size: 
 .stat strong { color: #ebdbbd; font-family: Georgia, serif; font-size: 19px; font-weight: normal; font-variant-numeric: tabular-nums; }
 .stat strong span { color: #a4a7bd; font-family: inherit; font-size: 12px; }
 .board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 3px; padding: 17px 13px 10px; background: radial-gradient(ellipse at 50% 60%, #3c3b6420, transparent 75%); }
-.bottle { min-width: 0; height: clamp(110px, 17.8svh, 148px); border: 1px solid transparent; border-radius: 15px; background: transparent; padding: 0 4px 3px; display: flex; flex-direction: column; align-items: center; position: relative; isolation: isolate; transition: background .18s, border-color .18s; }
+.bottle { min-width: 0; height: clamp(100px, 15svh, 132px); border: 1px solid transparent; border-radius: 15px; background: transparent; padding: 0 4px 3px; display: flex; flex-direction: column; align-items: center; position: relative; isolation: isolate; transition: background .18s, border-color .18s; }
 .bottle-art { width: 100%; height: calc(100% - 14px); overflow: visible; flex-shrink: 0; transition: transform .18s ease; }
 .bottle-number { height: 14px; display: flex; align-items: center; gap: 5px; color: #a9adc4; font-size: 9px; letter-spacing: .13em; }
 .empty-label { font-size: 8px; letter-spacing: .03em; opacity: .75; }
