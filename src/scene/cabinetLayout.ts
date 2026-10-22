@@ -1,14 +1,15 @@
 import type { CSSProperties } from 'react'
 
-// Coordinates measured on the unchanged 941 × 1672 reference. Every interactive
-// element shares the image's containing block; never independently cover/crop it.
-export const CABINET = { width: 941, height: 1672 } as const
-export const SHELF_Y = [628, 976, 1324] as const
-export const BOTTLE_X = [265, 470.5, 676] as const
-export const BOTTLE_SIZE = { width: 200, height: 300 } as const
+// Coordinates measured on the unchanged 841 × 1870 tall reference.
+// See assets/cabinet-tall-layout.md for the independently measured artwork bands.
+// Each element shares the image's containing block; never independently cover/crop it.
+export const CABINET = { width: 841, height: 1870 } as const
+export const SHELF_Y = [668, 1088, 1500] as const
+export const BOTTLE_X = [250, 420.5, 591] as const
+export const BOTTLE_SIZE = { width: 170, height: 255 } as const
 export const PANELS = {
-  undo: { x: 80, y: 1360, width: 230, height: 130 },
-  restart: { x: 631, y: 1360, width: 230, height: 130 },
+  undo: { x: 77, y: 1542, width: 200, height: 132 },
+  restart: { x: 564, y: 1542, width: 200, height: 132 },
 } as const
 
 interface Box { x: number; y: number; width: number; height: number }

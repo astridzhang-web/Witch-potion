@@ -100,7 +100,7 @@ export default function App() {
   return <main className="app-shell">
     <h1 className="sr-only">月夜魔法药剂室</h1>
     <section className="cabinet-scene" aria-label="月夜魔药展柜">
-      <img className="cabinet-art" src="/assets/shelf.webp" width="941" height="1672" alt="" fetchPriority="high" draggable={false} />
+      <img className="cabinet-art" src="/assets/shelf-tall.webp" width="841" height="1870" alt="" fetchPriority="high" draggable={false} />
       <header className="scene-hud">
         <div className="puzzle-id"><span aria-hidden="true">☾</span><span>手记 <strong>{String(puzzleNumber).padStart(2, '0')}</strong></span></div>
         <div className="move-stat"><span>步数</span><strong data-testid="moves">{session.history.length}</strong></div>

@@ -17,7 +17,7 @@ button:disabled { cursor: default; }
 button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-offset: 2px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .app-shell { min-height: 100svh; display: flex; align-items: center; justify-content: center; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
-.cabinet-scene { position: relative; isolation: isolate; container-type: inline-size; width: min(100%, 480px, max(280px, calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * .5627990431))); aspect-ratio: 941 / 1672; flex: none; box-shadow: 0 0 65px #07080d66; }
+.cabinet-scene { position: relative; isolation: isolate; container-type: inline-size; width: min(100%, 480px, max(280px, calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * .4497326203))); aspect-ratio: 841 / 1870; flex: none; box-shadow: 0 0 65px #07080d66; }
 .cabinet-art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; user-select: none; pointer-events: none; }
 .scene-hud { position: absolute; z-index: 2; top: 1%; left: 9%; right: 9%; min-height: 44px; display: flex; align-items: center; gap: 8px; color: #f1ddba; text-shadow: 0 1px 5px #000, 0 0 12px #050915; }
 .puzzle-id { display: flex; align-items: center; gap: 5px; margin-right: auto; white-space: nowrap; font-size: clamp(10px, 2.7cqw, 12px); }

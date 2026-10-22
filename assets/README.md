@@ -4,7 +4,7 @@ The user supplied `shelf.zip` for Milestone 2A. Its sole file, `shelf.png`, is p
 
 SHA-256: `70b372ee8aea067fa45a70f2b0e02b6141710d142ad7d406cd6c5c7653b48614`.
 
-The browser loads `public/assets/shelf.webp` (941 × 1672, 296,034 bytes), about 86% smaller. It uses quality-90 WebP encoding with no resizing, cropping or repainting. The original remains available for future exports. No separate license or attribution information was supplied with the image; this record documents its source, not a license grant.
+Milestone 2A loaded `public/assets/shelf.webp` (preserved; no longer the active scene) (941 × 1672, 296,034 bytes), about 86% smaller. It uses quality-90 WebP encoding with no resizing, cropping or repainting. The original remains available for future exports. No separate license or attribution information was supplied with the image; this record documents its source, not a license grant.
 
 Reproduce the optimized export from the repository root with FFmpeg:
 
@@ -12,11 +12,11 @@ Reproduce the optimized export from the repository root with FFmpeg:
 ffmpeg -hide_banner -loglevel error -i assets/source/shelf.png -c:v libwebp -quality 90 -compression_level 6 -frames:v 1 public/assets/shelf.webp
 ```
 
-`src/scene/cabinetLayout.ts` maps image coordinates to percentages within one aspect-preserving stage. Bottle centers are x=265, 470.5, 676; shelf contact planes are y=628, 976, 1324. The existing SVG's glass base is y=134 in its 100 × 150 viewBox. Button hit regions align with the left and right wooden panels; the center panel remains decoration. Bottle art, liquids and controls remain live DOM/SVG elements. The existing pouring portal measures their rendered coordinates and floats above the scene.
+The Milestone 2A layout mapped image coordinates to percentages within one aspect-preserving stage. Its historical bottle centers were x=265, 470.5, 676; shelf contact planes were y=628, 976, 1324. The existing SVG's glass base is y=134 in its 100 × 150 viewBox. Button hit regions align with the left and right wooden panels; the center panel remains decoration. Bottle art, liquids and controls remain live DOM/SVG elements. The existing pouring portal measures their rendered coordinates and floats above the scene.
 
-## Tall-phone cabinet — prepared only (2026-10-22)
+## Tall-phone cabinet — preparation record (2026-10-22)
 
-A second user-supplied `shelf.zip` contains a redrawn `shelf.png`. It is preserved byte-for-byte under a distinct name, `source/shelf-tall.png`; the previous `source/shelf.png` and active `public/assets/shelf.webp` remain unchanged.
+A second user-supplied `shelf.zip` contains a redrawn `shelf.png`. It is preserved byte-for-byte under a distinct name, `source/shelf-tall.png`; the previous `source/shelf.png` and `public/assets/shelf.webp` remain unchanged.
 
 | Property | New asset |
 | --- | --- |
@@ -32,12 +32,19 @@ The WebP retains the full 841 × 1870 image without resizing or cropping. Reprod
 ffmpeg -hide_banner -loglevel error -i assets/source/shelf-tall.png -c:v libwebp -quality 90 -compression_level 6 -frames:v 1 public/assets/shelf-tall.webp
 ```
 
-### Calibration required before a separately authorized replacement
+### Calibration scope recorded during preparation
 
-The active scene still uses the old 941 × 1672 image and its existing coordinates. This redrawn composition is not a uniform stretch of that image, so do not reuse the old coordinates by merely changing the stage ratio.
+At preparation commit `9ab4eb9`, the active scene still used the old 941 × 1672 image and its existing coordinates. This redrawn composition is not a uniform stretch of that image, so do not reuse the old coordinates by merely changing the stage ratio.
 
 - Remeasure each of the three shelf contact planes, then the three horizontal bottle centers per shelf (all nine bottle positions). Recheck bottle size, shelf/flower clearance and touch spacing; use the existing SVG base at viewBox y=134 as the contact point.
 - Remeasure the left undo and right restart inset bounds, center anchors and hit regions; keep the central inset decorative. Check minimum 44 px touch regions after responsive scaling.
 - At replacement time, update the shared image coordinate system and portrait aspect ratio together, then verify top information/safe-area clearance and floating-bottle departure/return alignment at the supported viewports.
 
-No new layout coordinates are applied in this preparation task. Neither the new PNG nor the new WebP is referenced by the game. Replacement and Milestone 2B require a further user instruction.
+No layout coordinates were applied at that preparation checkpoint. The subsequent authorized Milestone 2B now activates the tall WebP and recalibrates the layout as recorded below.
+
+
+## Milestone 2B: active tall cabinet
+
+The game now references **`/assets/shelf-tall.webp`** with a shared **841 × 1870** scene coordinate system. Both PNGs and both WebP files remain byte-for-byte unchanged. No image was repainted, cropped, resized or re-encoded for this replacement.
+
+See [the new artwork measurements and placement notes](cabinet-tall-layout.md) for the measured shelf/clearance bands, chosen nine bottle positions, side-panel hit regions and short-screen scroll behavior. The current layout is defined in `src/scene/cabinetLayout.ts`; independent artwork-region checks are in `tests/cabinet.spec.ts`. The existing SVG art, foreground animation, HUD and footer remain intact.

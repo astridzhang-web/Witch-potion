@@ -1,6 +1,6 @@
 # 月夜魔法药剂室 · Moonlit Alchemy
 
-A quiet, mobile-first potion sorting game. Milestone 2A: a playable wooden cabinet scene built with React, TypeScript, Vite and independent SVG bottles. All gameplay runs locally in the browser.
+A quiet, mobile-first potion sorting game. Milestone 2B: a playable tall wooden cabinet scene built with React, TypeScript, Vite and independent SVG bottles. All gameplay runs locally in the browser.
 
 ## Cloud development
 
@@ -45,10 +45,10 @@ Four fixed presets in `src/game/presets.json` each include a complete legal solu
 - `src/components/Bottle.tsx`: local SVG placeholder glass and color palette.
 - `src/App.tsx`, `src/styles.css`: Chinese UI, shared portrait scene and controls.
 - `src/scene/cabinetLayout.ts`: source-image coordinates for shelves, bottles and panel hitboxes.
-- `assets/source/shelf.png`, `public/assets/shelf.webp`: supplied original and optimized local scene; see [asset notes](assets/README.md).
+- `assets/source/shelf-tall.png`, `public/assets/shelf-tall.webp`: active tall cabinet original and optimized local scene (the earlier pair is preserved); see [asset notes](assets/README.md).
 - `src/game/game.test.ts`, `tests/game.spec.ts`: unit and real browser checks.
 
-Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 2A is complete; stop for feedback before 2B. Final bottle art, animation timing/physics refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
+Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 2B replacement and layout calibration are complete; stop for feedback before further work. Final bottle art, animation timing/physics refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
 
 ## Small floating-pour prototype
 
@@ -56,10 +56,12 @@ The current `work` branch includes the separately authorized ~0.92-second animat
 
 Run the existing development command and try bottle 1 → empty bottle 8 from a fresh first puzzle, followed by bottle 7 → bottle 1. See [the short animation capture](docs/screenshots/floating-pour-prototype.gif), [downward pour](docs/screenshots/floating-pour-down.png) and [upward pour](docs/screenshots/floating-pour-up.png). The GIF is a 20 fps visual reference; the live renderer uses requestAnimationFrame. Full checks now comprise 33 unit tests and 46 browser tests. Detailed behavior and limitations are recorded in `PROGRESS.md`.
 
-## Milestone 2A cabinet scene
+## Milestone 2B tall cabinet scene
 
-The supplied cabinet artwork is preserved, with a 290 KiB WebP served locally. All nine interactive bottles and the two bottom-panel buttons share its 941 × 1672 coordinate system. Undo is on the left, restart on the right; the middle inset remains decorative. Puzzle number, moves and new puzzle stay in the compact top bar.
+The redrawn 841×1870 cabinet is now active, using the previously prepared 296 KiB WebP unchanged. Nine independent SVG bottles and the two bottom-panel buttons share its image coordinates. Their placements were remeasured from the new artwork; see [layout measurements](assets/cabinet-tall-layout.md). Undo stays on the left, restart on the right, and the center inset stays decorative. Existing top HUD, new-puzzle entry and footer controls remain in place.
 
-[390 × 844 full-page screenshot](docs/screenshots/milestone2a-cabinet-mobile.png) · [Floating-pour frame in the cabinet](docs/screenshots/milestone2a-cabinet-pour.png)
+[390×844 full page](docs/screenshots/milestone2b-tall-390x844.png) · [360×640 full page](docs/screenshots/milestone2b-tall-360x640.png) · [390×844 floating pour](docs/screenshots/milestone2b-tall-pour-390x844.png) · [320×568 viewport, full scrollable page](docs/screenshots/milestone2b-tall-320x568-full-page.png)
 
-The scene keeps its original aspect ratio without cropping: taller phones show some surrounding dark space, and desktop centers the portrait scene. Tests verify complete framing at 390×844, 360×640, 320×568 and 1280×900, shelf contact points, panel touch targets and the existing gameplay/animation. Short landscape screens may scroll vertically to keep controls usable. Bottle art and tilted liquid remain the existing prototype; physical iOS/Safari performance is not yet verified. No Milestone 2B work is included.
+The scene preserves the full artwork without stretching or cropping. It fits completely at 390×844 and 360×640 and centers on desktop. At 320×568, the existing 280px minimum scene width gives about 623px of page height, so the footer is reached by a short vertical scroll. Tests cover artwork contact bands, non-overlapping bottle targets, panel bounds/centering, ≥44px targets, top information visibility and the unchanged gameplay/animation.
+
+Both cabinet source PNGs and WebP exports remain in the repository. The [Milestone 2A screenshot](docs/screenshots/milestone2a-cabinet-mobile.png) is historical. Current bottle art and tilted liquid remain the prototype; physical iOS/Safari and safe-area behavior on actual devices still need verification. HUD changes, animation refinements, final bottle art, rewards, PWA and public deployment remain future work.

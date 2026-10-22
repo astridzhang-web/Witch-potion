@@ -9,51 +9,91 @@ async function open(page: Page) {
   })), preset)
   await page.goto('/')
   await expect(page.locator('.cabinet-art')).toBeVisible()
-  await expect.poll(() => page.locator('.cabinet-art').evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth)).toBe(941)
+  await expect(page.locator('.cabinet-art')).toHaveAttribute('src', '/assets/shelf-tall.webp')
+  await expect.poll(() => page.locator('.cabinet-art').evaluate((img: HTMLImageElement) => img.complete && [img.naturalWidth, img.naturalHeight])).toEqual([841, 1870])
 }
 
-// Independent image landmarks: shelf contact planes and inset panel centers were
-// measured from the supplied PNG, not derived from the layout implementation.
+// Independently inspected artwork regions, documented in assets/cabinet-tall-layout.md.
+// These are surface/clearance bands, not copies of the chosen implementation anchors.
+const shelfBands = [[660, 674], [1080, 1096], [1490, 1510]]
+const bottleLanes = [[240, 260], [410, 431], [581, 601]]
+const panelRegions = [
+  { selector: '.undo-panel', x: [75, 281], centerX: [170, 185] },
+  { selector: '.restart-panel', x: [560, 770], centerX: [655, 674] },
+]
+const panelY = [1540, 1677]
+const panelCenterY = [1598, 1618]
 for (const [width, height] of [[390, 844], [360, 640], [320, 568], [1280, 900]]) {
-  test(`cabinet alignment and complete framing at ${width}×${height}`, async ({ page }) => {
+  test(`tall cabinet alignment and complete scrollable framing at ${width}×${height}`, async ({ page }) => {
     await page.setViewportSize({ width, height })
     await open(page)
     const stage = (await page.locator('.cabinet-scene').boundingBox())!
     const art = (await page.locator('.cabinet-art').boundingBox())!
     expect(art).toEqual(stage)
-    expect(art.width / art.height).toBeCloseTo(941 / 1672, 3)
+    expect(art.width / art.height).toBeCloseTo(841 / 1870, 3)
     expect(stage.x).toBeGreaterThanOrEqual(0)
     expect(stage.y).toBeGreaterThanOrEqual(0)
     expect(stage.x + stage.width).toBeLessThanOrEqual(width + .1)
-    expect(stage.y + stage.height).toBeLessThanOrEqual(height + .1)
+    const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight)
+    expect(stage.y + stage.height).toBeLessThanOrEqual(pageHeight + .5)
+    // Preserve the existing 280px minimum scene width: only the narrow/short case scrolls.
+    if (height >= 640) expect(stage.y + stage.height).toBeLessThanOrEqual(height + .1)
+    else expect(stage.width).toBeGreaterThanOrEqual(280)
     expect(Math.abs(stage.x + stage.width / 2 - width / 2)).toBeLessThan(.1)
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width)
-    expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBe(height)
+    expect(pageHeight).toBeLessThanOrEqual(Math.max(height, Math.ceil(stage.y + stage.height)))
+    const scale = stage.width / 841
+    const within = (value: number, band: number[]) => {
+      expect(value).toBeGreaterThanOrEqual(band[0])
+      expect(value).toBeLessThanOrEqual(band[1])
+    }
     const contacts = await page.locator('.board .bottle-art').evaluateAll((nodes) => nodes.map((node) => {
       const m = (node as SVGSVGElement).getScreenCTM()!
       return { x: m.a * 50 + m.e, y: m.d * 134 + m.f }
     }))
     expect(contacts).toHaveLength(9)
     for (let i = 0; i < contacts.length; i++) {
-      expect(Math.abs(contacts[i].x - (stage.x + [265, 470.5, 676][i % 3] / 941 * stage.width))).toBeLessThan(.15)
-      expect(Math.abs(contacts[i].y - (stage.y + [628, 976, 1324][Math.floor(i / 3)] / 1672 * stage.height))).toBeLessThan(.15)
+      within((contacts[i].x - stage.x) / scale, bottleLanes[i % 3])
+      within((contacts[i].y - stage.y) / scale, shelfBands[Math.floor(i / 3)])
       const target = (await page.getByTestId(`bottle-${i}`).boundingBox())!
       expect(target.width).toBeGreaterThanOrEqual(44)
       expect(target.height).toBeGreaterThanOrEqual(44)
+      if (i % 3 < 2) {
+        const next = (await page.getByTestId(`bottle-${i + 1}`).boundingBox())!
+        expect(target.x + target.width).toBeLessThanOrEqual(next.x + .1)
+      }
     }
-    for (const [selector, x] of [['.undo-panel', 195], ['.restart-panel', 746]] as const) {
-      const hit = (await page.locator(selector).boundingBox())!
+    for (const region of panelRegions) {
+      const hit = (await page.locator(region.selector).boundingBox())!
       expect(hit.width).toBeGreaterThanOrEqual(44)
       expect(hit.height).toBeGreaterThanOrEqual(44)
-      expect(Math.abs(hit.x + hit.width / 2 - (stage.x + x / 941 * stage.width))).toBeLessThan(.15)
-      expect(Math.abs(hit.y + hit.height / 2 - (stage.y + 1425 / 1672 * stage.height))).toBeLessThan(.15)
+      within((hit.x + hit.width / 2 - stage.x) / scale, region.centerX)
+      within((hit.y + hit.height / 2 - stage.y) / scale, panelCenterY)
+      within((hit.x - stage.x) / scale, region.x)
+      within((hit.x + hit.width - stage.x) / scale, region.x)
+      within((hit.y - stage.y) / scale, panelY)
+      within((hit.y + hit.height - stage.y) / scale, panelY)
+      // Text and icon together remain centered in the painted panel.
+      const content = await page.locator(`${region.selector} > *`).evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().toJSON()))
+      expect(Math.abs((content[0].x + content[1].x + content[1].width) / 2 - hit.x - hit.width / 2)).toBeLessThan(1)
     }
     await expect(page.locator('.controls button')).toHaveCount(2)
     const middleIsButton = await page.evaluate(({ x, y }) => !!document.elementFromPoint(x, y)?.closest('button'), {
-      x: stage.x + stage.width / 2, y: stage.y + stage.height * 1425 / 1672,
+      x: stage.x + stage.width / 2, y: stage.y + stage.height * 1608 / 1870,
     })
     expect(middleIsButton).toBe(false)
     await expect(page.locator('.scene-hud').getByRole('button', { name: '新谜题', exact: true })).toBeVisible()
+    for (const selector of ['.puzzle-id', '.move-stat', '.new-puzzle', '.scene-hud .icon-button']) {
+      const hud = (await page.locator(selector).boundingBox())!
+      expect(hud.x).toBeGreaterThanOrEqual(stage.x)
+      expect(hud.x + hud.width).toBeLessThanOrEqual(stage.x + stage.width)
+      expect(hud.y).toBeGreaterThanOrEqual(0)
+      expect(hud.y + hud.height).toBeLessThanOrEqual(height)
+    }
+    await page.locator('.footer').scrollIntoViewIfNeeded()
+    await expect(page.getByRole('checkbox', { name: '颜色符号' })).toBeInViewport()
+    await expect(page.locator('.save-status')).toBeInViewport()
+    await expect(page.getByRole('button', { name: '重来', exact: true })).toBeInViewport()
   })
 }
 
@@ -70,17 +110,17 @@ test('painted left/right panels are clickable, middle decoration does nothing', 
     await expect(page.getByTestId('moves')).toHaveText('1')
   }
   const stage = (await page.locator('.cabinet-scene').boundingBox())!
-  const at = (x: number) => ({ x: stage.x + x / 941 * stage.width, y: stage.y + 1425 / 1672 * stage.height })
+  const at = (x: number) => ({ x: stage.x + x / 841 * stage.width, y: stage.y + 1608 / 1870 * stage.height })
   await move()
-  const center = at(470.5)
+  const center = at(420.5)
   await tap(center.x, center.y)
   await expect(page.getByTestId('moves')).toHaveText('1')
   await expect(page.getByRole('dialog')).toHaveCount(0)
-  const left = at(195)
+  const left = at(177)
   await tap(left.x, left.y)
   await expect(page.getByTestId('moves')).toHaveText('0')
   await move()
-  const right = at(746)
+  const right = at(664)
   await tap(right.x, right.y)
   await expect(page.getByRole('dialog')).toBeVisible()
   await page.getByRole('button', { name: '确认重来' }).click()

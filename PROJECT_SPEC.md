@@ -43,7 +43,7 @@ The eventual PWA must work without internet after caching, support portrait touc
 
 ## Quota-safe continuation
 
-Complete one stable milestone at a time. Keep working builds and frequent meaningful Git checkpoints, push committed work when allowed. Maintain this spec and `PROGRESS.md` with actual checks, limitations, architecture and the exact next task. Inspect and preserve existing changes on resume. Never claim unimplemented or untested behavior works. Follow only the currently authorized scope; after Milestone 2A, stop for feedback before 2B.
+Complete one stable milestone at a time. Keep working builds and frequent meaningful Git checkpoints, push committed work when allowed. Maintain this spec and `PROGRESS.md` with actual checks, limitations, architecture and the exact next task. Inspect and preserve existing changes on resume. Never claim unimplemented or untested behavior works. Follow only the currently authorized scope; after the authorized Milestone 2B cabinet replacement, stop for feedback.
 
 ## Authorized narrow experiment: floating pour prototype (2026-10-22)
 
@@ -58,3 +58,11 @@ Use the supplied empty wooden cabinet as a static, aspect-preserving background;
 Preserve the current ~920 ms floating-pour system, gameplay, saves, victory feedback and reduced motion. Verify same-row and cross-row pouring, accurate return, input locks, panel clicks and complete framing at 390×844, 360×640, 320×568 and desktop. Keep the original source image and optimize the browser asset. Deliver a full 390×844 screenshot in `docs/screenshots/`, update progress, run tests/build, commit and push `work`.
 
 This stage does not authorize final bottle variations, new animation timing/physics/particles, audio, home transitions, rewards/shop, new level systems, PWA work or public deployment. Stop after 2A; do not begin 2B automatically.
+
+## Authorized Milestone 2B: tall cabinet replacement and calibration (2026-10-22)
+
+Replace only the active background reference with the existing 841×1870 `shelf-tall.webp`. Preserve both original assets and both WebP files without modification. Remeasure the new artwork's three shelf contact planes, nine bottle centers/sizes and left/right panel bounds; update the shared aspect-preserving coordinate system. The central panel remains decorative.
+
+Keep the current SVG bottle/liquid rendering, ~920ms animation mechanism and timings, game rules, save format, top HUD/new-puzzle entry and footer settings/status intact. Validate the four specified viewports (390×844, 360×640, 320×568, 1280×900), safe-area handling, touch regions, foreground pouring/return, undo and save compatibility. Short screens may scroll vertically. Test expectations must use independently inspected artwork landmarks.
+
+Run unit tests, production build and browser regressions. Commit real browser screenshots for 390×844, 360×640 and an in-flight 390×844 frame; update progress and push `work`. Do not include unrelated existing uncommitted files. Stop after replacement/calibration: no HUD redesign, center-panel flip, rewards, final bottles, fluid/animation polish, audio, home, shop, PWA or public deployment.

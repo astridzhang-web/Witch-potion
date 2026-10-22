@@ -2,9 +2,9 @@
 
 ## Current milestone
 
-**Milestone 2A cabinet scene — COMPLETE. Foundation and floating-pour prototype retained. Stop before 2B.**
+**Milestone 2B tall cabinet replacement and layout calibration — COMPLETE. Stop for user feedback.**
 
-The playable foundation, floating-pour experiment and explicitly requested cabinet scene integration are implemented. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement are implemented. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
 
 ## Implemented and working
 
@@ -17,7 +17,7 @@ The playable foundation, floating-pour experiment and explicitly requested cabin
 - Automatic versioned localStorage saves: current puzzle, board, full undo history and optional color-symbol setting. The loader validates the verified initial arrangement and every history transition.
 - Confirmation dialogs protect in-progress games; mouse, touch and native keyboard controls; reduced-motion support. Clear feedback when browser storage is unavailable.
 
-## Verification results
+## Verification results (latest: Milestone 2B)
 
 All final checks passed; **no known blocking gameplay bugs**.
 
@@ -33,11 +33,11 @@ All final checks passed; **no known blocking gameplay bugs**.
 | Storage resilience | Corrupt save recovery and blocked localStorage checked in browser; quota errors checked in unit tests |
 | Layout/accessibility basics | 320×568, 360×640, 390×844, 844×390 and 1280×900; 3 columns, 9 targets ≥44 px, no horizontal overflow; keyboard and reduced motion checked |
 | Typical mobile viewport | Full 390×844 page saved and visually inspected; whole cabinet, nine bottles and both panels visible |
-| Production server smoke | Milestone 2A build served on 4175; actual touch pour, reload, undo, 9 bottles, no page errors or external network requests |
+| Production server smoke | Milestone 2B build served on 4176; actual touch pour, reload, undo, 9 bottles, no page errors or external network requests |
 | Development server | Started on 5173; HTTP response and app entry verified; functional tests use the same Vite workflow on isolated 4173 |
 | `git diff --check` | Passed |
 
-Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2A production JS ≈239 kB (≈76 kB gzip), CSS ≈7.1 kB (≈2.5 kB gzip), local cabinet WebP ≈296 kB. No runtime external fonts/assets, backend or API keys.
+Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2B production JS ≈239 kB (≈76 kB gzip), CSS ≈7.1 kB (≈2.5 kB gzip), active tall cabinet WebP ≈303 kB. No runtime external fonts/assets, backend or API keys.
 
 ### Resolved setup issues
 
@@ -69,7 +69,7 @@ Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2A produc
 ### Prototype limitations
 
 - Tilted liquid layers remain attached to the bottle rather than simulating gravity/free surfaces. The thin neck stream and surface ring are deliberately simple. The path can temporarily cross other bottles in the foreground.
-- Milestone 2A now supplies the wooden cabinet; the unchanged foreground portal has been verified above its shelves.
+- The current Milestone 2B tall cabinet uses the same foreground portal, verified above its shelves.
 - Geometry changes finish the current move instead of retargeting a flight mid-air. No animation preference switch was added; the OS reduced-motion preference is supported.
 - Tested in desktop Chromium and emulated mobile touch. Physical iOS/Safari and low-end device frame-rate profiling remain untested.
 - Browser preview is running in the cloud, but the connected tools do not provide a user-accessible hosted preview URL. The onboarding UI does not support localhost links; no public deployment was performed. The committed GIF/screenshots provide a viewable reference.
@@ -87,6 +87,8 @@ Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2A produc
 
 ## Tall-phone cabinet asset preparation / 长屏木柜素材准备 (2026-10-22)
 
+Historical preparation checkpoint `9ab4eb9`; the later authorized replacement is recorded in the next section.
+
 - Completed only the requested asset preparation; the active Milestone 2A scene, interaction, animation and game logic are unchanged. No cabinet replacement or Milestone 2B work was started.
 - New upload `shelf.zip` → `shelf.png` preserved byte-for-byte as `assets/source/shelf-tall.png`: **841×1870**, ratio **841:1870 ≈ 9:20**, 2,204,564 bytes. Original SHA-256: `27dc4bbf95937a27f19f5873c8a72ddc6f488cb00098112a930d64fc1709598f`.
 - Generated independent `public/assets/shelf-tall.webp`: same dimensions, quality 90, no resize/crop, **302,590 bytes** (about 86.3% smaller). The original and optimized old cabinet remain untouched. The game continues to reference `/assets/shelf.webp`; the new asset is not wired into the UI.
@@ -94,10 +96,40 @@ Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2A produc
 - Validation for this asset-only task: source bytes matched the ZIP member; both new images decoded successfully at 841×1870; prior cabinet files and `src/` remained identical to the preceding commit; production build and `git diff --check` passed. Gameplay/browser suites were not rerun because no application code or active assets changed; the 33/46 results above describe the prior Milestone 2A validation.
 - Stop here. Wait for explicit authorization before replacing the cabinet or beginning 2B.
 
+## Milestone 2B / 正式长屏木柜替换与布局校准 (2026-10-22)
+
+### Actual scope
+
+- Started on existing `work` at `9ab4eb9bf131340d912fb7a14723c9b2666e7848`. The pre-existing untracked `docs/PROJECT_REPORT.md` is preserved byte-for-byte and excluded from this commit.
+- Activated the existing `/assets/shelf-tall.webp` and changed the shared scene ratio/dimensions to **841×1870**. Both source PNGs and both WebP files are unchanged; no image processing or cropping occurred.
+- Remeasured the new artwork. Bottle centers are **250 / 420.5 / 591**, shelf contact heights **668 / 1088 / 1500**, and SVG viewports **170×255** in source-image pixels. All nine bottles stand on the new shelves, with headroom retained and adjacent hit regions separated.
+- Left undo panel is **(77,1542,200,132)**; right restart panel is **(564,1542,200,132)**. Text/icons remain centered, targets are at least 44×44 CSS px, and the middle star panel remains inert. Measurements and independent artwork bands are recorded in `assets/cabinet-tall-layout.md`.
+- Only three application files changed: `src/App.tsx` (background URL/dimensions), `src/scene/cabinetLayout.ts` (image coordinates), and one stage-sizing rule in `src/styles.css`. `src/game/`, `Bottle.tsx` and `PourAnimation.tsx` are unchanged. Existing saves/history use the same schema and code.
+- Existing HUD/new-puzzle entry, vertical move display, footer color symbols and save status remain intact. The 920ms animation's mechanism, easing, angles, liquid/stream and rendering remain unchanged; no animation correction was needed.
+
+### Verification and browser evidence
+
+- `npm test`: **33 passed**. `npm run build`: **passed**. `npm run test:e2e`: **46 passed**, no skips/retries/failures (16 gameplay, 20 animation, 10 cabinet cases across desktop/mobile projects).
+- Cabinet tests now check the actual 841×1870 image, independently inspected shelf/center lanes and panel face regions instead of copying the chosen implementation anchors. They also check whole artwork availability, no horizontal overflow, non-overlapping bottle targets, ≥44px controls, centered panel content, top HUD bounds and footer reachability by scrolling.
+- Full original animation/gameplay regression passed: same-row in both directions, top→bottom, bottom→top, exact return position, foreground portal, volume/state/save synchronization, rapid input lock, undo, interrupted flights, reduced motion, refresh/history restoration and full victory/undo.
+- Production build served internally on **4176**; actual mobile taps for downward/upward pours, refresh and undo passed with no page errors or external requests. No public deployment.
+- Real production-browser screenshots committed under `docs/screenshots/`:
+  - `milestone2b-tall-390x844.png`: full page, **390×844**.
+  - `milestone2b-tall-360x640.png`: full page, **360×640**.
+  - `milestone2b-tall-pour-390x844.png`: fixed viewport, **390×844**, captured during the pouring phase without full-page resizing.
+  - `milestone2b-tall-320x568-full-page.png`: 320×568 viewport, **320×623** complete scrollable page.
+- Screenshots were visually inspected: wood contact points, flower clearance, side-panel alignment and foreground pouring are readable. 390×844 and 360×640 fit fully; desktop 1280×900 centers the portrait scene. At 320×568 the retained 280px minimum scene width intentionally yields about 623px of page height, so the remaining floor/footer can be reached by vertical scrolling.
+
+### Remaining limits and stop point
+
+- Original `viewport-fit=cover` and safe-area padding/height calculation are retained. The supplied Chromium does not expose the CDP safe-area inset emulation method; physical iOS/Safari/notch behavior has not been verified. Normal viewport tests above did run successfully.
+- The small-screen scene and existing HUD/footer text are compact; this task does not redesign them. SVG bottles remain prototypes, tilted layers still follow the bottle, and the original brisk animation timing remains.
+- No center-panel flip, completion-count/crystal reward system, settlement screen, final bottle artwork, HUD revision, liquid/animation polish, audio, home/shop, PWA or public deployment was added. Stop after this layout replacement; await the next explicit task.
+
 ## Git and cloud handoff
 
 - Connected repository: `astridzhang-web/Witch-potion`; branch **`work`**, tracking `origin/work`.
-- Foundation and animation checkpoints were pushed successfully. This document accompanies the Milestone 2A cabinet handoff. Use `git log -1` and `git ls-remote origin refs/heads/work` to compare the latest tips.
+- Foundation and animation checkpoints were pushed successfully. This document accompanies the Milestone 2B tall cabinet handoff. Use `git log -1` and `git ls-remote origin refs/heads/work` to compare the latest tips.
 - Reusable `install_script` and `start_skill` have been saved to the cloud environment configuration draft. They cover frozen dependency install, tests/build, restarting Vite and functional readiness checks. Draft saving does not publish or validate restoration in a fresh task.
 - The cloud configuration's original `main` reference was for an empty repository. The final environment save records the inspected checkout's exact committed HEAD at mount path `Witch-potion` so future restoration uses the implemented project.
 - Review/save the environment settings and publish the cloud environment snapshot when desired. This is separate from publicly deploying the game.
@@ -129,7 +161,7 @@ Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2A produc
 
 ## Exact next task (only after the user asks)
 
-The redrawn long-screen cabinet is prepared but unused. Wait for an explicit request before replacing the active scene or calibrating its positions. Do not automatically begin Milestone 2B, final bottle art, animation timing/physics, rewards, sound, PWA or deployment.
+Milestone 2B replacement/calibration is complete. Wait for user feedback on the tall-cabinet screenshots and actual game. Do not automatically begin HUD changes, the center-panel flip, final bottle art, animation timing/physics, rewards, sound, PWA or deployment.
 
 ## Resume in a fresh Codex session
 
