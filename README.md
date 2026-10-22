@@ -54,7 +54,7 @@ Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before re
 
 The current `work` branch includes the separately authorized ~0.92-second animation experiment: source lift/travel, inward tilt, matching-color stream, synchronized liquid transfer and return. It reuses the existing game rules and SVGs; controls lock briefly during the flight. Reduced motion performs the transfer immediately. Its timing and implementation are retained in the cabinet scene. No PWA work or public deployment is included.
 
-Run the existing development command and try bottle 1 → empty bottle 8 from a fresh first puzzle, followed by bottle 7 → bottle 1. See [the short animation capture](docs/screenshots/floating-pour-prototype.gif), [downward pour](docs/screenshots/floating-pour-down.png) and [upward pour](docs/screenshots/floating-pour-up.png). The GIF is a 20 fps visual reference; the live renderer uses requestAnimationFrame. Full checks now comprise 33 unit tests and 46 browser tests. Detailed behavior and limitations are recorded in `PROGRESS.md`.
+Run the existing development command and try bottle 1 → empty bottle 8 from a fresh first puzzle, followed by bottle 7 → bottle 1. See [the short animation capture](docs/screenshots/floating-pour-prototype.gif), [downward pour](docs/screenshots/floating-pour-down.png) and [upward pour](docs/screenshots/floating-pour-up.png). The GIF is a 20 fps visual reference; the live renderer uses requestAnimationFrame. Full checks now comprise 33 unit tests and 48 browser tests. Detailed behavior and limitations are recorded in `PROGRESS.md`.
 
 ## Milestone 2B tall cabinet scene
 
@@ -65,3 +65,6 @@ The redrawn 841×1870 cabinet is now active, using the previously prepared 296 K
 The scene preserves the full artwork without stretching or cropping. It fits completely at 390×844 and 360×640 and centers on desktop. At 320×568, the existing 280px minimum scene width gives about 623px of page height, so the footer is reached by a short vertical scroll. Tests cover artwork contact bands, non-overlapping bottle targets, panel bounds/centering, ≥44px targets, top information visibility and the unchanged gameplay/animation.
 
 Both cabinet source PNGs and WebP exports remain in the repository. The [Milestone 2A screenshot](docs/screenshots/milestone2a-cabinet-mobile.png) is historical. Current bottle art and tilted liquid remain the prototype; physical iOS/Safari and safe-area behavior on actual devices still need verification. HUD changes, animation refinements, final bottle art, rewards, PWA and public deployment remain future work.
+
+
+The subsequent contact-shadow correction keeps those coordinates and replaces the detached SVG ellipse with a small stationary shadow at the glass base. It dims on selection, hides for the flying source and returns on landing; moving bottle art carries no shelf shadow. See [same-state before/after browser comparisons](docs/screenshots/milestone2b-contact-comparison.md).

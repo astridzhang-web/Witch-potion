@@ -26,3 +26,13 @@ Undo uses `{x:77, y:1542, width:200, height:132}`; restart uses `{x:564, y:1542,
 Artwork, bottle hit regions and panels share one stage with aspect ratio **841 / 1870**. Existing safe-area padding and `viewport-fit=cover` remain in effect. At 390×844 and 360×640, the whole image fits in the viewport. At 320×568, the existing minimum stage width of 280px produces about 623px of page height: the base controls are visible, and scrolling reveals the footer and remaining artwork. Desktop centers the portrait stage. No cropping or stretching is applied.
 
 The unchanged foreground animation measures actual SVG coordinates after scaling. Its 920ms timing, curves, tilt, stream and liquid rendering are retained. Top HUD, new-puzzle entry, symbol setting and save status retain their existing layout and functionality.
+
+## Contact-shadow visual review (after Milestone 2B)
+
+The first row was re-inspected in a live 390×844 browser and in 3× device-scale detail captures. Its glass bases already land inside the upper shelf's y=660–674 surface band. The side bottles are clear of the posts and sit beside the low flower clusters; after removing the detached ellipses, no independent horizontal or vertical placement defect justified moving them. All three rows therefore retain the coordinates, dimensions and hit regions above.
+
+The previous shared `BottleArt` ellipse had center y=140 while the glass base is y=134. Its hard 64×8 SVG-unit footprint sat below the glass and, against the original warm shelf highlights, looked like a separate pad. Because that ellipse belonged to the shared SVG, the flying sprite also carried it.
+
+The replacement is one stationary `.bottle-contact-shadow` element per bottle button, drawn behind the glass. A dark radial gradient is centered at y=134/150, with a 48%-wide and 2.4%-high box (48×3.6 in the SVG coordinate proportions). It adds no orange light. The selected source's shadow is dimmed at the shelf plane; during flight it is hidden immediately, then restored after landing. The receiver retains its one stationary shadow. Shared `BottleArt` now contains only the original glass/liquid drawing, so neither portal sprite carries a shelf-contact ellipse. The existing animation mechanism remains unchanged.
+
+See [the before/after browser captures](../docs/screenshots/milestone2b-contact-comparison.md). No background art, bottle shape, size, palette, HUD, footer or layout coordinates changed in this visual correction.

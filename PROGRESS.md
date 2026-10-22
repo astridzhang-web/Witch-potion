@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-**Milestone 2B tall cabinet replacement and layout calibration — COMPLETE. Stop for user feedback.**
+**Milestone 2B cabinet integration and contact-shadow visual correction — COMPLETE. Stop for user feedback.**
 
 The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement are implemented. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
 
@@ -17,7 +17,7 @@ The playable foundation, floating-pour experiment, Milestone 2A integration and 
 - Automatic versioned localStorage saves: current puzzle, board, full undo history and optional color-symbol setting. The loader validates the verified initial arrangement and every history transition.
 - Confirmation dialogs protect in-progress games; mouse, touch and native keyboard controls; reduced-motion support. Clear feedback when browser storage is unavailable.
 
-## Verification results (latest: Milestone 2B)
+## Verification results (latest: Milestone 2B contact-shadow correction)
 
 All final checks passed; **no known blocking gameplay bugs**.
 
@@ -28,16 +28,16 @@ All final checks passed; **no known blocking gameplay bugs**.
 | Preset solvability | All 4 full witnesses replayed; color conservation checked after every move |
 | Puzzle variation | 200 seeded color permutations replayed to victory |
 | `npm run build` | TypeScript and production bundle passed |
-| `npm run test:e2e` | **46 passed**, no skips/failures; 16 gameplay, 20 animation and 10 cabinet cases, desktop Chromium and emulated mobile touch |
+| `npm run test:e2e` | **48 passed**, no skips/failures; 16 gameplay, 22 animation/shadow and 10 cabinet cases, desktop Chromium and emulated mobile touch |
 | Browser gameplay | Actual taps/clicks to full victory; invalid move, undo, restart/new confirmation, saved win/undo, reload and settings checked |
 | Storage resilience | Corrupt save recovery and blocked localStorage checked in browser; quota errors checked in unit tests |
 | Layout/accessibility basics | 320×568, 360×640, 390×844, 844×390 and 1280×900; 3 columns, 9 targets ≥44 px, no horizontal overflow; keyboard and reduced motion checked |
 | Typical mobile viewport | Full 390×844 page saved and visually inspected; whole cabinet, nine bottles and both panels visible |
-| Production server smoke | Milestone 2B build served on 4176; actual touch pour, reload, undo, 9 bottles, no page errors or external network requests |
+| Production browser capture | Latest build on 4176 confirmed against dist/index.html; full/detail/selected/in-flight captures with no page errors. Actual touch play/reload/undo covered by the browser suite |
 | Development server | Started on 5173; HTTP response and app entry verified; functional tests use the same Vite workflow on isolated 4173 |
 | `git diff --check` | Passed |
 
-Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2B production JS ≈239 kB (≈76 kB gzip), CSS ≈7.1 kB (≈2.5 kB gzip), active tall cabinet WebP ≈303 kB. No runtime external fonts/assets, backend or API keys.
+Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2B production JS ≈239 kB (≈76 kB gzip), CSS ≈7.5 kB (≈2.6 kB gzip), active tall cabinet WebP ≈303 kB. No runtime external fonts/assets, backend or API keys.
 
 ### Resolved setup issues
 
@@ -126,10 +126,34 @@ Historical preparation checkpoint `9ab4eb9`; the later authorized replacement is
 - The small-screen scene and existing HUD/footer text are compact; this task does not redesign them. SVG bottles remain prototypes, tilted layers still follow the bottle, and the original brisk animation timing remains.
 - No center-panel flip, completion-count/crystal reward system, settlement screen, final bottle artwork, HUD revision, liquid/animation polish, audio, home/shop, PWA or public deployment was added. Stop after this layout replacement; await the next explicit task.
 
+## Milestone 2B visual correction / 药瓶落位复核与接触阴影 (2026-10-22)
+
+### Findings and minimal change
+
+- Started from `22a445481f92faaf4d4bc5f252a9a0266633f91b` on the existing `work` branch. Preserved the unrelated untracked `docs/PROJECT_REPORT.md` without edits or staging.
+- Inspected the running baseline in the same 390×844 viewport/first-preset state as the prior screenshot, plus direct browser detail captures at device scale 3. The top row's glass bases already sit in the measured y=660–674 shelf band, and its side bottles clear the posts and sit beside the flowers. After correcting the detached shadows, no separate placement defect justified changing coordinates. **All centers, heights (668/1088/1500), sizes and hit regions remain unchanged**, including middle and bottom rows.
+- Root cause: the shared SVG's hard 64×8 ellipse was centered at y=140, below the actual glass base at y=134. The gap and hard oval boundary against the background's warm highlights produced a floating-pad impression. The same ellipse was also part of the temporary flying bottle art.
+- Removed only that ellipse from `BottleArt` and added one stationary `.bottle-contact-shadow` per board button. It is a small soft dark radial gradient centered at the true glass base, with a 48×3.6 proportional footprint. It adds no colored illumination or extra image assets.
+- On selection the shadow stays on the wood and dims to 20% opacity while the existing glass lift runs. The source's shadow is hidden immediately during flight and restored on landing. The target keeps its one stationary shadow; both portal sprites contain no shelf-contact shadow.
+- Runtime changes are confined to `src/components/Bottle.tsx` and five added CSS lines. Game/session/save code, `cabinetLayout.ts`, `App.tsx`, `PourAnimation.tsx`, bottle silhouette/size/colors/liquid rendering, HUD/footer and cabinet images are unchanged. Timing, path, angle, easing and stream remain the existing 920ms mechanism.
+
+### Verification and visual evidence
+
+- `npm test`: **33 passed**. `npm run build`: **passed**. `npm run test:e2e`: **48 passed**, no skips/retries/failures.
+- Existing cabinet checks now compare each rendered shadow center against the actual glass contact point, including the two empty bottles, at all four supported viewports. A new desktop/mobile lifecycle case checks selection lift/dimming, stationary placement, source hiding, target persistence, no below-glass shadow ellipse in the flying art, landing restoration and undo back to an empty receiver.
+- All existing same-row/cross-row animation, exact return, input-locking, interruption, save/undo, reduced-motion and full-victory tests continue to pass. No layout-coordinate expectation was changed because no coordinates changed.
+- Production build confirmed on internal port 4176. The corrected full page and flight captures are real 390×844 browser screenshots. The top/lower detail images are direct 3× device-scale browser clips (864×405), from the same 390×844 CSS viewport; no image-editor composition or repainting. In-flight screenshot is viewport-only at 430ms into bottle 1→8.
+- Before/after index: `docs/screenshots/milestone2b-contact-comparison.md`. Corrected deliverables: `milestone2b-contact-after-390x844.png`, `milestone2b-contact-after-top-detail.png`, `milestone2b-contact-after-lower-detail.png`, `milestone2b-contact-pour-390x844.png`. Added the two matching baseline detail captures and a selected-source frame; retained all previous screenshots.
+- Visual review confirms removal of the separate dark ovals on both full and empty bottles, preserved warm artwork lighting, and no flat contact ellipse flying with the source. The small contact shadow remains subtle at phone size.
+
+### Limits and stop point
+
+This is a static contact treatment, not a dynamic projection or liquid-physics system. The original warm wood highlights, simple SVG glass and brisk animation remain. Physical iOS/Safari verification is still outstanding. No HUD, middle-board, rewards, settlement, home, audio, PWA or deployment work was undertaken. Stop after this visual correction.
+
 ## Git and cloud handoff
 
 - Connected repository: `astridzhang-web/Witch-potion`; branch **`work`**, tracking `origin/work`.
-- Foundation and animation checkpoints were pushed successfully. This document accompanies the Milestone 2B tall cabinet handoff. Use `git log -1` and `git ls-remote origin refs/heads/work` to compare the latest tips.
+- Foundation and animation checkpoints were pushed successfully. This document accompanies the Milestone 2B contact-shadow correction handoff. Use `git log -1` and `git ls-remote origin refs/heads/work` to compare the latest tips.
 - Reusable `install_script` and `start_skill` have been saved to the cloud environment configuration draft. They cover frozen dependency install, tests/build, restarting Vite and functional readiness checks. Draft saving does not publish or validate restoration in a fresh task.
 - The cloud configuration's original `main` reference was for an empty repository. The final environment save records the inspected checkout's exact committed HEAD at mount path `Witch-potion` so future restoration uses the implemented project.
 - Review/save the environment settings and publish the cloud environment snapshot when desired. This is separate from publicly deploying the game.
@@ -161,7 +185,7 @@ Historical preparation checkpoint `9ab4eb9`; the later authorized replacement is
 
 ## Exact next task (only after the user asks)
 
-Milestone 2B replacement/calibration is complete. Wait for user feedback on the tall-cabinet screenshots and actual game. Do not automatically begin HUD changes, the center-panel flip, final bottle art, animation timing/physics, rewards, sound, PWA or deployment.
+Milestone 2B replacement/calibration and contact-shadow correction are complete. Wait for user feedback on the same-state visual comparisons and actual game. Do not automatically begin HUD changes, the center-panel flip, final bottle art, animation timing/physics, rewards, sound, PWA or deployment.
 
 ## Resume in a fresh Codex session
 

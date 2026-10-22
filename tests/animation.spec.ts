@@ -139,3 +139,42 @@ test('reduced motion applies the same pour immediately without a flight', async 
   await expect(page.getByTestId('moves')).toHaveText('1')
   await expect(page.getByTestId('bottle-7')).toHaveAttribute('data-liquid', '4,4')
 })
+
+
+test('contact shadow stays on the shelf, fades on lift, and never travels with the source', async ({ page }) => {
+  await open(page)
+  const source = page.getByTestId('bottle-0')
+  const shadow = source.locator('.bottle-contact-shadow')
+  const receiverShadow = page.getByTestId('bottle-7').locator('.bottle-contact-shadow')
+  const originalShadow = (await shadow.boundingBox())!
+  const originalArt = (await source.locator('svg').boundingBox())!
+  const originalOpacity = Number(await shadow.evaluate(node => getComputedStyle(node).opacity))
+  await source.dispatchEvent('click')
+  await page.clock.runFor(200)
+  expect((await source.locator('svg').boundingBox())!.y).toBeLessThan(originalArt.y)
+  expect(await shadow.boundingBox()).toEqual(originalShadow)
+  expect(Number(await shadow.evaluate(node => getComputedStyle(node).opacity))).toBeLessThan(originalOpacity)
+  await source.dispatchEvent('click')
+  await page.clock.runFor(200)
+  expect(Number(await shadow.evaluate(node => getComputedStyle(node).opacity))).toBe(originalOpacity)
+  await begin(page, 0)
+  await expect(shadow).toBeHidden()
+  await expect(receiverShadow).toBeVisible()
+  await page.clock.runFor(430)
+  await expect(page.getByTestId('pour-animation')).toHaveAttribute('data-phase', 'pour')
+  await expect(page.locator('.pour-overlay .bottle-contact-shadow')).toHaveCount(0)
+  // Guard against reintroducing the old flat under-bottle ellipse in shared sprite art.
+  const belowGlass = await page.locator('.pour-overlay svg.bottle-art ellipse').evaluateAll(nodes =>
+    nodes.some(node => Number(node.getAttribute('cy')) > 134))
+  expect(belowGlass).toBe(false)
+  await expect(shadow).toBeHidden()
+  await page.clock.runFor(600)
+  await expect(page.getByTestId('pour-animation')).toHaveCount(0)
+  await expect(shadow).toBeVisible()
+  await expect(receiverShadow).toBeVisible()
+  expect(await shadow.boundingBox()).toEqual(originalShadow)
+  expect(Number(await shadow.evaluate(node => getComputedStyle(node).opacity))).toBe(originalOpacity)
+  await page.getByRole('button', { name: '撤销', exact: true }).dispatchEvent('click')
+  await expect(page.getByTestId('bottle-7')).toHaveAttribute('data-liquid', '')
+  await expect(receiverShadow).toBeVisible()
+})

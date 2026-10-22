@@ -40,6 +40,7 @@ export default function Bottle({ liquid, index, selected, showSymbols, won, busy
     onClick={onClick}
   >
     <span className="bottle-halo" />
+    <span className="bottle-contact-shadow" aria-hidden="true" />
     <BottleArt liquid={liquid} showSymbols={showSymbols} />
     <span className="bottle-number">{complete ? <span aria-hidden="true">✓</span> : String(index + 1).padStart(2, '0')}{liquid.length === 0 && <span className="empty-label">空瓶</span>}</span>
   </button>
@@ -62,7 +63,6 @@ export function BottleArt({ liquid, showSymbols, fillLevel = liquid.length }: { 
           <stop offset=".65" stopColor={color.light} /><stop offset="1" stopColor={color.main} />
         </linearGradient>)}
       </defs>
-      <ellipse cx="50" cy="140" rx="32" ry="4" fill="#050713" opacity=".5" />
       <path d={silhouette} fill={`url(#${id}-glass)`} />
       <g clipPath={`url(#${id}-clip)`}>
         <g clipPath={`url(#${id}-level)`}>

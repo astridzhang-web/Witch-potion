@@ -58,6 +58,14 @@ for (const [width, height] of [[390, 844], [360, 640], [320, 568], [1280, 900]])
       const target = (await page.getByTestId(`bottle-${i}`).boundingBox())!
       expect(target.width).toBeGreaterThanOrEqual(44)
       expect(target.height).toBeGreaterThanOrEqual(44)
+      const contactShadow = page.getByTestId(`bottle-${i}`).locator('.bottle-contact-shadow')
+      await expect(contactShadow).toBeVisible()
+      const shadow = (await contactShadow.boundingBox())!
+      // Rendered shadow centers must touch the actual glass base, for full AND empty bottles.
+      expect(shadow.x + shadow.width / 2).toBeCloseTo(contacts[i].x, 1)
+      expect(shadow.y + shadow.height / 2).toBeCloseTo(contacts[i].y, 1)
+      expect(shadow.height).toBeLessThan(target.height * .04)
+      expect(shadow.width).toBeLessThan(target.width * .6)
       if (i % 3 < 2) {
         const next = (await page.getByTestId(`bottle-${i + 1}`).boundingBox())!
         expect(target.x + target.width).toBeLessThanOrEqual(next.x + .1)

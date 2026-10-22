@@ -35,6 +35,11 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .bottle-art { display: block; width: 100%; height: 100%; overflow: visible; transition: transform .18s ease, filter .18s ease; }
 .bottle-number { display: none; }
 .bottle-halo { position: absolute; inset: 40% 6% 1%; background: radial-gradient(ellipse, #ffd19b00, transparent 70%); z-index: -1; pointer-events: none; }
+/* Shelf contact belongs to the stationary slot, centered on SVG glass base y=134/150.
+   It is deliberately absent from BottleArt so the portal sprites cannot carry it. */
+.bottle-contact-shadow { position: absolute; left: 26%; top: 89.333333%; width: 48%; height: 2.4%; transform: translateY(-50%); background: radial-gradient(ellipse, #100b0866 0%, #100b0833 40%, #100b0800 75%); z-index: -1; pointer-events: none; }
+.bottle.is-selected .bottle-contact-shadow { opacity: .2; }
+.bottle.is-animating:not(.is-receiving) .bottle-contact-shadow { visibility: hidden; }
 .bottle.is-selected .bottle-art { transform: translateY(-5px); filter: drop-shadow(0 0 3px #f4dfacaa) drop-shadow(0 0 8px #edc97455); }
 .bottle.is-selected .bottle-halo, .bottle.is-receiving .bottle-halo { background: radial-gradient(ellipse, #f8d78d33, transparent 70%); }
 .bottle.is-complete .bottle-halo { background: radial-gradient(ellipse, #e3ce8c25, transparent 65%); }
