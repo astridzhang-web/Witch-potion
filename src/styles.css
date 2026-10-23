@@ -95,19 +95,38 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .new-puzzle-panel { width: 100%; height: 100%; min-height: 44px; padding: 0; border: 0; background: transparent; color: #f7dfad; display: flex; align-items: center; justify-content: center; gap: 3px; font: clamp(11px, 3.3cqw, 16px) 'Songti SC', 'SimSun', serif; letter-spacing: .05em; text-shadow: 0 1px 3px #160804; pointer-events: auto; }
 .new-puzzle-panel:disabled { pointer-events: none; }
 .new-puzzle-panel > span[aria-hidden] { font-size: 9px; opacity: .7; }
-.new-puzzle-panel:hover:not(:disabled) { color: #fff1cd; }
-.new-puzzle-panel:focus-visible { outline: none; color: #fff1cd; text-decoration: underline; text-underline-offset: 4px; background: radial-gradient(ellipse, #ecc98e26, transparent 70%); }
+.new-puzzle-panel { position: relative; text-decoration: none; }
+.panel-brass-glow { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: #ffe0a1; stroke-width: 1; opacity: 0; filter: drop-shadow(0 0 2px #edb956) drop-shadow(0 0 3px #e5b35b66); pointer-events: none; transition: opacity .2s ease; }
+.new-puzzle-panel:not(:disabled) .panel-brass-glow { opacity: .28; }
+.new-puzzle-panel:hover:not(:disabled) .panel-brass-glow { opacity: .48; }
+.new-puzzle-panel:focus-visible { outline: none; text-decoration: none; }
+.new-puzzle-panel:focus-visible .panel-brass-glow { opacity: .85; stroke-width: 1.2; }
+.new-puzzle-panel:active:not(:disabled) .panel-brass-glow { opacity: .65; }
 
-.settlement { position: fixed; inset: 0; width: min(360px, calc(100% - 28px)); max-height: calc(100svh - 32px); padding: 36px 16px 28px; border: 0; overflow: auto; color: #e9dfcf; text-align: center; background: radial-gradient(ellipse, #25203dce, #11132266 65%, transparent 76%); }
-.settlement::backdrop { background: #070b1ac9; backdrop-filter: blur(3px); }
-.settlement-close { position: absolute; right: 0; top: 0; }
-.settlement-close:focus-visible { outline-offset: -4px; }
-.settlement-kicker { font-size: 9px; letter-spacing: .22em; color: #cdb788; }
-.settlement h2 { font: 27px 'Songti SC', 'SimSun', serif; font-weight: normal; letter-spacing: .22em; margin: 20px 0 12px; color: #f2dfb5; }
-.settlement-moves { font-size: 12px; color: #c8bed8; margin: 0; }
-.settlement-moves strong { font: 21px Georgia, serif; margin-left: 7px; color: #ede0ff; }
-.settlement-crystal { width: min(220px, 58vw); height: auto; display: block; margin: 4px auto; }
-.crystal-gem { animation: crystal-hover 3s ease-in-out infinite alternate; }
-.settlement-copy { font-size: 12px; margin: 6px 0 18px; color: #e1d2b9; }
-#settlement-hint { font-size: 10px; color: #b9b2c8; line-height: 1.6; margin: 0; }
-@keyframes crystal-hover { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+/* A separate parchment layer over the REAL completed cabinet; never a scene mockup. */
+.settlement { position: fixed; inset: 0; width: min(294px, calc(100% - 24px - env(safe-area-inset-left) - env(safe-area-inset-right))); max-height: calc(100svh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); padding: 32px 10px 8px; border: 0; overflow: auto; color: #503017; text-align: center; background: transparent; font-family: 'Songti SC', 'SimSun', 'Noto Serif CJK SC', serif; }
+.settlement::backdrop { background: #110c17a6; backdrop-filter: blur(2px); }
+.settlement-close { position: absolute; right: 3px; top: 0; border: 1px solid #e6c185; color: #f3dcac; background: #21142196; width: 44px; height: 44px; box-shadow: inset 0 0 4px #eec78055; z-index: 1; }
+.settlement-close:focus-visible { outline-color: #ffedc6; outline-offset: -4px; }
+.parchment { position: relative; width: 100%; aspect-ratio: 971 / 1619; min-height: 450px; background: url('/assets/settlement/parchment.webp') center / 100% 100% no-repeat; filter: drop-shadow(0 6px 12px #08030a88); }
+.parchment-content { position: absolute; inset: 16% 9% 10%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
+.settlement h2 { font-size: clamp(24px, 7.4vw, 26px); font-weight: 500; letter-spacing: .14em; margin: 0; color: #442510; line-height: 1.3; }
+.record-divider { display: flex; align-items: center; justify-content: center; gap: 8px; width: 94%; color: #a37742; font-size: 12px; line-height: 1; }
+.record-divider::before, .record-divider::after { content: ''; height: 1px; flex: 1; background: linear-gradient(90deg, transparent, #a3774277); }
+.record-divider::after { transform: rotate(180deg); }
+.settlement-moves { display: flex; align-items: center; font-size: 14px; margin: 0; line-height: 1.2; }
+.settlement-moves strong { font: 27px/1.1 Georgia, serif; margin-left: 5px; color: #593369; }
+.settlement-crystal { position: relative; width: 74%; aspect-ratio: 1; flex-shrink: 0; color: #aa7944; }
+.astrolabe { position: absolute; inset: 0; width: 100%; height: 100%; }
+.crystal-group { position: absolute; inset: 19% 21%; display: flex; align-items: center; justify-content: center; gap: 0; }
+.reward-crystal { width: 58%; height: auto; flex: 0 0 auto; object-fit: contain; mix-blend-mode: normal; }
+.settlement-crystal[data-count='1'] .reward-crystal { width: 74%; }
+.settlement-crystal[data-count='3'] .crystal-group { inset-inline: 16%; }
+.settlement-crystal[data-count='3'] .reward-crystal { width: 38%; }
+.crystal-reward { display: flex; align-items: center; font-size: 14px; margin: 0; line-height: 1.2; }
+.crystal-reward strong { font: 24px/1.1 Georgia, serif; color: #643872; margin-left: 8px; }
+.completion-receipt { display: flex; align-items: center; justify-content: center; gap: 5px; margin: 0; font-size: 14px; white-space: nowrap; }
+.completion-receipt strong { font-weight: normal; font-size: 18px; color: #643872; margin-left: 4px; }
+.scroll-icon { width: 30px; height: 33px; flex: none; filter: drop-shadow(0 1px 1px #704b2833); }
+.settlement-copy { font-size: 12px; margin: 0; line-height: 1.5; color: #795737; }
+#settlement-hint { font: 11px/1.8 'Songti SC', 'SimSun', serif; color: #eadac0; margin: 7px 0 0; text-shadow: 0 1px 4px #000; }

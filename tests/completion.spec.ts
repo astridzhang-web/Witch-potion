@@ -90,12 +90,12 @@ test('last pour returns before settlement; dismiss flips, focuses and persists; 
   expect((await stored(page)).completion).toEqual({ totalCompleted: 1, currentPuzzleCounted: false, settlementDismissed: false })
 })
 
-test('v1 solved migration, undo and full restart replay do not count or celebrate twice', async ({ page }) => {
+test('v1 migration retires base reward, replay earns benchmark once without recounting', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await open(page, last + 1)
   await expect(page.getByRole('dialog', { name: '调配完成' })).toBeVisible()
   const migrated = await stored(page)
-  expect(migrated.version).toBe(2)
+  expect(migrated.version).toBe(3)
   expect(migrated.session).toEqual(fixture(last + 1).session)
   expect(migrated.showSymbols).toBe(true)
   // Any non-button content tap dismisses the settlement too.
@@ -108,6 +108,9 @@ test('v1 solved migration, undo and full restart replay do not count or celebrat
   await page.reload()
   await finish(page)
   await expect(page.getByTestId('total-completed')).toHaveText('1')
+  await expect(page.getByTestId('crystal-award')).toHaveText('+1')
+  await expect(page.getByTestId('completion-delta')).toHaveText('已记录')
+  await page.keyboard.press('Escape')
   await expect(page.getByRole('dialog')).toHaveCount(0)
   await page.getByRole('button', { name: '重来', exact: true }).click()
   await expect(page.getByTestId('moves')).toHaveText('0')

@@ -137,7 +137,7 @@ export default function App() {
 
     {flight && <PourAnimation flight={flight} showSymbols={showSymbols} onCommit={commitPour} onFinish={finishPour} />}
 
-    {showSettlement && <Settlement moves={session.history.length} onClose={dismiss} />}
+    {showSettlement && <Settlement moves={session.history.length} award={game.rewards.lastAward} completionDelta={game.rewards.completionDelta} onClose={dismiss} />}
 
     {modal && <Modal title={modal === 'help' ? '一瓶一色，便是魔法' : '重新调配这份药剂？'} onClose={() => setModal(null)}>
       {modal === 'help' ? <>

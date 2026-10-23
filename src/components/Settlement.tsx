@@ -1,7 +1,20 @@
 import { useEffect, useRef } from 'react'
 import Icon from './Icon'
+import CrystalDisplay from './CrystalDisplay'
 
-export default function Settlement({ moves, onClose }: { moves: number; onClose(): void }) {
+function ScrollIcon() {
+  return <svg className="scroll-icon" viewBox="0 0 44 48" aria-hidden="true">
+    <defs><linearGradient id="scroll-paper" x2="1" y2="1"><stop stopColor="#f9e1ab"/><stop offset=".5" stopColor="#dab27c"/><stop offset="1" stopColor="#f6d79b"/></linearGradient></defs>
+    <g transform="rotate(-12 22 24)" stroke="#89603a" strokeWidth="1.1" strokeLinejoin="round">
+      <path d="M8 9h26v29H10Z" fill="url(#scroll-paper)"/>
+      <path d="M8 5h26q6 0 4 7H8C2 12 2 5 8 5Z M10 35h25q6 0 3 8H10c-7 0-7-8 0-8Z" fill="url(#scroll-paper)"/>
+      <ellipse cx="8" cy="8.5" rx="2.6" ry="3.5" fill="#a87e4c"/><ellipse cx="10" cy="39" rx="2.6" ry="4" fill="#ac8354"/>
+      <path d="M25 19a5 5 0 1 0 0 10 6 6 0 0 1 0-10" fill="#9a703b" stroke="none"/>
+      <path d="M14 30h12" opacity=".4"/><path d="m28 12 1 8 3-2 3 1-1-7" fill="#80608f" stroke="#61456b" strokeWidth=".6"/>
+    </g>
+  </svg>
+}
+export default function Settlement({ moves, award, completionDelta, onClose }: { moves: number; award: 0 | 1 | 2; completionDelta: 0 | 1; onClose(): void }) {
   const ref = useRef<HTMLDialogElement>(null)
   useEffect(() => {
     const dialog = ref.current!
@@ -10,26 +23,18 @@ export default function Settlement({ moves, onClose }: { moves: number; onClose(
   }, [])
   return <dialog ref={ref} className="settlement" aria-labelledby="settlement-title" aria-describedby="settlement-hint" onClick={onClose} onCancel={event => { event.preventDefault(); onClose() }}>
     <button autoFocus className="icon-button settlement-close" aria-label="收起结算" onClick={event => { event.stopPropagation(); onClose() }}><Icon name="close" /></button>
-    <p className="settlement-kicker" aria-hidden="true">✧ MOONLIT ALCHEMY ✧</p>
-    <h2 id="settlement-title">调配完成</h2>
-    <p className="settlement-moves">本次步数 <strong data-testid="settlement-moves">{moves}</strong></p>
-    <svg className="settlement-crystal" viewBox="0 0 240 260" aria-hidden="true">
-      <defs>
-        <radialGradient id="crystal-aura"><stop stopColor="#9679ed" stopOpacity=".38"/><stop offset="1" stopColor="#7964bc" stopOpacity="0"/></radialGradient>
-        <linearGradient id="crystal-main" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#d1d9ff"/><stop offset=".45" stopColor="#8e7ce9"/><stop offset="1" stopColor="#514a9f"/></linearGradient>
-      </defs>
-      <ellipse cx="120" cy="135" rx="108" ry="115" fill="url(#crystal-aura)"/>
-      <g className="crystal-gem" stroke="#ded8ff" strokeOpacity=".55" strokeWidth="1">
-        <path d="M120 35 161 83 153 165 120 220 87 165 79 83Z" fill="url(#crystal-main)"/>
-        <path d="M120 35 109 92 111 165 120 220 137 159 137 89Z" fill="#c7b3ff" fillOpacity=".65"/>
-        <path d="M79 83 109 92 111 165 87 165Z" fill="#6552b5"/>
-        <path d="M137 89 161 83 153 165 137 159Z" fill="#8fa9ff" fillOpacity=".75"/>
-        <path d="M120 35 79 83 109 92Z" fill="#e8e4ff" fillOpacity=".65"/>
-        <path d="M111 165 120 220 87 165Z" fill="#524c9e"/>
-      </g>
-      <g fill="#e8ce90"><path d="m45 101 2 7 7 2-7 2-2 7-2-7-7-2 7-2Z"/><path d="m188 61 2 8 8 2-8 2-2 8-2-8-8-2 8-2Z"/><path d="m179 183 1.5 6 6 1.5-6 1.5-1.5 6-1.5-6-6-1.5 6-1.5Z"/><circle cx="64" cy="187" r="1.5"/><circle cx="175" cy="129" r="1"/></g>
-    </svg>
-    <p className="settlement-copy">七色各归其位，今夜的魔法已成。</p>
-    <p id="settlement-hint">轻触任意位置，欣赏你的调配成果</p>
+    <div className="parchment">
+      <div className="parchment-content">
+        <h2 id="settlement-title">调配完成</h2>
+        <div className="record-divider" aria-hidden="true">✧</div>
+        <p className="settlement-moves">本次步数 <strong data-testid="settlement-moves">{moves}</strong></p>
+        <CrystalDisplay count={award} />
+        <p className="crystal-reward">晶石奖励 <strong data-testid="crystal-award">+{award}</strong></p>
+        <p className="completion-receipt"><ScrollIcon/><span>已完成谜题</span><strong data-testid="completion-delta">{completionDelta ? '+1' : '已记录'}</strong></p>
+        <div className="record-divider" aria-hidden="true">☾</div>
+        <p className="settlement-copy">今夜的调配已收入月夜手记。</p>
+      </div>
+    </div>
+    <p id="settlement-hint">轻触任意位置关闭 · Esc 返回</p>
   </dialog>
 }

@@ -68,4 +68,27 @@ ffmpeg -hide_banner -loglevel error -i public/assets/shelf-tall.webp -vf 'crop=2
 
 All three combined are about 88 KiB. No new full-cabinet image was generated. The center face occupies x=300–541, y=1540–1678 in the shared 841×1870 scene. The recess covers the baked-in star even when the board turns edge-on; backface hiding prevents mirrored text/double faces. The reverse reuses neighboring ornament and scales its width, so it is a small art integration rather than bespoke final hinge art.
 
-The settlement crystal is an original inline geometric SVG in `Settlement.tsx`; it conveys completion only and has no associated currency/reward data. Milestone 2C replaces the historical HUD/footer entry placement described in the earlier records.
+At the 2C checkpoint the settlement crystal was an original inline geometric SVG in `Settlement.tsx`; it conveys completion only and has no associated currency/reward data. Milestone 2C replaces the historical HUD/footer entry placement described in the earlier records.
+
+
+## Milestone 2D: independent parchment and amethyst
+
+The supplied `结算框.zip` contains `single crystal.png` and `double crystal.png`. Preserve them as `source/settlement/reference-single.png` (769×1024) and `reference-double.png` (1024×1536). They are **reference only**, never imported by the game: their illustrated cabinet is not the real 841×1870 scene.
+
+Two separate transparent assets were generated with the image-generation tool using the double-crystal reference's antique style: a blank lightly textured parchment with fine brass/botanical edging, and one isolated translucent amethyst with internal light. Source PNGs are retained. No background cabinet was generated or replaced. These images are reusable foreground artwork, not screenshots.
+
+| Runtime asset | Retained source | Export | Bytes |
+| --- | --- | --- | --- |
+| `public/assets/settlement/parchment.webp` | `source/settlement/parchment.png`, 971×1619 RGBA | 600×1000, quality 92 WebP | 150,466 |
+| `public/assets/settlement/amethyst.webp` | `source/settlement/amethyst.png`, 1024×1536 RGBA | 384×576, quality 92 WebP | 54,010 |
+
+Reproduce these optimized, alpha-preserving browser exports from the repository root:
+
+```sh
+ffmpeg -hide_banner -loglevel error -i assets/source/settlement/parchment.png -vf scale=600:-1 -c:v libwebp -quality 92 -compression_level 6 -frames:v 1 public/assets/settlement/parchment.webp
+ffmpeg -hide_banner -loglevel error -i assets/source/settlement/amethyst.png -vf scale=384:576 -c:v libwebp -quality 92 -compression_level 6 -frames:v 1 public/assets/settlement/amethyst.webp
+```
+
+The circle/moon geometry in `CrystalDisplay.tsx` and small rolled-paper icon in `Settlement.tsx` are independent SVGs. Crystal images are duplicated dynamically from the actual reward receipt, with no pedestal. Text is real DOM content. One/two crystals use the same parchment and circle dimensions; a three-crystal art layout is reserved without a reward rule.
+
+`CenterPanel.tsx` adds only an SVG contour aligned to the existing `panel-back.webp` brass border. Its dim enabled glow, brighter hover and clear focus do not modify the panel textures or 550ms turning logic. All original cabinet PNG/WebP files remain unchanged. Differences from reference: regenerated paper grain/ornament and crystal facets, simpler SVG scroll, and layout sized for readable live text rather than a literal screenshot cutout.

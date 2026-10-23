@@ -153,7 +153,7 @@ test('corrupt local data recovers to a valid puzzle without browser errors', asy
   await expect(page.getByTestId('moves')).toHaveText('0')
   await expect(page.locator('[data-liquid]')).toHaveCount(9)
   const saved = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), saveKey)
-  expect(saved.version).toBe(2)
+  expect(saved.version).toBe(3)
   expect(saved.session.board.flat().sort()).toEqual(initial.flat().sort())
   expect(errors).toEqual([])
 })

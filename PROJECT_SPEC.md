@@ -34,7 +34,7 @@ Future workshop artwork: wooden workbench, ingredient shelves, books, parchment,
 
 ## Milestones and scope
 
-The original roadmap below is historical. Subsequent explicitly authorized 2A/2B/2C scopes supersede its sequence and UI details; see the current 2C requirements at the end.
+The original roadmap below is historical. Subsequent explicitly authorized 2A/2B/2C/2D scopes supersede its sequence and UI details; see the current 2D requirements at the end.
 
 1. **Stable playable foundation — complete.** App structure, complete rules, responsive 3 × 3 board, attractive placeholder glass, controls, saves, verified puzzles, useful automated tests, build, checkpoint commits and push when permitted.
 2. **Workshop artwork — requires a new instruction.** Atmospheric background, refined bottle variations, luminous liquids, dense tiny sparkles; small-screen legibility/performance checks; commit.
@@ -45,7 +45,7 @@ The eventual PWA must work without internet after caching, support portrait touc
 
 ## Quota-safe continuation
 
-Complete one stable milestone at a time. Keep working builds and frequent meaningful Git checkpoints, push committed work when allowed. Maintain this spec and `PROGRESS.md` with actual checks, limitations, architecture and the exact next task. Inspect and preserve existing changes on resume. Never claim unimplemented or untested behavior works. Follow only the currently authorized scope; after the authorized Milestone 2C HUD and completion flow, stop for feedback.
+Complete one stable milestone at a time. Keep working builds and frequent meaningful Git checkpoints, push committed work when allowed. Maintain this spec and `PROGRESS.md` with actual checks, limitations, architecture and the exact next task. Inspect and preserve existing changes on resume. Never claim unimplemented or untested behavior works. Follow only the currently authorized scope; after the authorized Milestone 2D parchment and basic rewards, stop for feedback.
 
 ## Authorized narrow experiment: floating pour prototype (2026-10-22)
 
@@ -74,7 +74,7 @@ Run unit tests, production build and browser regressions. Commit real browser sc
 Review the top row against the actual cabinet before deciding whether a small coordinate correction is necessary; retain correctly placed rows and existing bottle size/shape. Replace the detached under-bottle ellipse with a thin, soft, dark contact shadow at the true glass base. Keep stationary contact rendering separate from flying sprite art, hide the departing source's contact shadow and restore it on return. Preserve rules/saves, the 920ms animation and its motion/stream, HUD/footer and all background assets. Deliver same-state browser comparisons, run all checks, update progress, commit/push `work`, then stop.
 
 
-## Authorized Milestone 2C: HUD and completion flow (current)
+## Historical Milestone 2C: HUD and completion flow
 
 This scope supersedes the historical top new-puzzle entry, preset numbering, decorative-only center panel, footer settings/save-success text and v1-only save schema described above. The game has no linear levels.
 
@@ -88,3 +88,19 @@ This scope supersedes the historical top new-puzzle entry, preset numbering, dec
 - Preserve rules, presets, cabinet illustration, all nine bottle placements, SVG/liquid art, contact shadows and the existing pour mechanism/timing. Validate migration/counting, modal/flip state, input locks, keyboard/reduced motion and responsive layout with units and real browsers.
 
 Deliver real normal 390×844 and 360×640 screenshots, settlement, completed-board and panel-flip evidence; update documents, run all checks, commit and push `work`, then stop. Final bottles, perspective compensation, liquid/animation polish, home, rewards/shop, audio, PWA and public deployment remain outside this scope.
+
+
+## Authorized Milestone 2D: parchment settlement and brass feedback (2026-10-23, current)
+
+This supersedes 2C's geometric crystal, text underline, v2-only schema and prohibition on basic reward bookkeeping. Retain the 550ms panel flip, manual new-puzzle flow, 920ms pour, nine bottle positions/art, rules and original 841×1870 cabinet.
+
+- Use a compact golden parchment record over a softly dimmed/blurred **live completed game**. Never use the cabinet drawn in the supplied settlement reference as the scene background. Paper, Chinese text, astrolabe, reusable transparent amethyst and small scroll icon are independent layers.
+- Display actual moves, actual newly granted crystals, and an independent completion increment. One crystal is centered; two are close and symmetric in the same fixed-size circle/panel. Reserve art-only capacity for three without defining a third reward condition. No pedestal.
+- First success per puzzle instance grants a base +1. The first success at or below the matching preset's `solution.length` grants a further +1, either together or on a later replay. Reference witnesses are not shortest-path claims. Each instance has at most two crystals; repeated callbacks, undo/restart/reload/closing cannot grant the same credit again.
+- Lifetime crystal balance is independent of completed-puzzle count. Persist the board, history, symbols, completion flags, balance, per-instance base/bonus flags and latest receipt atomically as schema v3 under the existing key. Only explicit new puzzle resets instance eligibility, including when preset IDs recur.
+- No retrospective crystals on v1/v2 migration. Preserve all valid board/history/settings; retain v2 completion/dismissal exactly, and retain 2C's v1 completion migration. Retire the base for an already-counted legacy instance with balance 0; its benchmark bonus remains available on a future successful replay. Uncompleted legacy instances remain fully eligible. A pending migrated settlement shows +0 crystals and “已记录”; a dismissed one stays dismissed. v1 cannot recover completion history that was never stored.
+- Newly earned replay bonuses reopen settlement after the pour returns, showing +1 crystal and “已记录” for completion count. Replays without a new credit keep the existing no-repeat-settlement behavior. No fabricated +1/+2 receipt.
+- Replace all central-button underlining with a subtle warm brass-contour glow. Hover may brighten it; keyboard focus is clearer and pressing changes brightness. Keep text still and focus accessible. No breathing animation is needed; reduced motion disables opacity transitions.
+- Keep the 44px close control, tap/Escape dismissal, safe-area margins and internal scrolling on short screens. Verify 390×844, 360×640, 320×568 and centered desktop with actual browser screenshots.
+
+Deliver tests/build, screenshots and updated documents, commit/push `work`, then stop for visual acceptance. No final bottles, perspective changes, animation refinement, home, shop/spending, special third reward, audio, PWA or public deployment.

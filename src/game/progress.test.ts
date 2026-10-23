@@ -54,7 +54,7 @@ describe('completion transactions', () => {
   })
 })
 
-describe('v1 migration and atomic v2 persistence', () => {
+describe('v1 migration and atomic current-version persistence', () => {
   it('preserves every board, move, undo step and symbol setting in an unfinished v1 save', () => {
     const session = play(createSession(puzzle), 7)
     const migrated = decodeSave(legacy(session))!
@@ -64,7 +64,7 @@ describe('v1 migration and atomic v2 persistence', () => {
     const storage = memory()
     expect(saveProgress(storage, migrated)).toBe(true)
     expect(loadSave(storage)).toEqual(migrated)
-    expect(JSON.parse(storage.getItem(SAVE_KEY)!).version).toBe(2)
+    expect(JSON.parse(storage.getItem(SAVE_KEY)!).version).toBe(3)
     expect(storage.entries.size).toBe(1)
   })
   it('credits a solved v1 board once, restores pending settlement, then preserves dismissal', () => {
