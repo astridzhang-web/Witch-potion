@@ -29,9 +29,8 @@ const clamp = (n: number) => Math.max(0, Math.min(1, n))
 const ease = (n: number) => n * n * (3 - 2 * n)
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 
-export default function PourAnimation({ flight, showSymbols, onCommit, onFinish }: {
+export default function PourAnimation({ flight, onCommit, onFinish }: {
   flight: Flight
-  showSymbols: boolean
   onCommit(session: Session): void
   onFinish(): void
 }) {
@@ -104,10 +103,10 @@ export default function PourAnimation({ flight, showSymbols, onCommit, onFinish 
 
   return createPortal(<div className="pour-overlay" data-testid="pour-animation" data-phase={phase} data-from={pour.from} data-to={pour.to} aria-hidden="true">
     <div className="receiving-sprite" style={{ left: target.x, top: target.y, width: target.width, height: target.height }}>
-      <BottleArt liquid={pour.after[pour.to]} showSymbols={showSymbols} fillLevel={targetLevel} />
+      <BottleArt liquid={pour.after[pour.to]} fillLevel={targetLevel} />
     </div>
     <div className="flying-bottle" style={{ width: source.width, height: source.height, transform: `translate3d(${x}px, ${y}px, 0) rotate(${angle}deg)` }}>
-      <BottleArt liquid={pour.before[pour.from]} showSymbols={showSymbols} fillLevel={sourceLevel} />
+      <BottleArt liquid={pour.before[pour.from]} fillLevel={sourceLevel} />
     </div>
     {phase === 'pour' && <svg className="potion-stream" width="100%" height="100%" data-color={pour.color}>
       <path d={`M${tip.x} ${tip.y} Q${mouth.x} ${tip.y + 3} ${mouth.x} ${mouth.y + 4}`} stroke={color.main} strokeWidth="5" fill="none" strokeLinecap="round" />

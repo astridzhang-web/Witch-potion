@@ -133,9 +133,9 @@ describe('versioned local saves', () => {
     const session = pourSession(start(), ...PRESETS[0].solution[0])!.session
     const memory = new Map<string, string>()
     const storage = { getItem: (key: string) => memory.get(key) ?? null, setItem: (key: string, value: string) => { memory.set(key, value) } }
-    expect(saveProgress(storage, createGame(session, true))).toBe(true)
+    expect(saveProgress(storage, createGame(session))).toBe(true)
     expect(memory.has(SAVE_KEY)).toBe(true)
-    expect(loadSave(storage)).toEqual(createGame(session, true))
+    expect(loadSave(storage)).toEqual(createGame(session))
     expect(boardsEqual(undo(loadSave(storage)!.session).board, puzzle.initial)).toBe(true)
   })
   it.each([null, '{', '{}', 'null', '{"version":2}', '[]'])('safely rejects corrupt/unknown data: %s', (raw) => {

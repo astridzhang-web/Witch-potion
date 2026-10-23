@@ -30,7 +30,7 @@ Browser tests use `/usr/bin/chromium` when available in the cloud. Set `CHROMIUM
 
 Tap a bottle, then an empty bottle or one with the same top color and available space. The maximum contiguous top group transfers at once. Sort seven colors into seven full bottles, leaving two empty. Tap the selected bottle again to deselect. Undo and restart remain available; restarting an unfinished puzzle asks for confirmation. After winning, dismiss the crystal settlement to reveal the center panel’s “新谜题” button. The completed board stays until you choose to start another puzzle.
 
-Progress, undo history, lifetime completion count, settlement dismissal and optional color symbols are saved together in this browser's localStorage. Color symbols are configured in the help dialog; successful saves are silent. Blocked storage does not prevent play, but displays a warning. Clearing browser data removes progress. Corrupt or incompatible saves start a fresh verified puzzle. This version keeps one active puzzle, not a cloud account or multi-device sync.
+Progress, undo history, lifetime completion count, settlement dismissal are saved together in this browser's localStorage. The help dialog contains four concise steps; successful saves are silent. Blocked storage does not prevent play, but displays a warning. Clearing browser data removes progress. Corrupt or incompatible saves start a fresh verified puzzle. This version keeps one active puzzle, not a cloud account or multi-device sync.
 
 ## Puzzle reliability
 
@@ -48,7 +48,7 @@ Four fixed presets in `src/game/presets.json` each include a complete legal solu
 - `assets/source/shelf-tall.png`, `public/assets/shelf-tall.webp`: active tall cabinet original and optimized local scene (the earlier pair is preserved); see [asset notes](assets/README.md).
 - `src/game/game.test.ts`, `tests/game.spec.ts`: unit and real browser checks.
 
-Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 2E mechanism, stardust and typography are complete; stop for visual acceptance before further work. Final bottle art, animation timing/physics refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
+Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 2E and its HUD/help visual patch are complete; stop for visual acceptance before further work. Final bottle art, animation timing/physics refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
 
 ## Small floating-pour prototype
 
@@ -107,3 +107,17 @@ for prose/HUD, adding **122.4 KiB** total. [Font licenses and rebuild](public/fo
 
 Verified: **68 unit tests, 82 browser tests**, production build. Physical Safari/iOS and low-end
 GPU checks remain outstanding. No gameplay, reward, save, bottle/pour or scene-art changes.
+
+## Milestone 2E visual patch
+
+The active center panel sustains a warm brass inner glow with a champagne outer halo;
+its brightness remains visible without hover or focus. Side button groups mirror each other,
+whole HUD groups stay symmetric, and help sits independently at the viewport's safe top-right.
+Help contains four text steps and closes via outside tap, its close button or Escape.
+
+Color symbols are removed from the interface, rendering and runtime state. Existing v1/v2/v3
+saves ignore the obsolete preference and retain valid game/history/reward data; v3 writes omit
+that field. The font families, cabinet coordinates, flip/dust/pour and rewards are retained.
+The refreshed text font subset plus unchanged display subset total **105.5 KiB**.
+
+[Actual screenshots and continuous glow recording](docs/screenshots/milestone2e-patch-preview.md)

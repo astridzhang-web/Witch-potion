@@ -62,3 +62,16 @@ The wood thickness is a lightweight CSS box rather than a physical hinge simulat
 Phone-scale dust is intentionally small; inspect the enlarged detail/movie to judge its
 independent motion. Physical Safari/iOS and low-end GPU performance remain unverified.
 No changes to bottle shapes, liquid physics, rewards, saves, home, shop, audio or PWA.
+
+## 2E visual patch overrides
+
+The same contour now combines a `#f8cd91` fine inner edge, `#eab377` warm brass body
+and a diffuse `#fff0d0` champagne halo. The active SVG opacity stays at **0.94**;
+hover is 0.98, keyboard focus 1 with a clearer fine edge, and pressed 0.88. The same late-turn
+fade-in remains, but the resting appearance no longer depends on focus/hover. Dust fill is
+paler warm white; emitter geometry and animation are unchanged.
+
+Side content now uses mirrored inline-flex groups biased outward (undo icon then text;
+restart text then icon), per the new user direction. The previous text-centered side grid
+is superseded. CenterPanel structure/650ms timer, coordinates and all textures remain unchanged.
+See [patch evidence](../docs/screenshots/milestone2e-patch-preview.md).

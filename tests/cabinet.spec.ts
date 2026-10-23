@@ -81,9 +81,12 @@ for (const [width, height] of [[390, 844], [360, 640], [320, 568], [1280, 900]])
       within((hit.x + hit.width - stage.x) / scale, region.x)
       within((hit.y - stage.y) / scale, panelY)
       within((hit.y + hit.height - stage.y) / scale, panelY)
-      // The text itself is centered; the arrow occupies a separate left column.
-      const content = await page.locator(`${region.selector} > *`).evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().toJSON()))
-      expect(Math.abs(content[1].x + content[1].width / 2 - hit.x - hit.width / 2)).toBeLessThan(1)
+      // The whole content group is biased outward; the mirrored right order is text/arrow.
+      const content = (await page.locator(`${region.selector} .panel-content`).boundingBox())!
+      const offset = content.x + content.width / 2 - hit.x - hit.width / 2
+      expect(region.selector.includes('undo') ? offset : -offset).toBeLessThan(-2)
+      expect(content.x).toBeGreaterThan(hit.x + 5)
+      expect(content.x + content.width).toBeLessThan(hit.x + hit.width - 5)
     }
     await expect(page.locator('.controls').getByRole('button')).toHaveCount(2)
     const middleIsButton = await page.evaluate(({ x, y }) => !!document.elementFromPoint(x, y)?.closest('button'), {
@@ -91,7 +94,7 @@ for (const [width, height] of [[390, 844], [360, 640], [320, 568], [1280, 900]])
     })
     expect(middleIsButton).toBe(false)
     await expect(page.locator('.scene-hud').getByRole('button', { name: '新谜题', exact: true })).toHaveCount(0)
-    for (const selector of ['.completion-stat', '.move-stat', '.scene-hud .icon-button']) {
+    for (const selector of ['.completion-stat', '.move-stat']) {
       const hud = (await page.locator(selector).boundingBox())!
       expect(hud.x).toBeGreaterThanOrEqual(stage.x)
       expect(hud.x + hud.width).toBeLessThanOrEqual(stage.x + stage.width)

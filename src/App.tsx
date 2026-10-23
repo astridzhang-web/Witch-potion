@@ -37,7 +37,7 @@ export default function App() {
     busyRef.current = false
     setFlight(null)
   }, [])
-  const { session, showSymbols } = game
+  const { session } = game
   const won = isVictory(session.board)
   const stuck = !won && !hasLegalMove(session.board)
   const showSettlement = !busy && settlementPending(game)
@@ -113,38 +113,40 @@ export default function App() {
 
   return <main className="app-shell">
     <h1 className="sr-only">月夜魔法药剂室</h1>
+    <button className="icon-button help-button" aria-label="玩法说明" disabled={blocked} onClick={() => setModal('help')}><Icon name="help" /></button>
     <section className="cabinet-scene" aria-label="月夜魔药展柜">
       <img className="cabinet-art" src="/assets/shelf-tall.webp" width="841" height="1870" alt="" fetchPriority="high" draggable={false} />
       <header className="scene-hud">
-        <div className="completion-stat"><span aria-hidden="true">☾</span><span>已完成 <strong data-testid="total-completed">{game.completion.totalCompleted}</strong></span></div>
+        <div className="completion-stat"><span>已完成</span><strong data-testid="total-completed">{game.completion.totalCompleted}</strong></div>
         <div className="move-stat"><span>步数</span><strong data-testid="moves">{session.history.length}</strong></div>
-        <button className="icon-button" aria-label="玩法说明" disabled={blocked} onClick={() => setModal('help')}><Icon name="help" /></button>
       </header>
       <div className="board" role="group" aria-label="九只药瓶，三行三列" aria-busy={busy}>
-        {session.board.map((liquid, index) => <Bottle key={index} liquid={liquid} index={index} style={bottlePosition(index)} selected={selected === index} showSymbols={showSymbols} won={won} busy={busy} animating={flight?.pour.from === index || flight?.pour.to === index} receiving={flight?.pour.to === index} onClick={() => selectBottle(index)} />)}
+        {session.board.map((liquid, index) => <Bottle key={index} liquid={liquid} index={index} style={bottlePosition(index)} selected={selected === index} won={won} busy={busy} animating={flight?.pour.from === index || flight?.pour.to === index} receiving={flight?.pour.to === index} onClick={() => selectBottle(index)} />)}
       </div>
       <div className="board-message" role="status" aria-live="polite" aria-atomic="true">
         <span className="message-star" aria-hidden="true">✧</span><span>{busy ? '魔法调配中…' : won ? (game.completion.settlementDismissed ? '慢慢欣赏，准备好后再开启新谜题' : '七色各归其位') : stuck ? '暂时没有可行的倒法，试试撤销或重新开始' : notice}</span>
       </div>
 
       <div className="controls" aria-label="木柜底座操作">
-        <button className="panel-button undo-panel" style={panelPosition('undo')} disabled={blocked || !session.history.length} onClick={() => { if (busyRef.current || showSettlement) return; setGame(previous => withSession(previous, undo(previous.session))); setSelected(null); setNotice('已撤销上一步，灵感可以重来') }}><Icon name="undo" /><span>撤销</span></button>
-        <button className="panel-button restart-panel" style={panelPosition('restart')} disabled={blocked} onClick={requestRestart}><Icon name="restart" /><span>重来</span></button>
+        <button className="panel-button undo-panel" style={panelPosition('undo')} disabled={blocked || !session.history.length} onClick={() => { if (busyRef.current || showSettlement) return; setGame(previous => withSession(previous, undo(previous.session))); setSelected(null); setNotice('已撤销上一步，灵感可以重来') }}><span className="panel-content"><Icon name="undo" /><span>撤销</span></span></button>
+        <button className="panel-button restart-panel" style={panelPosition('restart')} disabled={blocked} onClick={requestRestart}><span className="panel-content"><span>重来</span><Icon name="restart" /></span></button>
         <CenterPanel revealed={won && !busy && game.completion.settlementDismissed} blocked={blocked} onNew={beginNew} />
       </div>
       {!saved && <p className="save-error" role="alert">无法自动保存，请保持此页面打开</p>}
     </section>
 
-    {flight && <PourAnimation flight={flight} showSymbols={showSymbols} onCommit={commitPour} onFinish={finishPour} />}
+    {flight && <PourAnimation flight={flight} onCommit={commitPour} onFinish={finishPour} />}
 
     {showSettlement && <Settlement moves={session.history.length} award={game.rewards.lastAward} completionDelta={game.rewards.completionDelta} onClose={dismiss} />}
 
-    {modal && <Modal title={modal === 'help' ? '一瓶一色，便是魔法' : '重新调配这份药剂？'} onClose={() => setModal(null)}>
+    {modal && <Modal simple={modal === 'help'} title={modal === 'help' ? '一瓶一色，便是魔法' : '重新调配这份药剂？'} onClose={() => setModal(null)}>
       {modal === 'help' ? <>
-        <ol className="instructions"><li>轻点一只药瓶，再点另一只，即可倒入药剂。再次轻点选中的瓶子可放下。</li><li>只能倒入空瓶，或顶层颜色相同且尚有空位的瓶子。顶层连续同色的药剂会尽可能一起倒出。</li><li>让七种颜色各装满一瓶，留下两只空瓶，就完成了。遇到难题，随时撤销或重来。</li></ol>
-        <p className="help-note">每份初始配方都有解；途中仍需留意顺序。开启「颜色符号」可辅助分辨颜色。进度保存在当前浏览器，清除网站数据会丢失存档。</p>
-        <label className="symbols-toggle"><input type="checkbox" checked={showSymbols} onChange={event => setGame(previous => ({ ...previous, showSymbols: event.target.checked }))} /><span>颜色符号</span></label>
-        <button className="dialog-primary" onClick={() => setModal(null)}>开始调配</button>
+        <ol className="instructions">
+          <li>轻点一只药瓶，再点另一只进行倒药。</li>
+          <li>只能倒入空瓶，或顶部颜色相同且有空位的药瓶。</li>
+          <li>让七种颜色分别装满一瓶，即可完成谜题。</li>
+          <li>需要时可以撤销，或重新开始当前谜题。</li>
+        </ol>
       </> : <>
         <p className="dialog-copy">当前配方保持不变，步数和撤销记录将归零。</p>
         <div className="dialog-actions"><button className="dialog-secondary" onClick={() => setModal(null)}>继续当前游戏</button><button className="dialog-primary" onClick={performRestart}>确认重来</button></div>

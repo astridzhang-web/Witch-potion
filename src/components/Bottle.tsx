@@ -2,13 +2,13 @@ import { useId, type CSSProperties } from 'react'
 import { isComplete, type Bottle as BottleState } from '../game/rules'
 
 export const COLORS = [
-  { name: '玫瑰红', light: '#ff8394', main: '#dc4269', dark: '#9b274b', symbol: '●' },
-  { name: '紫水晶', light: '#bea0f8', main: '#8b64d5', dark: '#5c379e', symbol: '◆' },
-  { name: '薄荷绿', light: '#acedd0', main: '#53c99d', dark: '#25886b', symbol: '＋' },
-  { name: '天空蓝', light: '#9eddfa', main: '#53b7e8', dark: '#287eab', symbol: '≋' },
-  { name: '蜂蜜金', light: '#ffe9a0', main: '#eac25e', dark: '#b98b2c', symbol: '○' },
-  { name: '珊瑚橙', light: '#ffc0a0', main: '#f28a60', dark: '#b95537', symbol: '△' },
-  { name: '兰花粉', light: '#f7b1f1', main: '#dc71d8', dark: '#a142a0', symbol: '×' },
+  { name: '玫瑰红', light: '#ff8394', main: '#dc4269', dark: '#9b274b' },
+  { name: '紫水晶', light: '#bea0f8', main: '#8b64d5', dark: '#5c379e' },
+  { name: '薄荷绿', light: '#acedd0', main: '#53c99d', dark: '#25886b' },
+  { name: '天空蓝', light: '#9eddfa', main: '#53b7e8', dark: '#287eab' },
+  { name: '蜂蜜金', light: '#ffe9a0', main: '#eac25e', dark: '#b98b2c' },
+  { name: '珊瑚橙', light: '#ffc0a0', main: '#f28a60', dark: '#b95537' },
+  { name: '兰花粉', light: '#f7b1f1', main: '#dc71d8', dark: '#a142a0' },
 ] as const
 
 const silhouette = 'M39 15 L39 41 C39 51 20 52 18 75 L16 109 Q15 133 39 134 L61 134 Q85 133 84 109 L82 75 C80 52 61 51 61 41 L61 15 Z'
@@ -18,14 +18,13 @@ interface Props {
   style?: CSSProperties
   index: number
   selected: boolean
-  showSymbols: boolean
   won: boolean
   busy?: boolean
   animating?: boolean
   receiving?: boolean
   onClick(): void
 }
-export default function Bottle({ liquid, index, selected, showSymbols, won, busy, animating, receiving, style, onClick }: Props) {
+export default function Bottle({ liquid, index, selected, won, busy, animating, receiving, style, onClick }: Props) {
   const complete = isComplete(liquid)
   const contents = liquid.length ? `从上到下：${[...liquid].reverse().map((c) => COLORS[c].name).join('、')}` : '空瓶'
   return <button
@@ -41,13 +40,13 @@ export default function Bottle({ liquid, index, selected, showSymbols, won, busy
   >
     <span className="bottle-halo" />
     <span className="bottle-contact-shadow" aria-hidden="true" />
-    <BottleArt liquid={liquid} showSymbols={showSymbols} />
+    <BottleArt liquid={liquid} />
     <span className="bottle-number">{complete ? <span aria-hidden="true">✓</span> : String(index + 1).padStart(2, '0')}{liquid.length === 0 && <span className="empty-label">空瓶</span>}</span>
   </button>
 }
 
 /** Shared art for stationary bottles and the two animation sprites. Fractional levels are visual only. */
-export function BottleArt({ liquid, showSymbols, fillLevel = liquid.length }: { liquid: BottleState; showSymbols: boolean; fillLevel?: number }) {
+export function BottleArt({ liquid, fillLevel = liquid.length }: { liquid: BottleState; fillLevel?: number }) {
   const id = useId().replace(/:/g, '')
   return (
     <svg className="bottle-art" viewBox="0 0 100 150" aria-hidden="true" data-fill-level={fillLevel}>
@@ -69,7 +68,6 @@ export function BottleArt({ liquid, showSymbols, fillLevel = liquid.length }: { 
         {liquid.map((color, i) => <g key={i}>
           <rect x="15" y={130 - (i + 1) * 18} width="70" height="18.5" fill={`url(#${id}-color-${color})`} />
           <path d={`M17 ${130 - (i + 1) * 18} Q50 ${134 - (i + 1) * 18} 83 ${130 - (i + 1) * 18}`} fill="none" stroke={COLORS[color].light} strokeWidth="1.4" opacity=".75" />
-          {showSymbols && <text x="50" y={143 - (i + 1) * 18} textAnchor="middle" fill="#fff" fillOpacity=".8" fontSize="11" fontFamily="Arial, sans-serif">{COLORS[color].symbol}</text>}
         </g>)}
         </g>
         {fillLevel > 0 && <ellipse cx="50" cy={130 - fillLevel * 18} rx="34" ry="2.4" fill={COLORS[liquid[Math.min(liquid.length - 1, Math.ceil(fillLevel) - 1)]].light} fillOpacity=".6" />}

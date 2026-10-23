@@ -97,7 +97,7 @@ test('v1 migration retires base reward, replay earns benchmark once without reco
   const migrated = await stored(page)
   expect(migrated.version).toBe(3)
   expect(migrated.session).toEqual(fixture(last + 1).session)
-  expect(migrated.showSymbols).toBe(true)
+  expect(migrated).not.toHaveProperty('showSymbols')
   // Any non-button content tap dismisses the settlement too.
   await page.locator('.settlement-crystal').click()
   const next = page.getByRole('button', { name: '新谜题', exact: true })

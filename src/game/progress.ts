@@ -15,13 +15,13 @@ export interface Rewards {
   lastAward: 0 | 1 | 2
   completionDelta: 0 | 1
 }
-export interface Save { session: Session; showSymbols: boolean; completion: Completion; rewards: Rewards }
+export interface Save { session: Session; completion: Completion; rewards: Rewards }
 const emptyRewards = (): Rewards => ({ balance: 0, baseClaimed: false, bonusClaimed: false, lastAward: 0, completionDelta: 0 })
 export function referenceMoves(puzzle: Puzzle): number {
   return PRESETS.find(preset => preset.id === puzzle.presetId)!.solution.length
 }
-export function createGame(session: Session, showSymbols = false): Save {
-  return withSession({ session, showSymbols, completion: { totalCompleted: 0, currentPuzzleCounted: false, settlementDismissed: false }, rewards: emptyRewards() }, session)
+export function createGame(session: Session): Save {
+  return withSession({ session, completion: { totalCompleted: 0, currentPuzzleCounted: false, settlementDismissed: false }, rewards: emptyRewards() }, session)
 }
 
 /** One transaction for the board, independent completion credit, and unclaimed rewards. */
@@ -46,10 +46,10 @@ export function withSession(game: Save, session: Session): Save {
 
 /** No retrospective crystals. A legacy completed instance's base is retired; its
  * benchmark bonus remains available on a future successful replay. No modal is reopened. */
-export function migrateLegacy(session: Session, showSymbols: boolean, completion?: Completion): Save {
+export function migrateLegacy(session: Session, completion?: Completion): Save {
   const counted = isVictory(session.board)
   const prior = completion ?? { totalCompleted: Number(counted), currentPuzzleCounted: counted, settlementDismissed: false }
-  return { session, showSymbols, completion: prior, rewards: { ...emptyRewards(), baseClaimed: prior.currentPuzzleCounted } }
+  return { session, completion: prior, rewards: { ...emptyRewards(), baseClaimed: prior.currentPuzzleCounted } }
 }
 export function settlementPending(game: Save): boolean {
   return isVictory(game.session.board) && game.completion.currentPuzzleCounted && !game.completion.settlementDismissed

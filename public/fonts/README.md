@@ -10,9 +10,9 @@ technical subset names; the glyph designs remain the requested fonts, not substi
 | UI | Official source / release | Local subset | Size |
 | --- | --- | --- | --- |
 | Three cabinet labels, settlement title | [LXGW ZhenKai v0.800.2](https://github.com/lxgw/LxgwZhenKai/releases/tag/v0.800.2), `LXGWZhenKai-Regular.ttf` (internal version `0.800; June 8, 2025`) | `zhenkai-ui.woff2`, 11 characters | 5,960 B |
-| HUD, prose, help, rewards | [Adobe Source Han Serif 2.003R](https://github.com/adobe-fonts/source-han-serif/tree/2.003R), `OTF/SimplifiedChinese/SourceHanSerifSC-Medium.otf` (internal version 2.003) | `han-serif-ui.woff2`, Medium, 328 characters | 119,416 B |
+| HUD, prose, help, rewards | [Adobe Source Han Serif 2.003R](https://github.com/adobe-fonts/source-han-serif/tree/2.003R), `OTF/SimplifiedChinese/SourceHanSerifSC-Medium.otf` (internal version 2.003) | `han-serif-ui.woff2`, Medium, 286 characters | 102,056 B |
 
-Total: **125,376 bytes / 122.4 KiB**. ZhenKai is the original regular edition requested here,
+Total: **108,016 bytes / 105.5 KiB**. ZhenKai is the original regular edition requested here,
 not the more recent Slab edition. No outlines or glyph advances were altered.
 
 ## Rebuild
@@ -34,5 +34,8 @@ The display subset contains exactly the fixed labels; the text subset covers ASC
 non-ASCII characters found in application TS/TSX (excluding tests). New UI copy may require
 regeneration; unsupported characters use the system fallback. Both files are preloaded,
 use `font-display: swap`, and retain fixed control grids/line heights. CJK fallback chains
-include Songti/SimSun for text and Kaiti for display. Existing Georgia numerals remain.
+include Songti/SimSun for text and Kaiti for display. Settlement numerals retain Georgia; the compact HUD uses the Medium text subset throughout.
 The single Medium text file is reused across UI weight declarations without synthetic bold.
+
+The 2E visual patch regenerates only the text subset for its shorter four-step help,
+including the new characters 别 and 部. The decorative font file remains unchanged.

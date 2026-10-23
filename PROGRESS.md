@@ -2,9 +2,24 @@
 
 ## Current milestone
 
-**Milestone 2E wooden mechanism, champagne stardust and typography — COMPLETE. Stop for visual acceptance.**
+**Milestone 2E Visual Patch — COMPLETE. Stop for visual acceptance.**
 
 The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+
+## Milestone 2E Visual Patch / HUD、按钮与帮助整理 (2026-10-23)
+
+- Continued incrementally from `e331018fc29a4f8137cbcd7ddedba9f136674507` on `work`. Preserved the unrelated untracked project report unchanged and excluded it from the patch.
+- The existing brass contour now mixes a warm gold fine edge/body with a champagne outer halo and pale warm-white dust. Resting opacity is **0.94**, hover **0.98**, focus **1.0**; the focus outline is still clearer, but ordinary activation no longer relies on focus/hover. The 650ms turn, wood thickness, 36 emitters, lifetime phases and late-turn activation mechanism are retained.
+- Left content is **arrow + 撤销**, biased left; right content is **重来 + arrow**, biased right. The center label/stars stay centered. No cabinet or panel coordinates changed; arrows retain the same paths.
+- Entire `已完成 + count` and `步数 + count` groups sit in equal symmetric HUD columns. Both use Source Han Serif Medium (including tabular digits); the moon decoration no longer occupies the left group. Help is a separate 44×44 viewport-fixed control in the safe top-right, outside the cabinet containing block. Geometry tests cover 1/2/3-digit values at phone and desktop widths.
+- Help is now four concise text steps over a softly dimmed/blurred live board. Close button, outside click and Escape work without changing the saved game. The restart confirmation retains its existing presentation and behavior.
+- Completely removed color-symbol palette metadata, SVG text rendering, UI switch/copy/styles, component props and game-state field. `PourAnimation` only loses the obsolete prop forwarding; its trajectory, timing, liquid/stream and commit mechanism are untouched.
+- **Save compatibility:** keep the existing key and v3 schema. v1/v2/v3 loading ignores the obsolete preference (true/false/missing/other legacy value) while still validating every board/history transition and completion/reward record. Newly written saves omit it. Tests compare unfinished, won, dismissed, undone and restarted games; v3 session, counters, crystal balance, claimed flags and receipt survive exactly. Existing v1/v2 no-retrospective-reward policies are unchanged.
+- The shorter help needs two newly included glyphs (`别`, `部`). Refreshed only the Source Han Serif subset: **102,056 B / 286 characters**; unchanged ZhenKai is **5,960 B**, total **108,016 B / 105.5 KiB**. No missing Chinese glyphs remain in application source. Families, versions and OFL licenses stay the same.
+- Final verification: **71 unit tests passed**, **88 Playwright tests passed**, production build passed, `git diff --check` passed. Added legacy-preference preservation cases and browser coverage for symmetric digit groups, independent help, all dismiss modes, symbol removal and actual ten-second unfocused/unhovered glow. Updated obsolete symbol/side-alignment expectations. An existing edge-plane check incorrectly measured the projected edge at an arbitrary CSS frame; it now checks the actual wood-plane thickness. Initial new fixture type/import issues were confined to the test harness and fixed; no game-rule assertions were weakened.
+- Actual production screenshots include near-end (600ms), completion +1/+5/+10 seconds, HUD/buttons/glow details, help, 360×640 and scrollable 320×568. The three timed samples measured **1.002 / 5.003 / 10.002 s**, all without hover/focus, opacity **0.94** throughout. Recorded **630 real browser frames over 11.16s** into a full-page MP4 and derived crop GIF. No browser page errors. [Patch gallery](docs/screenshots/milestone2e-patch-preview.md).
+- Scope checked: cabinet/panel/parchment assets, nine bottle coordinates and shapes/colors, CenterPanel/PanelMagic implementation, pure rules/session/puzzles and reward calculations unchanged. No new phase, deployment, home, shop, audio or PWA.
+- Remaining limit: Chromium phone emulation is verified; physical Safari/iOS and low-end GPU checks are still outstanding. Stop for user visual acceptance.
 
 ## Milestone 2E / 木板机关、星尘与字体精修 (2026-10-23)
 
@@ -28,22 +43,22 @@ The playable foundation, floating-pour experiment, Milestone 2A integration and 
 - Undo, exact-puzzle restart, manually started new puzzles after settlement, move counter, lifetime completed-puzzle counter and crystal victory feedback. Undo remains available after winning.
 - Four fixed puzzle templates with complete solution witnesses (34, 25, 27, 31 moves; not shortest-path claims). New puzzles cycle templates with bijective color relabeling.
 - Open SVG glass bottles with basic luminous gradients, midnight/champagne UI and moon motif. Intentionally milestone 1 placeholder art.
-- Automatic versioned localStorage saves: current puzzle, board, full undo history, optional color-symbol setting, lifetime completion count, current-instance credit, settlement dismissal, crystal balance and base/bonus reward receipt. The loader validates the verified initial arrangement and every history transition.
+- Automatic versioned localStorage saves: current puzzle, board, full undo history, lifetime completion count, current-instance credit, settlement dismissal, crystal balance and base/bonus reward receipt. The loader validates the verified initial arrangement and every history transition.
 - A restart confirmation protects in-progress games; mouse, touch and native keyboard controls; reduced-motion support. Clear feedback when browser storage is unavailable.
 
-## Verification results (latest: Milestone 2E, 2026-10-23)
+## Verification results (latest: Milestone 2E Visual Patch, 2026-10-23)
 
 All final checks passed; **no known blocking gameplay bugs**.
 
 | Check | Result |
 | --- | --- |
 | `npm ci --cache /workspace/.npm-cache` | Passed; frozen lockfile install reproduced |
-| `npm test` | **68 passed**, no skips/failures |
+| `npm test` | **71 passed**, no skips/failures |
 | Preset solvability | All 4 full witnesses replayed; color conservation checked after every move |
 | Puzzle variation | 200 seeded color permutations replayed to victory |
 | `npm run build` | TypeScript and production bundle passed |
-| `npm run test:e2e` | **82 passed**, no skips/failures; 16 gameplay, 22 animation/shadow, 10 cabinet, 14 completion/HUD, 10 reward/parchment and 10 panel-magic/font cases, desktop Chromium and emulated mobile touch |
-| Browser gameplay | Actual taps/clicks to full animated victory; invalid move, undo, restart confirmation, settlement/flip/new puzzle, reload and help settings checked |
+| `npm run test:e2e` | **88 passed**, no skips/failures; 16 gameplay, 22 animation/shadow, 10 cabinet, 14 completion/HUD, 10 reward/parchment, 10 panel-magic/font and 6 visual-patch cases, desktop Chromium and emulated mobile touch |
+| Browser gameplay | Actual taps/clicks to full animated victory; invalid move, undo, restart confirmation, settlement/flip/new puzzle, reload and simple help checked |
 | Storage resilience | Corrupt save recovery and blocked localStorage checked in browser; quota errors checked in unit tests |
 | Layout/accessibility basics | 320×568, 360×640, 390×844, 844×390 and 1280×900; 3 columns, 9 targets ≥44 px, no horizontal overflow; keyboard and reduced motion checked |
 | Typical mobile viewport | Full 390×844 and 360×640 pages saved and visually inspected; whole cabinet, nine bottles and three base panels visible |
@@ -51,7 +66,7 @@ All final checks passed; **no known blocking gameplay bugs**.
 | Development server | Started on 5173; HTTP response and app entry verified; functional tests use the same Vite workflow on isolated 4173 |
 | `git diff --check` | Passed |
 
-Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2E production JS ≈247.75 kB (≈78.79 kB gzip), CSS ≈14.36 kB (≈4.36 kB gzip), active tall cabinet WebP ≈303 kB. Local font subsets total 125,376 B (122.4 KiB). No runtime external fonts/assets, backend or API keys.
+Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2E patch production JS ≈246.95 kB (≈78.38 kB gzip), CSS ≈14.45 kB (≈4.36 kB gzip), active tall cabinet WebP ≈303 kB. Local font subsets total 108,016 B (105.5 KiB). No runtime external fonts/assets, backend or API keys.
 
 ### Resolved setup issues
 
@@ -257,7 +272,7 @@ Paper grain/ornament and amethyst facets are generated adaptations, not a pixel-
 
 ## Exact next task (only after the user asks)
 
-Milestone 2E is complete. Wait for visual acceptance of the solid wooden flip, champagne brass glow, drifting stardust, fonts and button alignment. Do not automatically begin final bottle art, perspective compensation, animation timing/physics, crystal spending/shop, home, sound, PWA or deployment.
+Milestone 2E Visual Patch is complete. Wait for visual acceptance of sustained mixed glow, mirrored buttons, symmetric HUD and simplified help. Color symbols are retired with old saves preserved. Do not automatically begin final bottle art, perspective compensation, animation timing/physics, crystal spending/shop, home, sound, PWA or deployment.
 
 ## Resume in a fresh Codex session
 

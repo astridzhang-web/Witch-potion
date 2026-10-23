@@ -92,7 +92,7 @@ describe('legacy reward migration', () => {
       const completion = { totalCompleted: 7, currentPuzzleCounted: false, settlementDismissed: false }
       const game = decodeSave(JSON.stringify({ version, session, completion, showSymbols: true }))!
       expect(game.session).toEqual(session)
-      expect(game.showSymbols).toBe(true)
+      expect(game).not.toHaveProperty('showSymbols')
       expect(game.rewards.balance).toBe(0)
       expect(game.rewards.baseClaimed).toBe(false)
       const won = withSession(roundTrip(game), solve())
@@ -130,3 +130,27 @@ describe('legacy reward migration', () => {
     expect(decodeSave(JSON.stringify({ ...game, version: 3, rewards: { ...game.rewards, ...patch } }))).toBeNull()
   })
 })
+
+// Removing an optional UI preference must never discard otherwise valid saves.
+for (const version of [1, 2, 3]) {
+  it(`ignores retired symbol metadata in v${version} across active, won, dismissed and undone games`, () => {
+    const won = createGame(solve())
+    const dismissed = dismissSettlement(won)
+    const cases = [createGame(undo(solve())), won, dismissed, withSession(dismissed, undo(won.session)), withSession(dismissed, restart(won.session))]
+    for (const game of cases) {
+      const expected = decodeSave(JSON.stringify({ ...game, version }))!
+      expect(expected).not.toBeNull()
+      expect(expected.session).toEqual(game.session)
+      if (version === 3) expect(expected).toEqual(game)
+      for (const showSymbols of [true, false, undefined, 'obsolete']) {
+        const restored = decodeSave(JSON.stringify({ ...game, version, showSymbols }))!
+        expect(restored).toEqual(expected)
+        expect(restored).not.toHaveProperty('showSymbols')
+        const writes: string[] = []
+        expect(saveProgress({ getItem: () => null, setItem: (_, raw) => { writes.push(raw) } }, restored)).toBe(true)
+        expect(JSON.parse(writes[0])).not.toHaveProperty('showSymbols')
+        expect(decodeSave(writes[0])).toEqual(restored)
+      }
+    }
+  })
+}

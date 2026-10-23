@@ -55,11 +55,11 @@ describe('completion transactions', () => {
 })
 
 describe('v1 migration and atomic current-version persistence', () => {
-  it('preserves every board, move, undo step and symbol setting in an unfinished v1 save', () => {
+  it('preserves every board, move, undo step in an unfinished v1 save while ignoring retired UI preferences', () => {
     const session = play(createSession(puzzle), 7)
     const migrated = decodeSave(legacy(session))!
     expect(migrated.session).toEqual(session)
-    expect(migrated.showSymbols).toBe(true)
+    expect(migrated).not.toHaveProperty('showSymbols')
     expect(migrated.completion.totalCompleted).toBe(0)
     const storage = memory()
     expect(saveProgress(storage, migrated)).toBe(true)

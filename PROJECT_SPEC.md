@@ -122,3 +122,21 @@ Deliver true mobile browser captures, alignment guides and an actual GIF/video. 
 390×844, 360×640 and 320×568, keyboard/motion/restoration/font loading plus existing regressions.
 No game rules, rewards/save algorithms, bottle coordinates, 920ms pouring, cabinet/parchment
 artwork, home/shop/audio/PWA/deployment changes. Stop for visual acceptance after commit/push.
+
+## Authorized Milestone 2E visual patch
+
+Incrementally refine the existing 2E result: sustain the warm brass/gold inner contour
+and champagne outer halo without hover/focus; retain the flip, dust and font families.
+Mirror the side content groups (arrow + 撤销 biased left, 重来 + arrow biased right),
+keep the middle label centered and all scene coordinates unchanged. Center the complete
+HUD groups symmetrically about the cabinet axis, with an independent safe-area help control.
+
+Help becomes four simple text steps over a dimmed/blurred live board, closable by the
+close control, outside click or Escape. Remove color-symbol UI, rendering and state entirely.
+Ignore the obsolete field in v1/v2/v3 saves without altering valid session/history,
+completion, rewards or dismissal. New v3 writes omit the preference; no reward/schema logic
+redesign. Retain keyboard/reduced-motion support and all underlying game behavior.
+
+Deliver 390×844 and 360×640 screenshots plus near-end/1s/5s/10s glow evidence, full tests,
+build, documentation and commit/push. No scene/bottle positions, pour mechanics, parchment
+design, reward algorithms, puzzle generation, home/shop/audio/PWA/deployment changes.
