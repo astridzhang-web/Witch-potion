@@ -1,6 +1,6 @@
 # 月夜魔法药剂室 · Moonlit Alchemy
 
-A quiet, mobile-first potion sorting game. Milestone 2D: a playable tall wooden cabinet scene with a parchment completion record and basic crystal rewards built with React, TypeScript, Vite and independent SVG bottles. All gameplay runs locally in the browser.
+A quiet, mobile-first potion sorting game. Milestone 2E: a playable tall wooden cabinet scene with a solid wooden flip, champagne stardust, local Chinese typography, parchment completion record and basic crystal rewards built with React, TypeScript, Vite and independent SVG bottles. All gameplay runs locally in the browser.
 
 ## Cloud development
 
@@ -48,7 +48,7 @@ Four fixed presets in `src/game/presets.json` each include a complete legal solu
 - `assets/source/shelf-tall.png`, `public/assets/shelf-tall.webp`: active tall cabinet original and optimized local scene (the earlier pair is preserved); see [asset notes](assets/README.md).
 - `src/game/game.test.ts`, `tests/game.spec.ts`: unit and real browser checks.
 
-Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 2D parchment and basic rewards are complete; stop for feedback before further work. Final bottle art, animation timing/physics refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
+Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 2E mechanism, stardust and typography are complete; stop for visual acceptance before further work. Final bottle art, animation timing/physics refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
 
 ## Small floating-pour prototype
 
@@ -83,7 +83,7 @@ The small panel textures reuse the existing artwork without modifying the cabine
 
 ## Milestone 2D parchment and basic crystals
 
-The completed cabinet now sits behind a compact, independent parchment record. Actual moves, one/two transparent amethysts and a small scroll record remain separate from the artwork. The middle wooden button uses a warm brass-contour glow for active/hover/keyboard feedback, without underlining; its 550ms flip is unchanged.
+The completed cabinet now sits behind a compact, independent parchment record. Actual moves, one/two transparent amethysts and a small scroll record remain separate from the artwork. The middle wooden button uses a warm brass-contour glow for active/hover/keyboard feedback, without underlining; at the 2D checkpoint its 550ms flip was unchanged; 2E supersedes the panel presentation.
 
 Each new puzzle instance earns a base **+1 crystal**, and a one-time additional **+1** when its actual moves are no greater than that preset's verified solution length. A later successful replay can earn only the missing bonus. Completion count stays independent. No-new-reward replays do not repeat settlement; bonus receipts show only the new +1 and mark the completion as already recorded. No shop, spending or balance HUD is included.
 
@@ -92,3 +92,18 @@ Schema **v3** stores the complete state atomically under the existing key. v1/v2
 [Single crystal, 390×844](docs/screenshots/milestone2d-single-390x844.png) · [Two crystals, 390×844](docs/screenshots/milestone2d-double-390x844.png) · [360×640](docs/screenshots/milestone2d-double-360x640.png) · [320×568](docs/screenshots/milestone2d-double-320x568.png) · [Brass focus detail](docs/screenshots/milestone2d-panel-focus-detail.png) · [All browser evidence](docs/screenshots/milestone2d-preview.md)
 
 The single-crystal example uses a legal 35-move solve; the two-crystal example uses its 34-move witness. The reference artwork is not a runtime game background. Paper and amethyst are newly generated reusable art based on that reference, so ornament, crystal facets and the small SVG scroll differ from the concept illustration. Actual iOS/Safari remains unverified. Stop for visual feedback before further development.
+
+## Milestone 2E wooden mechanism and typography
+
+The middle panel now has shallow wooden thickness and changing light across a 650ms flip.
+A contour-aligned pale brass halo appears near landing, followed by independent drifting,
+twinkling dust. New-puzzle activation, manual progression and all rewards/saves remain unchanged.
+Reduced motion shows the correct face with static glow/glints. Side labels are centered separately
+from their arrows; the center label has symmetric stars, with no panel coordinate changes.
+
+Local OFL WOFF2 subsets use **LXGW ZhenKai** for labels/title and **Source Han Serif Medium**
+for prose/HUD, adding **122.4 KiB** total. [Font licenses and rebuild](public/fonts/README.md) ·
+[Presentation notes](assets/panel-magic.md) · [Browser gallery and video](docs/screenshots/milestone2e-preview.md)
+
+Verified: **68 unit tests, 82 browser tests**, production build. Physical Safari/iOS and low-end
+GPU checks remain outstanding. No gameplay, reward, save, bottle/pour or scene-art changes.

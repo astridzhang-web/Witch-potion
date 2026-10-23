@@ -72,7 +72,7 @@ test('last pour returns before settlement; dismiss flips, focuses and persists; 
   await page.keyboard.press('Escape')
   const next = page.getByRole('button', { name: '新谜题', exact: true })
   await expect(next).toBeDisabled()
-  await page.clock.runFor(600)
+  await page.clock.runFor(700)
   await expect(next).toBeEnabled()
   await expect(next).toBeFocused()
   const saved = await stored(page)

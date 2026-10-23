@@ -2,9 +2,23 @@
 
 ## Current milestone
 
-**Milestone 2D parchment settlement, basic crystal bookkeeping and brass feedback — COMPLETE. Stop for visual acceptance.**
+**Milestone 2E wooden mechanism, champagne stardust and typography — COMPLETE. Stop for visual acceptance.**
 
-The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+
+## Milestone 2E / 木板机关、星尘与字体精修 (2026-10-23)
+
+- Continued from `3d8ac4f5536a8cf5f298753aaf85ff5c34504625` on the existing `work` checkout. Preserved the unrelated untracked `docs/PROJECT_REPORT.md`; it is not part of this commit.
+- Central horizontal flip is now **650ms**, with four scene-scaled wooden side planes, hidden face backs and a temporary light/shade pass. The opaque recess still masks the baked-in star. The existing completion/dismissal/readiness flow remains; the back becomes interactive after landing, and a restored dismissed save starts directly on the back.
+- Recalibrated the brass contour to the existing 208×138 texture and added three coincident champagne-gold passes: fine highlight, soft body and diffuse halo. It lights near the end of the turn; hover/focus/pressed feedback uses the contour, with no underline or moving text.
+- Added **36 stable SVG dust emitters** around all four sides. Independent 1.8–3s phases, tiny varied dots/four miniature stars, outward drift and fading; no frame-driven React state, new particle dependency or random regeneration on render. Dust starts after landing, pauses/fades on return, and cannot intercept clicks. Reduced motion removes the flip and all continuous animation, retaining the contour and four static glints.
+- Locally hosted **LXGW ZhenKai v0.800.2** for panel labels/settlement title and **Source Han Serif 2.003 Medium** for interface/prose. WOFF2 subsets are **5,960 B + 119,416 B = 122.4 KiB**, with pinned official URLs/hashes, original OFL notices and renamed subset family metadata. Font preloads, system fallbacks and stable text-centered grids are documented in `public/fonts/README.md`; `scripts/subset-fonts.py` rebuilds them without shipping full desktop fonts.
+- Undo/restart text is centered independently of arrows. Both arrows have harmonized bounds and a reserved left column with clearance from the brass rivets; center stars use identical side columns. **No cabinet/panel centers or bottle coordinates changed.** Actual font-delayed and font-loaded label centers match within subpixel tolerance.
+- Verification: **68 unit tests**, **82 full Playwright cases**, and production build passed. The new five browser scenarios run on desktop/mobile and cover the 650ms readiness gate, particle lifecycle/identity, pointer passthrough, restoration without rewards, reduced-motion changes during a turn, keyboard focus, three viewport alignments and delayed font delivery. The initial new star-width assertion differed by 0.000015 CSS px due to 3D floating-point projection; it now compares at 0.001 px precision. No gameplay assertion was relaxed. After the final arrow-clearance adjustment, all **20 cabinet/panel cases** passed again.
+- Production browser evidence: normal and active 390×844 cabinet, 360×640 and scrollable 320×568, 3× detail/focus/center-line/turn frames, single/double parchment and desktop parchment. Single/double paper size stays **274×456.84 CSS px** at 390×844; narrow-screen text remains inside the paper. Captures reported **zero page errors**. See [gallery](docs/screenshots/milestone2e-preview.md).
+- Real Chromium screencast recorded **407 frames over 7.65s**; MP4 preserves the whole viewport, GIF enlarges only the button region. It shows closing settlement, turning, sustained independent dust cycles, manual new-puzzle click and return. The separate 210ms thickness still pauses the actual CSS transition; the video does not use animation seeking or synthetic imagery.
+- Scope audit: `src/game/`, `App.tsx`, cabinet coordinates, Bottle/PourAnimation and all original scene/panel/settlement artwork are unchanged. No new rewards, save migration, bottle art, sound, home, shop, PWA or deployment.
+- Limits: the mechanism is a lightweight CSS solid, not a modeled hinge; tiny mobile-scale particles are best judged with the actual animation/detail. Physical Safari/iOS and low-end GPU performance remain unverified. Stop here for user visual acceptance.
 
 ## Implemented and working
 
@@ -17,7 +31,7 @@ The playable foundation, floating-pour experiment, Milestone 2A integration and 
 - Automatic versioned localStorage saves: current puzzle, board, full undo history, optional color-symbol setting, lifetime completion count, current-instance credit, settlement dismissal, crystal balance and base/bonus reward receipt. The loader validates the verified initial arrangement and every history transition.
 - A restart confirmation protects in-progress games; mouse, touch and native keyboard controls; reduced-motion support. Clear feedback when browser storage is unavailable.
 
-## Verification results (latest: Milestone 2D, 2026-10-23)
+## Verification results (latest: Milestone 2E, 2026-10-23)
 
 All final checks passed; **no known blocking gameplay bugs**.
 
@@ -28,7 +42,7 @@ All final checks passed; **no known blocking gameplay bugs**.
 | Preset solvability | All 4 full witnesses replayed; color conservation checked after every move |
 | Puzzle variation | 200 seeded color permutations replayed to victory |
 | `npm run build` | TypeScript and production bundle passed |
-| `npm run test:e2e` | **72 passed**, no skips/failures; 16 gameplay, 22 animation/shadow, 10 cabinet, 14 completion/HUD and 10 reward/parchment cases, desktop Chromium and emulated mobile touch |
+| `npm run test:e2e` | **82 passed**, no skips/failures; 16 gameplay, 22 animation/shadow, 10 cabinet, 14 completion/HUD, 10 reward/parchment and 10 panel-magic/font cases, desktop Chromium and emulated mobile touch |
 | Browser gameplay | Actual taps/clicks to full animated victory; invalid move, undo, restart confirmation, settlement/flip/new puzzle, reload and help settings checked |
 | Storage resilience | Corrupt save recovery and blocked localStorage checked in browser; quota errors checked in unit tests |
 | Layout/accessibility basics | 320×568, 360×640, 390×844, 844×390 and 1280×900; 3 columns, 9 targets ≥44 px, no horizontal overflow; keyboard and reduced motion checked |
@@ -37,7 +51,7 @@ All final checks passed; **no known blocking gameplay bugs**.
 | Development server | Started on 5173; HTTP response and app entry verified; functional tests use the same Vite workflow on isolated 4173 |
 | `git diff --check` | Passed |
 
-Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2D production JS ≈246 kB (≈78 kB gzip), CSS ≈11.7 kB (≈3.6 kB gzip), active tall cabinet WebP ≈303 kB. No runtime external fonts/assets, backend or API keys.
+Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2E production JS ≈247.75 kB (≈78.79 kB gzip), CSS ≈14.36 kB (≈4.36 kB gzip), active tall cabinet WebP ≈303 kB. Local font subsets total 125,376 B (122.4 KiB). No runtime external fonts/assets, backend or API keys.
 
 ### Resolved setup issues
 
@@ -209,7 +223,7 @@ Paper grain/ornament and amethyst facets are generated adaptations, not a pixel-
 ## Git and cloud handoff
 
 - Connected repository: `astridzhang-web/Witch-potion`; branch **`work`**, tracking `origin/work`.
-- Foundation and animation checkpoints were pushed successfully. This document accompanies the Milestone 2D handoff. Use `git log -1` and `git ls-remote origin refs/heads/work` to compare the latest tips.
+- Foundation and animation checkpoints were pushed successfully. This document accompanies the Milestone 2E handoff. Use `git log -1` and `git ls-remote origin refs/heads/work` to compare the latest tips.
 - Reusable `install_script` and `start_skill` have been saved to the cloud environment configuration draft. They cover frozen dependency install, tests/build, restarting Vite and functional readiness checks. Draft saving does not publish or validate restoration in a fresh task.
 - The cloud configuration's original `main` reference was for an empty repository. The final environment save records the inspected checkout's exact committed HEAD at mount path `Witch-potion` so future restoration uses the implemented project.
 - Review/save the environment settings and publish the cloud environment snapshot when desired. This is separate from publicly deploying the game.
@@ -243,7 +257,7 @@ Paper grain/ornament and amethyst facets are generated adaptations, not a pixel-
 
 ## Exact next task (only after the user asks)
 
-Milestone 2D is complete. Wait for visual acceptance of the parchment, crystal layout and brass-edge feedback. Do not automatically begin final bottle art, perspective compensation, animation timing/physics, crystal spending/shop, home, sound, PWA or deployment.
+Milestone 2E is complete. Wait for visual acceptance of the solid wooden flip, champagne brass glow, drifting stardust, fonts and button alignment. Do not automatically begin final bottle art, perspective compensation, animation timing/physics, crystal spending/shop, home, sound, PWA or deployment.
 
 ## Resume in a fresh Codex session
 

@@ -92,3 +92,11 @@ ffmpeg -hide_banner -loglevel error -i assets/source/settlement/amethyst.png -vf
 The circle/moon geometry in `CrystalDisplay.tsx` and small rolled-paper icon in `Settlement.tsx` are independent SVGs. Crystal images are duplicated dynamically from the actual reward receipt, with no pedestal. Text is real DOM content. One/two crystals use the same parchment and circle dimensions; a three-crystal art layout is reserved without a reward rule.
 
 `CenterPanel.tsx` adds only an SVG contour aligned to the existing `panel-back.webp` brass border. Its dim enabled glow, brighter hover and clear focus do not modify the panel textures or 550ms turning logic. All original cabinet PNG/WebP files remain unchanged. Differences from reference: regenerated paper grain/ornament and crystal facets, simpler SVG scroll, and layout sized for readable live text rather than a literal screenshot cutout.
+
+## Milestone 2E presentation and fonts
+
+All existing artwork is retained byte-for-byte. The bottom-button reference informs the
+light treatment only; it is not installed as a replacement texture. See [panel-magic.md](panel-magic.md)
+for measured contour, CSS thickness, deterministic stardust and unchanged scene centers.
+New local WOFF2 subsets have official-source hashes and OFL copyright/license files in
+[public/fonts](../public/fonts/README.md); the full desktop fonts are not redistributed here.

@@ -1,6 +1,11 @@
+@font-face { font-family: 'Moonlit Display'; src: url('/fonts/zhenkai-ui.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Moonlit Text'; src: url('/fonts/han-serif-ui.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
 /* The cabinet artwork and all hit regions use the same un-cropped portrait stage. */
 :root {
-  font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-text: 'Moonlit Text', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Songti SC', 'SimSun', serif;
+  --font-display: 'Moonlit Display', 'LXGW ZhenKai', 'Kaiti SC', 'KaiTi', serif;
+  font-family: var(--font-text);
+  line-height: 1.5;
   color: #eee2cb;
   background: #0d0d17;
   font-synthesis: none;
@@ -41,8 +46,9 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .bottle:focus-visible .bottle-art { filter: drop-shadow(0 0 2px #fff3cd) drop-shadow(0 0 7px #f7d691); }
 .bottle.is-animating .bottle-art { visibility: hidden; }
 @media (hover: hover) { .bottle:hover:not(:disabled) .bottle-halo { background: radial-gradient(ellipse, #f8d78d20, transparent 70%); } }
-.panel-button { position: absolute; transform: translateY(-50%); min-height: 44px; min-width: 44px; pointer-events: auto; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 0; border: 0; border-radius: 18%; background: transparent; color: #f3d59c; font-family: "Songti SC", "SimSun", serif; font-size: clamp(12px, 3.7cqw, 18px); letter-spacing: .12em; text-shadow: 0 1px 3px #180803, 0 0 8px #100704; }
-.panel-button svg { width: clamp(16px, 4.7cqw, 22px); height: clamp(16px, 4.7cqw, 22px); }
+.panel-button { position: absolute; transform: translateY(-50%); min-height: 44px; min-width: 44px; pointer-events: auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 2cqw; border: 0; border-radius: 18%; background: transparent; color: #f3d59c; font-family: var(--font-display); font-size: clamp(12px, 3.7cqw, 18px); line-height: 1; letter-spacing: 0; text-shadow: 0 1px 3px #180803, 0 0 8px #100704; }
+.panel-button svg { grid-column: 1; justify-self: end; margin-inline-end: .2em; width: clamp(11px, 3.2cqw, 16px); height: clamp(11px, 3.2cqw, 16px); }
+.panel-button > span { grid-column: 2; }
 .panel-button:hover:not(:disabled) { color: #fff1c6; background: radial-gradient(ellipse, #ecc98e13, transparent 70%); }
 .panel-button:active:not(:disabled) { background: radial-gradient(ellipse, #f5d79d24, transparent 70%); }
 .panel-button:disabled { color: #c8b493; opacity: .45; }
@@ -57,7 +63,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .modal { position: fixed; width: min(400px, calc(100% - 32px)); max-height: calc(100svh - 48px); padding: 30px 24px 24px; border: 1px solid #dbc38b50; border-radius: 23px; background: #1e253b; color: #eeebdf; box-shadow: 0 15px 100px #0008; }
 .modal::backdrop { background: #080c1ac9; backdrop-filter: blur(5px); }
 .modal-close { position: absolute; right: 9px; top: 8px; }
-.modal h2 { font-family: "Songti SC", "SimSun", serif; font-weight: 400; font-size: 22px; margin: 17px 0 20px; color: #efdbb5; }
+.modal h2 { font-family: var(--font-text); font-weight: 400; font-size: 22px; margin: 17px 0 20px; color: #efdbb5; }
 .instructions { font-size: 13px; line-height: 1.9; padding-left: 20px; color: #d4d3df; }
 .instructions li { padding-left: 3px; margin-bottom: 12px; }
 .instructions li::marker { color: var(--gold); }
@@ -85,32 +91,64 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .symbols-toggle input { accent-color: #d6bc90; width: 18px; height: 18px; margin-right: 5px; }
 .save-error { position: absolute; bottom: 1%; left: 8%; right: 8%; max-width: none; margin: 0; padding: 6px; color: #ffdbc1; background: #281213e8; border: 1px solid #e1a88266; border-radius: 6px; text-align: center; font-size: 11px; }
 
-/* An opaque wood recess covers the baked-in star even when the turning board is edge-on. */
-.center-panel { position: absolute; min-height: 44px; perspective: 600px; background: linear-gradient(#10080499, #10080499), url('/assets/panel-wood.webp') center / 100% 100%; box-shadow: inset 0 0 5px #120703; }
-.panel-rotor { width: 100%; height: 100%; min-height: 44px; position: relative; transform-style: preserve-3d; transition: transform 550ms cubic-bezier(.4, 0, .2, 1); }
+/* Opaque recess masks the cabinet's baked-in star throughout the 3D turn. */
+.center-panel { --panel-depth: clamp(3px, 1.2cqw, 6px); position: absolute; min-height: 44px; perspective: 600px; background: linear-gradient(#100804aa, #100804aa), url('/assets/panel-wood.webp') center / 100% 100%; box-shadow: inset 0 0 5px #120703; }
+.panel-rotor { width: 100%; height: 100%; min-height: 44px; position: relative; transform-style: preserve-3d; transition: transform var(--flip-duration) cubic-bezier(.38, .06, .22, 1); }
 .center-panel.is-revealed .panel-rotor { transform: rotateX(180deg); }
 .panel-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; background-size: 100% 100%; background-repeat: no-repeat; }
-.panel-front { background-image: url('/assets/panel-star.webp'); transform: translateZ(.2px); }
-.panel-back { background-image: url('/assets/panel-back.webp'); transform: rotateX(180deg) translateZ(.2px); }
-.new-puzzle-panel { width: 100%; height: 100%; min-height: 44px; padding: 0; border: 0; background: transparent; color: #f7dfad; display: flex; align-items: center; justify-content: center; gap: 3px; font: clamp(11px, 3.3cqw, 16px) 'Songti SC', 'SimSun', serif; letter-spacing: .05em; text-shadow: 0 1px 3px #160804; pointer-events: auto; }
+.panel-front { background-image: url('/assets/panel-star.webp'); transform: translateZ(calc(var(--panel-depth) / 2)); }
+.panel-back { background-image: url('/assets/panel-back.webp'); transform: rotateX(180deg) translateZ(calc(var(--panel-depth) / 2)); }
+.panel-edge { position: absolute; backface-visibility: hidden; background: repeating-linear-gradient(3deg, #36190d 0 1px, #75401e 2px, #48240f 3px); border: .5px solid #9f6d3880; pointer-events: none; }
+.panel-edge-top, .panel-edge-bottom { width: 100%; height: var(--panel-depth); left: 0; }
+.panel-edge-top { top: calc(var(--panel-depth) / -2); transform: rotateX(90deg); }
+.panel-edge-bottom { bottom: calc(var(--panel-depth) / -2); transform: rotateX(-90deg); }
+.panel-edge-left, .panel-edge-right { width: var(--panel-depth); height: 100%; top: 0; }
+.panel-edge-left { left: calc(var(--panel-depth) / -2); transform: rotateY(-90deg); }
+.panel-edge-right { right: calc(var(--panel-depth) / -2); transform: rotateY(90deg); }
+.panel-face::after { content: ''; position: absolute; inset: 0; background: linear-gradient(#fff0c933, #100500bb); opacity: 0; pointer-events: none; }
+.center-panel[data-turning='true'] .panel-face::after { animation: panel-turn-light var(--flip-duration) ease-in-out; }
+@keyframes panel-turn-light { 0%, 100% { opacity: 0; } 45% { opacity: .85; } 70% { opacity: .25; } }
+.new-puzzle-panel { position: relative; width: 100%; height: 100%; min-height: 44px; padding: 0 14%; border: 0; background: transparent; color: #f7dfad; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; font: 400 clamp(12px, 3.7cqw, 18px)/1 var(--font-display); letter-spacing: 0; text-shadow: 0 1px 3px #160804; text-decoration: none; pointer-events: auto; }
 .new-puzzle-panel:disabled { pointer-events: none; }
-.new-puzzle-panel > span[aria-hidden] { font-size: 9px; opacity: .7; }
-.new-puzzle-panel { position: relative; text-decoration: none; }
-.panel-brass-glow { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: #ffe0a1; stroke-width: 1; opacity: 0; filter: drop-shadow(0 0 2px #edb956) drop-shadow(0 0 3px #e5b35b66); pointer-events: none; transition: opacity .2s ease; }
-.new-puzzle-panel:not(:disabled) .panel-brass-glow { opacity: .28; }
-.new-puzzle-panel:hover:not(:disabled) .panel-brass-glow { opacity: .48; }
+.panel-label { grid-column: 2; }
+.panel-star { font: 11px/1 Georgia, serif; color: #ecd5a6; justify-self: center; }
+.panel-brass-glow, .panel-stardust { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.panel-brass-glow { fill: none; stroke-linejoin: round; opacity: 0; transition: opacity .18s ease; }
+.brass-halo { stroke: #f9e8bd; stroke-width: 7; opacity: .36; filter: blur(4px); }
+.brass-body { stroke: #ffecc6; stroke-width: 2.8; opacity: .78; filter: blur(1px); }
+.brass-highlight { stroke: #fff3d8; stroke-width: .85; opacity: .92; }
+.center-panel.is-revealed .panel-brass-glow { opacity: .72; transition: opacity .25s ease .4s; }
+.center-panel[data-ready='true'] .panel-brass-glow { transition: opacity .2s ease; }
+.new-puzzle-panel:hover:not(:disabled) .panel-brass-glow { opacity: .88; }
 .new-puzzle-panel:focus-visible { outline: none; text-decoration: none; }
-.new-puzzle-panel:focus-visible .panel-brass-glow { opacity: .85; stroke-width: 1.2; }
-.new-puzzle-panel:active:not(:disabled) .panel-brass-glow { opacity: .65; }
+.new-puzzle-panel:focus-visible .panel-brass-glow { opacity: 1; }
+.new-puzzle-panel:focus-visible .brass-highlight { stroke: #fffdf0; stroke-width: 1.6; }
+.new-puzzle-panel:active:not(:disabled) .panel-brass-glow { opacity: .6; }
+.panel-stardust { opacity: 0; transition: opacity .18s ease; }
+.center-panel[data-ready='true'] .panel-stardust { opacity: 1; transition-duration: .3s; }
+.magic-mote { fill: #fff2d1; filter: drop-shadow(0 0 1.6px #fff3cf); opacity: 0; animation: panel-dust var(--life) linear var(--phase) infinite; animation-play-state: paused; }
+.center-panel[data-ready='true'] .magic-mote { animation-play-state: running; }
+@keyframes panel-dust {
+  0% { opacity: 0; transform: translate(0, 0) scale(.55); }
+  16% { opacity: var(--peak); }
+  30% { opacity: .35; }
+  44% { opacity: var(--peak); }
+  65% { opacity: .45; }
+  100% { opacity: 0; transform: translate(var(--drift-x), var(--drift-y)) scale(.65); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .magic-mote { opacity: 0; }
+  .panel-stardust > g:nth-child(9n) .magic-mote { opacity: .55; }
+}
 
 /* A separate parchment layer over the REAL completed cabinet; never a scene mockup. */
-.settlement { position: fixed; inset: 0; width: min(294px, calc(100% - 24px - env(safe-area-inset-left) - env(safe-area-inset-right))); max-height: calc(100svh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); padding: 32px 10px 8px; border: 0; overflow: auto; color: #503017; text-align: center; background: transparent; font-family: 'Songti SC', 'SimSun', 'Noto Serif CJK SC', serif; }
+.settlement { position: fixed; inset: 0; width: min(294px, calc(100% - 24px - env(safe-area-inset-left) - env(safe-area-inset-right))); max-height: calc(100svh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); padding: 32px 10px 8px; border: 0; overflow: auto; color: #503017; text-align: center; background: transparent; font-family: var(--font-text); }
 .settlement::backdrop { background: #110c17a6; backdrop-filter: blur(2px); }
 .settlement-close { position: absolute; right: 3px; top: 0; border: 1px solid #e6c185; color: #f3dcac; background: #21142196; width: 44px; height: 44px; box-shadow: inset 0 0 4px #eec78055; z-index: 1; }
 .settlement-close:focus-visible { outline-color: #ffedc6; outline-offset: -4px; }
 .parchment { position: relative; width: 100%; aspect-ratio: 971 / 1619; min-height: 450px; background: url('/assets/settlement/parchment.webp') center / 100% 100% no-repeat; filter: drop-shadow(0 6px 12px #08030a88); }
 .parchment-content { position: absolute; inset: 16% 9% 10%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
-.settlement h2 { font-size: clamp(24px, 7.4vw, 26px); font-weight: 500; letter-spacing: .14em; margin: 0; color: #442510; line-height: 1.3; }
+.settlement h2 { font-family: var(--font-display); font-size: clamp(24px, 7.4vw, 26px); font-weight: 400; letter-spacing: .06em; margin: 0; color: #442510; line-height: 1.3; }
 .record-divider { display: flex; align-items: center; justify-content: center; gap: 8px; width: 94%; color: #a37742; font-size: 12px; line-height: 1; }
 .record-divider::before, .record-divider::after { content: ''; height: 1px; flex: 1; background: linear-gradient(90deg, transparent, #a3774277); }
 .record-divider::after { transform: rotate(180deg); }
@@ -129,4 +167,4 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .completion-receipt strong { font-weight: normal; font-size: 18px; color: #643872; margin-left: 4px; }
 .scroll-icon { width: 30px; height: 33px; flex: none; filter: drop-shadow(0 1px 1px #704b2833); }
 .settlement-copy { font-size: 12px; margin: 0; line-height: 1.5; color: #795737; }
-#settlement-hint { font: 11px/1.8 'Songti SC', 'SimSun', serif; color: #eadac0; margin: 7px 0 0; text-shadow: 0 1px 4px #000; }
+#settlement-hint { font: 11px/1.8 var(--font-text); color: #eadac0; margin: 7px 0 0; text-shadow: 0 1px 4px #000; }

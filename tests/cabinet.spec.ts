@@ -81,9 +81,9 @@ for (const [width, height] of [[390, 844], [360, 640], [320, 568], [1280, 900]])
       within((hit.x + hit.width - stage.x) / scale, region.x)
       within((hit.y - stage.y) / scale, panelY)
       within((hit.y + hit.height - stage.y) / scale, panelY)
-      // Text and icon together remain centered in the painted panel.
+      // The text itself is centered; the arrow occupies a separate left column.
       const content = await page.locator(`${region.selector} > *`).evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().toJSON()))
-      expect(Math.abs((content[0].x + content[1].x + content[1].width) / 2 - hit.x - hit.width / 2)).toBeLessThan(1)
+      expect(Math.abs(content[1].x + content[1].width / 2 - hit.x - hit.width / 2)).toBeLessThan(1)
     }
     await expect(page.locator('.controls').getByRole('button')).toHaveCount(2)
     const middleIsButton = await page.evaluate(({ x, y }) => !!document.elementFromPoint(x, y)?.closest('button'), {

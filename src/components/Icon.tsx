@@ -1,7 +1,7 @@
 export type IconName = 'undo' | 'restart' | 'new' | 'help' | 'check' | 'close' | 'sparkle'
 const paths: Record<IconName, string> = {
-  undo: 'M9 5 4 10l5 5M4 10h9a6 6 0 0 1 0 12',
-  restart: 'M4 9a8 8 0 1 1 0 7M4 3v6h6',
+  undo: 'M9 4 4 9l5 5M4 9h9a6 6 0 0 1 0 12',
+  restart: 'M4 9a8 8 0 1 1 0 7M4 4v5h5',
   new: 'M12 4v16M4 12h16',
   help: 'M9.5 8a2.5 2.5 0 1 1 4 2c-1 .7-1.5 1.3-1.5 3M12 17h.01',
   check: 'm5 12 4 4L19 6',

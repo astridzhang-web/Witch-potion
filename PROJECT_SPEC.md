@@ -34,7 +34,7 @@ Future workshop artwork: wooden workbench, ingredient shelves, books, parchment,
 
 ## Milestones and scope
 
-The original roadmap below is historical. Subsequent explicitly authorized 2A/2B/2C/2D scopes supersede its sequence and UI details; see the current 2D requirements at the end.
+The original roadmap below is historical. Subsequent explicitly authorized 2A/2B/2C/2D/2E scopes supersede its sequence and UI details; see the current 2E requirements at the end.
 
 1. **Stable playable foundation — complete.** App structure, complete rules, responsive 3 × 3 board, attractive placeholder glass, controls, saves, verified puzzles, useful automated tests, build, checkpoint commits and push when permitted.
 2. **Workshop artwork — requires a new instruction.** Atmospheric background, refined bottle variations, luminous liquids, dense tiny sparkles; small-screen legibility/performance checks; commit.
@@ -45,7 +45,7 @@ The eventual PWA must work without internet after caching, support portrait touc
 
 ## Quota-safe continuation
 
-Complete one stable milestone at a time. Keep working builds and frequent meaningful Git checkpoints, push committed work when allowed. Maintain this spec and `PROGRESS.md` with actual checks, limitations, architecture and the exact next task. Inspect and preserve existing changes on resume. Never claim unimplemented or untested behavior works. Follow only the currently authorized scope; after the authorized Milestone 2D parchment and basic rewards, stop for feedback.
+Complete one stable milestone at a time. Keep working builds and frequent meaningful Git checkpoints, push committed work when allowed. Maintain this spec and `PROGRESS.md` with actual checks, limitations, architecture and the exact next task. Inspect and preserve existing changes on resume. Never claim unimplemented or untested behavior works. Follow only the currently authorized scope; after the authorized Milestone 2E visual refinement, stop for feedback.
 
 ## Authorized narrow experiment: floating pour prototype (2026-10-22)
 
@@ -104,3 +104,21 @@ This supersedes 2C's geometric crystal, text underline, v2-only schema and prohi
 - Keep the 44px close control, tap/Escape dismissal, safe-area margins and internal scrolling on short screens. Verify 390×844, 360×640, 320×568 and centered desktop with actual browser screenshots.
 
 Deliver tests/build, screenshots and updated documents, commit/push `work`, then stop for visual acceptance. No final bottles, perspective changes, animation refinement, home, shop/spending, special third reward, audio, PWA or public deployment.
+
+## Authorized Milestone 2E: wooden mechanism, stardust and typography
+
+Presentation only: shallow wood thickness and changing turn lighting, a 550–700ms horizontal
+flip (implemented at 650ms), contour-aligned champagne brass glow and independent small
+outward-drifting stars. Fixed lightweight CSS/SVG emitters must not regenerate on ordinary
+renders, intercept input or animate continuously under reduced motion. Restore a ready back
+without a fresh flip or reward, and preserve manual new-puzzle activation/readiness.
+
+Use officially sourced local WOFF2 subsets of LXGW ZhenKai for cabinet labels and the
+settlement title, and Source Han Serif Medium for ordinary interface text; retain licenses,
+source/version details, accessible text and system fallbacks. Center labels independently of
+arrows, keep equal center ornaments, and preserve the existing three panel centers.
+
+Deliver true mobile browser captures, alignment guides and an actual GIF/video. Validate
+390×844, 360×640 and 320×568, keyboard/motion/restoration/font loading plus existing regressions.
+No game rules, rewards/save algorithms, bottle coordinates, 920ms pouring, cabinet/parchment
+artwork, home/shop/audio/PWA/deployment changes. Stop for visual acceptance after commit/push.
