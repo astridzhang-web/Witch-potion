@@ -2,9 +2,19 @@
 
 ## Current milestone
 
-**Milestone 3A three-bottle prototype — COMPLETE. Stop for visual acceptance.**
+**Milestone 3B index-0 art/liquid sample — COMPLETE. Stop for visual acceptance.**
 
 The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+
+## Milestone 3B / 第一只月影玻璃美术样板 (2026-10-25)
+
+- Continued from `8110f50eaf25771af47a0ae58b3492baadd25957` on `work`; preserved/excluded the unrelated untracked project report. Only **index 0** selects `moon-glass`, explicitly shared by resting/flying/receiving art. Slots 1–8 retain 3A appearances, including the other round bottles.
+- Retained the supplied **1086×1448 RGBA PNG** unchanged at `assets/reference/透明玻璃月影药瓶.png`. Served `public/assets/bottles/moon-glass-source.webp` is **776,836 B** (lossless, 32.6% smaller); decoded RGBA matches the original exactly. No concept reinterpretation, painted replacement glass or baked-in liquid.
+- Alpha analysis: original belly center ≈4.1%, neck ≈98.9%, shoulder ≈95.3%. SVG masks reduce opaque glass regions and clip detached matte residue; a warm-color detail pass preserves the existing gold moon/chain and rim highlights. Actual rendered mean alpha is ≈1.9% belly / 36.1% neck / 37.9% shoulder. Glass still lightly brightens edge colors; there is no physical refraction. [Source, measurements and layer notes](assets/moon-glass.md).
+- Uniform art mapping puts source mouth **(543,52)** at SVG **(50,10)** and source contact **(543,1410)** at **(50,134)**. A measured cavity and 10.3-unit lip radius fit the formal artwork, preserving image proportions and existing cabinet placement. Source liquid stays horizontal; receiver inner flow is clipped behind the glass. **260/640/920ms** timeline and atomic commit remain unchanged.
+- Validation: **85 unit tests passed, 96 Playwright cases passed (4.3 min), production build and `git diff --check` passed**. New coverage includes slot-only selection, formal cavity/tilt, natural aspect, measured mouth/base alignment, source/receiver texture continuity, landing/undo/reload and reduced motion. All game/reward/save/cabinet/HUD/panel regressions passed. No modifications to `src/game/`, HUD/styles, cabinet positions, palette or panel effects.
+- Actual production captures include full 390×844 and 360×640 pages; empty, 1-unit gold, 1-unit purple, 2-color half-full and 4-unit bottles, including four adjacent color bands in the existing moon-2 preset. Source/receiver details, selection/flight/return frames and a **3.8s full-page MP4/GIF** (118 real screencast frames) show actual pours. All fixtures use existing valid presets/histories; no page errors. [Visual acceptance gallery](docs/screenshots/milestone3b-preview.md).
+- Limits: illustrated reflections rotate with the bottle, some pale liquid brightening remains at glass edges, and tiny ornaments occupy only a few phone pixels. Physical Safari/iOS and low-end filter performance remain unverified. Stop after this one sample for art/animation acceptance; no expansion to the other eight slots.
 
 ## Milestone 3A / 三种炼金瓶与动态药液原型 (2026-10-25)
 

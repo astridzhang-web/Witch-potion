@@ -1,10 +1,15 @@
+import { MOON_GLASS } from './moonGlass'
+
 /** Presentation geometry only; the four-unit game state remains in game/rules. */
 export type BottleKind = 'round' | 'pear' | 'faceted'
+export type BottleAppearance = BottleKind | 'moon-glass'
 export interface Point { x: number; y: number }
 export const MOUTH = { x: 50, y: 10, radius: 7 }
 export const CONTACT = { x: 50, y: 134 }
 const kinds: BottleKind[] = ['round', 'pear', 'faceted']
 export const bottleKind = (index: number) => kinds[index % kinds.length]
+// The sample belongs to slot 0, NOT to every round bottle. Shared by all sprites.
+export const bottleAppearance = (index: number): BottleAppearance => index === 0 ? 'moon-glass' : bottleKind(index)
 
 // Curves are sampled once. The same cavity polygon drives clipping AND liquid area.
 function curve(points: Point[], end: Point, a: Point, b: Point) {
@@ -48,14 +53,27 @@ const paths = {
   pear: 'M42 10V45C42 61 27 74 20 99C13 122 31 134 50 134C69 134 87 122 80 99C73 74 58 61 58 45V10Z',
   faceted: 'M42 10V47L31 65L19 100L31 127L40 134H60L69 127L81 100L69 65L58 47V10Z',
 }
-export const BOTTLE_GEOMETRY = Object.fromEntries(kinds.map(kind => {
-  const polygon = cavity(kind)
-  return [kind, { outline: paths[kind], polygon, clip: `M${polygon.map(p => `${p.x},${p.y}`).join('L')}Z`,
-    capacityArea: area(below(polygon, kind === 'faceted' ? 72 : 76)) }]
-})) as Record<BottleKind, { outline: string; polygon: Point[]; clip: string; capacityArea: number }>
+function moonCavity(): Point[] {
+  const left = [{ x: 430, y: 52 }, { x: 478, y: 98 }, { x: 486, y: 190 }, { x: 486, y: 500 }]
+  curve(left, { x: 430, y: 715 }, { x: 486, y: 635 }, { x: 465, y: 685 })
+  curve(left, { x: 222, y: 1020 }, { x: 310, y: 755 }, { x: 222, y: 856 })
+  curve(left, { x: 360, y: 1300 }, { x: 222, y: 1140 }, { x: 266, y: 1250 })
+  curve(left, { x: 543, y: 1328 }, { x: 414, y: 1326 }, { x: 480, y: 1328 })
+  return [...left, ...left.slice(0, -1).reverse().map(p => ({ x: 1086 - p.x, y: p.y }))]
+    .map(p => ({ x: 50 + (p.x - 543) * MOON_GLASS.scale, y: 10 + (p.y - 52) * MOON_GLASS.scale }))
+}
+interface Geometry { outline?: string; polygon: Point[]; clip: string; capacityArea: number; mouthRadius: number }
+const geometry = (polygon: Point[], fullY: number, mouthRadius: number, outline?: string): Geometry => ({
+  outline, polygon, clip: `M${polygon.map(p => `${p.x},${p.y}`).join('L')}Z`,
+  capacityArea: area(below(polygon, fullY)), mouthRadius,
+})
+export const BOTTLE_GEOMETRY: Record<BottleAppearance, Geometry> = {
+  ...Object.fromEntries(kinds.map(kind => [kind, geometry(cavity(kind), kind === 'faceted' ? 72 : 76, MOUTH.radius, paths[kind])])) as Record<BottleKind, Geometry>,
+  'moon-glass': geometry(moonCavity(), 10 + (815 - 52) * MOON_GLASS.scale, 10.3),
+}
 
 /** Horizontal world-space surfaces conserve 2D area as the glass rotates. */
-export function liquidSurfaces(kind: BottleKind, angle: number, levels: readonly number[]): number[] {
+export function liquidSurfaces(kind: BottleAppearance, angle: number, levels: readonly number[]): number[] {
   const shape = BOTTLE_GEOMETRY[kind], polygon = shape.polygon.map(p => rotate(p, angle))
   const minY = Math.min(...polygon.map(p => p.y)), maxY = Math.max(...polygon.map(p => p.y))
   return levels.map(level => {
@@ -71,11 +89,11 @@ export function liquidSurfaces(kind: BottleKind, angle: number, levels: readonly
   })
 }
 /** Keep the free surface at the downhill lip while pouring the TOP color. */
-export function pouringAngle(kind: BottleKind, level: number): number {
+export function pouringAngle(kind: BottleAppearance, level: number): number {
   const shape = BOTTLE_GEOMETRY[kind], wanted = shape.capacityArea * Math.max(.005, level) / 4
   let low = 65, high = 175
   for (let i = 0; i < 18; i++) {
-    const mid = (low + high) / 2, lip = rotate({ x: MOUTH.x + MOUTH.radius, y: MOUTH.y }, mid)
+    const mid = (low + high) / 2, lip = rotate({ x: MOUTH.x + shape.mouthRadius, y: MOUTH.y }, mid)
     const volume = area(below(shape.polygon.map(p => rotate(p, mid)), lip.y))
     if (volume > wanted) low = mid
     else high = mid

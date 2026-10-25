@@ -1,6 +1,7 @@
+import MoonGlass from './MoonGlass'
 import { useId, type CSSProperties } from 'react'
-import { isComplete, type Bottle as BottleState } from '../game/rules'
-import { BOTTLE_GEOMETRY, bottleKind, liquidSurfaces, type BottleKind } from '../scene/bottleGeometry'
+import { isComplete, type Color, type Bottle as BottleState } from '../game/rules'
+import { BOTTLE_GEOMETRY, bottleAppearance, liquidSurfaces, type BottleAppearance } from '../scene/bottleGeometry'
 
 export const COLORS = [
   { name: '玫瑰红', light: '#dc8b9d', main: '#c25b79', dark: '#a54d68' },
@@ -39,14 +40,14 @@ export default function Bottle({ liquid, index, selected, won, busy, animating, 
   >
     <span className="bottle-halo" />
     <span className="bottle-contact-shadow" aria-hidden="true" />
-    <BottleArt liquid={liquid} kind={bottleKind(index)} />
+    <BottleArt liquid={liquid} kind={bottleAppearance(index)} />
     <span className="bottle-number">{complete ? <span aria-hidden="true">✓</span> : String(index + 1).padStart(2, '0')}{liquid.length === 0 && <span className="empty-label">空瓶</span>}</span>
   </button>
 }
 
 /** Glass and liquid stay independent; only the liquid counter-rotates against gravity. */
-export function BottleArt({ liquid, kind = 'round', fillLevel = liquid.length, angle = 0, pouring = false }: {
-  liquid: BottleState; kind?: BottleKind; fillLevel?: number; angle?: number; pouring?: boolean
+export function BottleArt({ liquid, kind = 'round', fillLevel = liquid.length, angle = 0, pouring = false, receivingColor }: {
+  liquid: BottleState; kind?: BottleAppearance; fillLevel?: number; angle?: number; pouring?: boolean; receivingColor?: Color
 }) {
   const id = useId().replace(/:/g, '')
   const shape = BOTTLE_GEOMETRY[kind]
@@ -68,7 +69,7 @@ export function BottleArt({ liquid, kind = 'round', fillLevel = liquid.length, a
         <stop offset=".7" stopColor={color.light} /><stop offset="1" stopColor={color.main} />
       </linearGradient>)}
     </defs>
-    <path d={shape.outline} fill={`url(#${id}-glass)`} />
+    {kind !== 'moon-glass' && <path d={shape.outline} fill={`url(#${id}-glass)`} />}
     <g className="liquid-cavity" clipPath={`url(#${id}-cavity)`}>
       <g className="gravity-liquid" transform={`rotate(${-angle} 50 10)`}>
         {liquid.map((color, i) => i < level && <g key={i} className="liquid-layer" data-color={color}>
@@ -77,7 +78,12 @@ export function BottleArt({ liquid, kind = 'round', fillLevel = liquid.length, a
         </g>)}
         {level > 0 && <path className="liquid-surface" d={`M-160 ${surfaces.at(-1)}H260`} fill="none" stroke={COLORS[topColor].light} strokeWidth="1.25" opacity=".85" />}
       </g>
+      {receivingColor !== undefined && <g>
+        <path className="receiving-flow" d={`M50 10V${surfaces.at(-1)}`} stroke={COLORS[receivingColor].light} strokeWidth="1.8" opacity=".6" />
+        <ellipse cx="50" cy={surfaces.at(-1)} rx="12" ry="1.3" fill="none" stroke={COLORS[receivingColor].light} strokeWidth=".9" opacity=".65" />
+      </g>}
     </g>
+    {kind === 'moon-glass' ? <MoonGlass id={id} cavity={shape.clip} /> : <>
     <path d={shape.outline} fill="none" stroke="#c8d8df" strokeOpacity=".6" strokeWidth="1" />
     <path d="M45 15V44M55 15V43" fill="none" stroke="#eef4ee" strokeOpacity=".38" strokeWidth="1.1" />
     {kind === 'round' && <path d="M29 77Q18 94 24 111M77 88Q82 107 71 119" fill="none" stroke="#edf1e8" strokeOpacity=".24" strokeWidth="1.8" strokeLinecap="round" />}
@@ -89,6 +95,7 @@ export function BottleArt({ liquid, kind = 'round', fillLevel = liquid.length, a
     </g>
     <ellipse cx="50" cy="10" rx="9" ry="2.8" fill="#152027" fillOpacity=".6" stroke="#d1d8cd" strokeOpacity=".8" strokeWidth="1" />
     <ellipse cx="50" cy="10" rx="6.7" ry="1.4" fill="#0d1421" fillOpacity=".8" stroke="#dfcd9f" strokeOpacity=".55" strokeWidth=".6" />
-    {pouring && level > 0 && <path className="wet-lip" d={`M${50 + Math.sign(angle) * 5} 11L${50 + Math.sign(angle) * 7} 10`} stroke={COLORS[topColor].light} strokeWidth="1.7" strokeLinecap="round" />}
+    </>}
+    {pouring && level > 0 && <path className="wet-lip" d={`M${50 + Math.sign(angle) * (shape.mouthRadius - 2)} 11L${50 + Math.sign(angle) * shape.mouthRadius} 10`} stroke={COLORS[topColor].light} strokeWidth="1.7" strokeLinecap="round" />}
   </svg>
 }

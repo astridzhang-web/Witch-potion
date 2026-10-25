@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { BottleArt, COLORS } from './Bottle'
 import type { Pour } from '../game/rules'
 import type { Session } from '../game/session'
-import { BOTTLE_GEOMETRY, MOUTH, bottleKind, liquidSurfaces, pouringAngle, rotate } from '../scene/bottleGeometry'
+import { BOTTLE_GEOMETRY, MOUTH, bottleAppearance, liquidSurfaces, pouringAngle, rotate } from '../scene/bottleGeometry'
 
 interface ArtBox { x: number; y: number; width: number; height: number; restY: number }
 export interface Flight {
@@ -91,7 +91,7 @@ export default function PourAnimation({ flight, onCommit, onFinish }: {
   const phase = elapsed < ARRIVE ? 'lift' : returning ? 'return' : 'pour'
   // Pour inward at screen edges so the tilted body stays on-screen even across rows.
   const direction = target.x + target.width / 2 < window.innerWidth / 2 ? -1 : 1
-  const sourceKind = bottleKind(pour.from), targetKind = bottleKind(pour.to)
+  const sourceKind = bottleAppearance(pour.from), targetKind = bottleAppearance(pour.to)
   const sourceLevel = pour.before[pour.from].length - pour.amount * progress
   const targetLevel = pour.before[pour.to].length + pour.amount * progress
   const travel = ease(clamp(elapsed / ARRIVE))
@@ -101,7 +101,7 @@ export default function PourAnimation({ flight, onCommit, onFinish }: {
   const sourceScale = source.width / 100, targetScale = target.width / 100
   const mouth = { x: target.x + MOUTH.x * targetScale, y: target.y + MOUTH.y * targetScale }
   const tip = { x: mouth.x - direction * 12, y: mouth.y - 22 }
-  const lip = rotate({ x: MOUTH.x + direction * MOUTH.radius, y: MOUTH.y }, angle)
+  const lip = rotate({ x: MOUTH.x + direction * BOTTLE_GEOMETRY[sourceKind].mouthRadius, y: MOUTH.y }, angle)
   // Position the actual downhill rim at the stream origin, not the old SVG origin.
   const near = { x: tip.x - lip.x * sourceScale, y: tip.y - lip.y * sourceScale }
   const x = returning ? lerp(near.x, source.x, back) : lerp(source.x, near.x, travel)
@@ -111,7 +111,7 @@ export default function PourAnimation({ flight, onCommit, onFinish }: {
 
   return createPortal(<div className="pour-overlay" data-testid="pour-animation" data-phase={phase} data-from={pour.from} data-to={pour.to} aria-hidden="true">
     <div className="receiving-sprite" style={{ left: target.x, top: target.y, width: target.width, height: target.height }}>
-      <BottleArt liquid={pour.after[pour.to]} kind={targetKind} fillLevel={targetLevel} />
+      <BottleArt liquid={pour.after[pour.to]} kind={targetKind} fillLevel={targetLevel} receivingColor={targetKind === 'moon-glass' && phase === 'pour' ? pour.color : undefined} />
     </div>
     <div className="flying-bottle" style={{ width: source.width, height: source.height, transform: `translate3d(${x}px, ${y}px, 0) rotate(${angle}deg)` }}>
       <BottleArt liquid={pour.before[pour.from]} kind={sourceKind} fillLevel={sourceLevel} angle={angle} pouring={phase === 'pour'} />
@@ -120,10 +120,10 @@ export default function PourAnimation({ flight, onCommit, onFinish }: {
       <path d={`M${tip.x} ${tip.y} Q${mouth.x} ${tip.y + 3} ${mouth.x} ${mouth.y + 4}`} stroke={color.main} strokeWidth={Math.min(3.2, targetScale * 4)} opacity=".92" fill="none" strokeLinecap="round" />
       <path d={`M${tip.x} ${tip.y} Q${mouth.x} ${tip.y + 3} ${mouth.x} ${mouth.y + 4}`} stroke={color.light} strokeWidth={targetScale * 1.3} opacity=".8" fill="none" strokeLinecap="round" />
       <defs><clipPath id={`${id}-receiver`}><path d={BOTTLE_GEOMETRY[targetKind].clip} /></clipPath></defs>
-      <g transform={`translate(${target.x} ${target.y}) scale(${targetScale})`} clipPath={`url(#${id}-receiver)`}>
+      {targetKind !== 'moon-glass' && <g transform={`translate(${target.x} ${target.y}) scale(${targetScale})`} clipPath={`url(#${id}-receiver)`}>
         <path className="receiving-flow" d={`M50 10V${surface}`} stroke={color.light} strokeWidth="1.8" opacity=".6" />
         <ellipse cx="50" cy={surface} rx="12" ry="1.3" fill="none" stroke={color.light} strokeWidth=".9" opacity=".65" />
-      </g>
+      </g>}
     </svg>}
   </div>, document.body)
 }

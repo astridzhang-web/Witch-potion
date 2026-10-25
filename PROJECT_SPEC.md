@@ -163,3 +163,14 @@ all existing game/reward/save rules. No concept-image crops, nine-final-bottle p
 special potion particles or new systems. Unify HUD label/number size, weight and baseline
 without changing the shoulder coordinates. Deliver real mixed-puzzle and empty/half/full
 screenshots plus a browser pour recording, then stop for visual acceptance.
+
+## Authorized Milestone 3B sample
+
+Use the supplied transparent moon-glass artwork only at slot index 0, retaining the original
+PNG and a separately named web asset. Preserve its natural proportions and recognized
+ornaments; inspect and non-destructively temper opaque neck/shoulder highlights. Composite
+independent four-unit SVG liquid inside a measured cavity, under the actual glass artwork.
+Use one explicit appearance selector for rest/source/receiver/return; the other eight slots
+keep 3A art. Preserve the 920ms timeline, HUD, cabinet positions, palette, rewards and saves.
+Deliver real wood-background empty/one/two/four-unit captures plus source/receiver recordings,
+run tests/build, update progress, commit/push `work`, then stop for visual acceptance.

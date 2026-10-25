@@ -100,3 +100,11 @@ light treatment only; it is not installed as a replacement texture. See [panel-m
 for measured contour, CSS thickness, deterministic stardust and unchanged scene centers.
 New local WOFF2 subsets have official-source hashes and OFL copyright/license files in
 [public/fonts](../public/fonts/README.md); the full desktop fonts are not redistributed here.
+
+## Milestone 3B: index-0 moon-glass sample
+
+The user-supplied PNG is preserved at `reference/透明玻璃月影药瓶.png`; its pixel-identical
+lossless web texture is `public/assets/bottles/moon-glass-source.webp`. Only index 0 uses
+this texture, behind reversible SVG alpha/detail treatments and above dynamic liquid.
+See [source analysis and geometry notes](moon-glass.md) and the
+[real-browser acceptance gallery](../docs/screenshots/milestone3b-preview.md).
