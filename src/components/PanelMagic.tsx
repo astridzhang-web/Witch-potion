@@ -25,11 +25,15 @@ const particles = Array.from({ length: 36 }, (_, i) => {
   const y = edge.a[1] + (edge.b[1] - edge.a[1]) * t
   const nx = (edge.b[1] - edge.a[1]) / edge.length
   const ny = -(edge.b[0] - edge.a[0]) / edge.length
-  return { x, y, star: i % 9 === 0, radius: (.8 + seed * .65) * 1.65, style: {
-    '--drift-x': `${nx * (9 + seed * 12) + (seed - .5) * 7}px`,
-    '--drift-y': `${ny * (8 + seed * 12) - 3}px`,
+  // Mostly fine dust, six brighter dots and just three tiny star glints.
+  const star = i % 12 === 0
+  const bright = !star && i % 5 === 2
+  const drift = star || bright ? 1.4 : 1
+  return { x, y, star, radius: bright ? 2.25 + seed * .6 : 1.05 + seed * .65, style: {
+    '--drift-x': `${(nx * (9 + seed * 12) + (seed - .5) * 7) * drift}px`,
+    '--drift-y': `${(ny * (8 + seed * 12) - 3) * drift}px`,
     '--life': `${1.8 + seed * 1.2}s`, '--phase': `${-i * .371}s`,
-    '--peak': .65 + seed * .35,
+    '--peak': star ? 1 : bright ? .85 + seed * .15 : .55 + seed * .2,
   } as CSSProperties }
 })
 

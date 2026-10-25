@@ -24,7 +24,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .app-shell { min-height: 100svh; display: flex; align-items: center; justify-content: center; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 .cabinet-scene { position: relative; isolation: isolate; container-type: inline-size; width: min(100%, 480px, max(280px, calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * .4497326203))); aspect-ratio: 841 / 1870; flex: none; box-shadow: 0 0 65px #07080d66; }
 .cabinet-art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; user-select: none; pointer-events: none; }
-.scene-hud { position: absolute; z-index: 2; top: 1%; left: 8%; right: 8%; min-height: 44px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; color: #f1ddba; text-shadow: 0 1px 5px #000, 0 0 12px #050915; }
+.scene-hud { position: absolute; z-index: 2; inset: 0; pointer-events: none; color: #f1ddba; text-shadow: 0 1px 5px #000, 0 0 12px #050915; }
 .icon-button { background: transparent; border: 0; padding: 10px; display: grid; place-items: center; color: #e4cea8; width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; }
 .icon-button:hover { color: #fff1ce; }
 .icon-button:disabled { opacity: .45; }
@@ -84,7 +84,11 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 /* Milestone 2C: compact lifetime HUD and quiet persistence. */
 .save-error { position: absolute; bottom: 1%; left: 8%; right: 8%; max-width: none; margin: 0; padding: 6px; color: #ffdbc1; background: #281213e8; border: 1px solid #e1a88266; border-radius: 6px; text-align: center; font-size: 11px; }
 
-.completion-stat, .move-stat { display: flex; justify-self: center; align-items: center; gap: 6px; white-space: nowrap; font-size: clamp(11px, 3cqw, 13px); font-weight: 500; line-height: 1.4; }
+.completion-stat, .move-stat { position: absolute; display: flex; transform: translate(-50%, -50%); pointer-events: auto; align-items: center; gap: 6px; white-space: nowrap; font-size: clamp(11px, 3cqw, 13px); font-weight: 500; line-height: 1.4; }
+/* Optical anchors on the 841×1870 artwork: (168,126) and (668,123).
+   These sit above the sloping shoulders, outside the raised central moon crest. */
+.completion-stat { left: 19.9762%; top: 6.738%; }
+.move-stat { left: 79.4293%; top: 6.5775%; }
 .completion-stat strong, .move-stat strong { font: inherit; font-size: 15px; font-variant-numeric: tabular-nums; }
 .help-button { position: fixed; z-index: 3; top: max(4px, env(safe-area-inset-top)); right: max(4px, env(safe-area-inset-right)); width: 44px; height: 44px; }
 .help-button svg { width: 18px; height: 18px; transform: translate(3.5px, -3.5px); filter: drop-shadow(0 1px 3px #000); }
@@ -132,12 +136,12 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .magic-mote { fill: #fff6df; filter: drop-shadow(0 0 1.6px #fff2d4); opacity: 0; animation: panel-dust var(--life) linear var(--phase) infinite; animation-play-state: paused; }
 .center-panel[data-ready='true'] .magic-mote { animation-play-state: running; }
 @keyframes panel-dust {
-  0% { opacity: 0; transform: translate(0, 0) scale(.55); }
+  0% { opacity: 0; transform: translate(0, 0) scale(.9); }
   16% { opacity: var(--peak); }
   30% { opacity: .35; }
   44% { opacity: var(--peak); }
   65% { opacity: .45; }
-  100% { opacity: 0; transform: translate(var(--drift-x), var(--drift-y)) scale(.65); }
+  100% { opacity: 0; transform: translate(var(--drift-x), var(--drift-y)) scale(1); }
 }
 @media (prefers-reduced-motion: reduce) {
   .magic-mote { opacity: 0; }

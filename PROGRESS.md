@@ -2,9 +2,18 @@
 
 ## Current milestone
 
-**Milestone 2E Fine Polish — COMPLETE. Stop for visual acceptance.**
+**Milestone 2E Small Visual Patch — COMPLETE. Stop for visual acceptance.**
 
 The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+
+## Milestone 2E Small Visual Patch / 肩部 HUD 与分层星尘 (2026-10-25)
+
+- Continued from `6f5cac976aae6dcd77e6350db54837e3e2c87cc3` on `work`; preserved and excluded the unrelated untracked project report. Runtime changes are confined to `PanelMagic.tsx` and HUD/dust rules in `styles.css`.
+- Replaced the evenly divided HUD grid with two artwork-relative optical anchors, source **(168,126) / (668,123)**. Whole labels sit above the sloping shoulders, outside the central raised moon crest. Font, weight, content and help target/icon remain unchanged. At 390×844 group centers are **(81.03,56.88) / (306.69,55.52)**. Layout tests now check independently measured shoulder clearance for whole 1–3 digit labels at 390×844, 360×640, 320×568 and desktop, rather than the superseded exact mathematical symmetry.
+- Kept **36** fixed emitters: **27 fine dots, 6 brighter dots, 3 tiny four-point glints**. Animation scale is **0.9–1**, replacing the size-suppressing 0.55–0.65. Bright dots/glints drift 1.4× farther; other drift, independent phases, 1.8–3s lifetimes, warm-white color and lightweight CSS mechanism remain. Existing lifecycle tests also guard against shrinking during the visible phase and check the size hierarchy. Reduced motion still has four static glints.
+- Captured matched before/after 390×844 and 360×640 pages and 3× HUD/particle/button details. An actual browser screencast supplies **311 frames**, encoded into a **5.4-second full-page MP4 and GIF**. Static comparisons pause CSS animations at the same 2200ms; the recording plays continuously. No browser page errors. [Screenshots, comparison and animation](docs/screenshots/milestone2e-small-preview.md).
+- Measured side-button content and help icon positions are identical before/after; brass resting opacity remains **0.94**. No changes to glow layers, panel turn/thickness, fonts/art, bottle layout, pour, game/reward/save logic, help or settlement. No new dependencies or deployment.
+- Validation: **71 unit tests passed, 88 Playwright cases passed (3.9 min), production build and `git diff --check` passed**. No test failures. Physical Safari/iOS remains unverified. Stop after visual-patch delivery.
 
 ## Milestone 2E Fine Polish / 粒子与间距微调 (2026-10-25)
 

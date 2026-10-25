@@ -140,3 +140,14 @@ redesign. Retain keyboard/reduced-motion support and all underlying game behavio
 Deliver 390×844 and 360×640 screenshots plus near-end/1s/5s/10s glow evidence, full tests,
 build, documentation and commit/push. No scene/bottle positions, pour mechanics, parchment
 design, reward algorithms, puzzle generation, home/shop/audio/PWA/deployment changes.
+
+## Authorized Milestone 2E small visual patch
+
+Supersede the symmetric HUD grid with artwork-relative placement in the two empty
+shoulders above the raised cabinet crest, keeping the moon clear and preserving the
+single-line labels, fonts and independent help control. Keep 36 stable dust emitters,
+but remove excessive visible-phase shrinking, introduce mostly fine dots with a few
+brighter dots/tiny stars, and allow some to drift farther into the dark wood. Preserve
+lifecycles, reduced motion, the current brass glow, side-button layout, flip and all
+gameplay. Deliver matched real mobile captures and a full-view particle GIF/video,
+run all checks, commit/push `work`, then stop for visual acceptance.

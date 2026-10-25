@@ -17,7 +17,7 @@ async function open(page: Page, value = save()) {
   await page.evaluate(() => document.fonts.ready)
 }
 
-test('whole HUD groups stay symmetric with 1–3 digits; help stays at the viewport edge', async ({ page }) => {
+test('HUD groups stay inside the artwork shoulder spaces with 1–3 digits; help stays at the viewport edge', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await open(page)
   for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }, { width: 320, height: 568 }, { width: 1280, height: 900 }]) {
@@ -29,11 +29,17 @@ test('whole HUD groups stay symmetric with 1–3 digits; help stays at the viewp
       const stage = (await page.locator('.cabinet-scene').boundingBox())!
       const left = (await page.locator('.completion-stat').boundingBox())!
       const right = (await page.locator('.move-stat').boundingBox())!
-      expect(Math.abs((left.x + left.width / 2 + right.x + right.width / 2) / 2 - stage.x - stage.width / 2)).toBeLessThan(.6)
-      expect(Math.abs(left.y + left.height / 2 - right.y - right.height / 2)).toBeLessThan(.6)
-      expect(left.x + left.width).toBeLessThan(right.x - 8)
+      // Independently read from the source illustration: negative space above the
+      // sloping shoulders, inside the outer pillars and outside the moon crest.
+      // Test the whole label (including three digits), not implementation anchors.
+      for (const [box, minX, maxX] of [[left, 65, 285], [right, 555, 780]] as const) {
+        expect((box.x - stage.x) / stage.width * 841).toBeGreaterThan(minX)
+        expect((box.x + box.width - stage.x) / stage.width * 841).toBeLessThan(maxX)
+        expect((box.y - stage.y) / stage.height * 1870).toBeGreaterThan(80)
+        expect((box.y + box.height - stage.y) / stage.height * 1870).toBeLessThan(165)
+      }
       const help = (await page.locator('.help-button').boundingBox())!
-      expect(help.x).toBeGreaterThan(right.x + right.width)
+      expect(help.x >= right.x + right.width || help.y + help.height <= right.y).toBe(true)
       expect(viewport.width - help.x - help.width).toBeCloseTo(4, 0)
       expect(help.y).toBeCloseTo(4, 0)
       expect(help.width).toBeGreaterThanOrEqual(44)

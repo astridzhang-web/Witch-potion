@@ -38,7 +38,11 @@ test('solid flip gates input; independent dust starts after landing, and clears 
   // not the transient projected height while the browser's CSS timeline catches up.
   expect(await page.locator('.panel-edge-top').evaluate(el => parseFloat(getComputedStyle(el).height))).toBeGreaterThan(2)
   const particles = page.locator('.magic-mote')
-  expect(await particles.count()).toBeGreaterThanOrEqual(30)
+  expect(await particles.count()).toBe(36)
+  const radii = await particles.locator('circle').evaluateAll(nodes => nodes.map(el => Number(el.getAttribute('r'))))
+  expect(radii.filter(r => r < 2).length).toBeGreaterThan(radii.filter(r => r >= 2).length)
+  expect(Math.max(...radii) / Math.min(...radii)).toBeGreaterThan(2)
+  await expect(particles.locator('path')).toHaveCount(3)
   const phases = await particles.evaluateAll(nodes => nodes.map(el => getComputedStyle(el).animationDelay))
   expect(new Set(phases).size).toBe(phases.length)
   const periods = await particles.evaluateAll(nodes => nodes.map(el => parseFloat(getComputedStyle(el).animationDuration)))
@@ -56,6 +60,8 @@ test('solid flip gates input; independent dust starts after landing, and clears 
     return { start, bright, end }
   })
   expect(motion.end.transform).not.toBe(motion.start.transform)
+  // The visible phase must no longer shrink a mote to roughly half its size.
+  expect(Number(motion.bright.transform.match(/^matrix\(([^,]+)/)![1])).toBeGreaterThanOrEqual(.85)
   expect(motion.bright.opacity).toBeGreaterThan(motion.start.opacity)
   expect(motion.bright.opacity).toBeGreaterThan(motion.end.opacity)
   const node = await mote.elementHandle()
