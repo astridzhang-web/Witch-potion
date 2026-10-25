@@ -2,9 +2,19 @@
 
 ## Current milestone
 
-**Milestone 2E Small Visual Patch — COMPLETE. Stop for visual acceptance.**
+**Milestone 3A three-bottle prototype — COMPLETE. Stop for visual acceptance.**
 
 The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+
+## Milestone 3A / 三种炼金瓶与动态药液原型 (2026-10-25)
+
+- Continued from `de8ef809c382078e9a342b67a81b9d45f8406172`; preserved/excluded the unrelated untracked project report. Added only **round, pear and faceted** long-neck SVG prototypes, repeated by column in the existing nine slots. No concept-image crops, new runtime dependency or final nine-bottle set.
+- Independent clear glass, restrained pale brass and clipped liquid layers share shape geometry. All retain the 100×150 viewBox, mouth **(50,10)** and contact **(50,134)**; cabinet coordinates/hit targets/shadows are unchanged. Seven color IDs/names remain, with a softer palette and slight gradients; no special potion effects.
+- Liquid boundaries counter-rotate to remain horizontal. A bounded polygon-area solve preserves each fractional unit within its actual cavity, and a lip-contact solve increases tilt as liquid drains. This replaces the former fixed 76° tilt because the new long necks need additional rotation to reach the liquid. The flight follows the actual lip; the receiver stream/ripple is clipped and tracks its rising surface. **920ms total / 640ms single commit** and the existing easing, interruption handling and input locks remain.
+- HUD label/number share inherited size, weight, line height and baseline alignment. Existing shoulder anchors/help positioning, panel/glow/dust/fonts, settlement/rewards and all `src/game/` logic are unchanged; no save migration.
+- Validation: **81 unit tests passed, 90 Playwright cases passed (3.9 min), production build passed**. Geometry tests cover equal-unit area, layer order/clearance, mirrored tilt, fractional levels and lip contact. Browser tests inspect actual transformed horizontal boundaries, exact stream/lip alignment, all three source shapes, receiver rise, return and HUD typography, plus all existing regressions.
+- Real production captures cover 390×844, 360×640, mixed puzzles and every shape empty/half/full, all from legal preset histories (steps 0/1/5). Added selected/lift/pour/receive/return frames and a **6.2s full-view MP4/GIF** of three actual pours (round/round/faceted) from 208 browser screencast frames, plus a separate real pear-source pour recording (70 frames). No page errors. [Visual acceptance gallery](docs/screenshots/milestone3a-preview.md); [geometry/animation notes](assets/bottle-prototypes.md).
+- Limits: intentionally simple SVG glass/brass, 2D area instead of physical 3D volume, instantaneous level equilibrium without fluid inertia/refraction. Physical iOS/Safari and low-end device performance remain unverified. Stop for visual acceptance; do not expand into final nine-bottle art or another phase.
 
 ## Milestone 2E Small Visual Patch / 肩部 HUD 与分层星尘 (2026-10-25)
 

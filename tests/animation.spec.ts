@@ -31,7 +31,7 @@ async function begin(page: Page, step: number) {
   return { from, to }
 }
 
-for (const [name, step] of [['upper to lower', 0], ['lower to upper', 1], ['adjacent same row, tilt left', 10], ['adjacent same row, tilt right', 12]] as const) {
+for (const [name, step] of [['upper to lower', 0], ['lower to upper', 1], ['faceted source to lower shelf', 2], ['adjacent same row, tilt left', 10], ['adjacent same row, tilt right', 12]] as const) {
   test(`floating pour: ${name}`, async ({ page }) => {
     await open(page, step)
     const source = page.getByTestId(`bottle-${preset.solution[step][0]}`).locator('svg')
@@ -56,13 +56,31 @@ for (const [name, step] of [['upper to lower', 0], ['lower to upper', 1], ['adja
     expect(sourceLevel).toBeGreaterThan(expected.after[from].length)
     expect(targetLevel + sourceLevel).toBeCloseTo(before[from].length + before[to].length)
     await expect(page.locator('.potion-stream')).toHaveAttribute('data-color', String(expected.color))
+    // Inspect actual rendered SVG transforms: liquid boundaries stay horizontal
+    // while the surrounding glass tilts; the stream starts exactly at its wet lip.
+    const geometry = await page.evaluate(() => {
+      const world = (path: SVGPathElement, end: boolean) => path.getPointAtLength(end ? path.getTotalLength() : 0).matrixTransform(path.getScreenCTM()!)
+      const lip = world(document.querySelector('.wet-lip')!, true)
+      const stream = world(document.querySelector('.potion-stream > path')!, false)
+      const boundaries = [...document.querySelectorAll<SVGPathElement>('.flying-bottle .liquid-boundary')]
+      return { gap: Math.hypot(lip.x - stream.x, lip.y - stream.y), slopes: boundaries.map(p => Math.abs(world(p, false).y - world(p, true).y)) }
+    })
+    expect(geometry.gap).toBeLessThan(.2)
+    for (const slope of geometry.slopes) expect(slope).toBeLessThan(.1)
+    const kinds = ['round', 'pear', 'faceted']
+    await expect(page.locator('.flying-bottle .bottle-art')).toHaveAttribute('data-kind', kinds[from % 3])
+    await expect(page.locator('.receiving-sprite .bottle-art')).toHaveAttribute('data-kind', kinds[to % 3])
+    const receivingY = await page.locator('.receiving-sprite .liquid-surface').evaluate((el: SVGPathElement) => el.getPointAtLength(0).matrixTransform(el.getScreenCTM()!).y)
+    await page.clock.runFor(80)
+    expect(await page.locator('.receiving-sprite .liquid-surface').evaluate((el: SVGPathElement) => el.getPointAtLength(0).matrixTransform(el.getScreenCTM()!).y)).toBeLessThan(receivingY)
+
     await expect(page.getByTestId('moves')).toHaveText(String(step))
     const flightRect = await page.locator('.flying-bottle').boundingBox()
     const viewport = page.viewportSize()!
     expect(flightRect!.x).toBeGreaterThanOrEqual(0)
     expect(flightRect!.x + flightRect!.width).toBeLessThanOrEqual(viewport.width)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
-    await page.clock.runFor(260)
+    await page.clock.runFor(180)
     await expect(overlay).toHaveAttribute('data-phase', 'return')
     await expect(page.getByTestId('moves')).toHaveText(String(step + 1))
     const stored = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), key)

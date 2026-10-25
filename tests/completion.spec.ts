@@ -43,6 +43,14 @@ test('compact HUD, silent save and inert star panel before completion', async ({
     const label = (await page.locator('.move-stat > span').boundingBox())!
     const number = (await page.getByTestId('moves').boundingBox())!
     expect(number.x).toBeGreaterThan(label.x + label.width)
+    for (const group of ['.completion-stat', '.move-stat']) {
+      const typography = await page.locator(group).evaluate(el => [...el.children].map(child => {
+        const style = getComputedStyle(child)
+        return [style.fontSize, style.fontWeight, style.fontFamily, style.lineHeight]
+      }))
+      expect(typography[0]).toEqual(typography[1])
+      await expect(page.locator(group)).toHaveCSS('align-items', 'baseline')
+    }
     expect(Math.abs(label.y + label.height / 2 - number.y - number.height / 2)).toBeLessThan(2)
     const completed = (await page.locator('.completion-stat').boundingBox())!
     expect(completed.x + completed.width).toBeLessThan(label.x)

@@ -151,3 +151,15 @@ brighter dots/tiny stars, and allow some to drift farther into the dark wood. Pr
 lifecycles, reduced motion, the current brass glow, side-button layout, flip and all
 gameplay. Deliver matched real mobile captures and a full-view particle GIF/video,
 run all checks, commit/push `work`, then stop for visual acceptance.
+
+## Authorized Milestone 3A prototype
+
+Implement only round-bellied, pear and faceted long-neck SVG prototypes, repeated in the
+existing nine-slot cabinet. Keep transparent glass/pale brass and independent four-unit
+liquid layers with the existing seven color identities at slightly lower saturation.
+Use a lightweight 2D gravity correction and actual-mouth stream alignment for selection,
+flight, tilt, source depletion, receiving and return, retaining the 920ms lifecycle and
+all existing game/reward/save rules. No concept-image crops, nine-final-bottle production,
+special potion particles or new systems. Unify HUD label/number size, weight and baseline
+without changing the shoulder coordinates. Deliver real mixed-puzzle and empty/half/full
+screenshots plus a browser pour recording, then stop for visual acceptance.

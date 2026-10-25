@@ -76,7 +76,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 /* Existing animation keeps its viewport-space portal above the cabinet and shelves. */
 .pour-overlay { position: fixed; inset: 0; z-index: 1000; pointer-events: none; overflow: hidden; }
 .flying-bottle, .receiving-sprite { position: absolute; left: 0; top: 0; }
-.flying-bottle { transform-origin: 50% 10%; will-change: transform; filter: drop-shadow(0 6px 7px #03061680) drop-shadow(0 0 5px #e2d3ae30); }
+.flying-bottle { transform-origin: 50% 6.6666667%; will-change: transform; filter: drop-shadow(0 6px 7px #03061680) drop-shadow(0 0 5px #e2d3ae30); }
 .pour-overlay .bottle-art { display: block; width: 100%; height: 100%; transition: none; }
 .potion-stream { position: absolute; inset: 0; overflow: visible; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
@@ -84,12 +84,12 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 /* Milestone 2C: compact lifetime HUD and quiet persistence. */
 .save-error { position: absolute; bottom: 1%; left: 8%; right: 8%; max-width: none; margin: 0; padding: 6px; color: #ffdbc1; background: #281213e8; border: 1px solid #e1a88266; border-radius: 6px; text-align: center; font-size: 11px; }
 
-.completion-stat, .move-stat { position: absolute; display: flex; transform: translate(-50%, -50%); pointer-events: auto; align-items: center; gap: 6px; white-space: nowrap; font-size: clamp(11px, 3cqw, 13px); font-weight: 500; line-height: 1.4; }
+.completion-stat, .move-stat { position: absolute; display: flex; transform: translate(-50%, -50%); pointer-events: auto; align-items: baseline; gap: 6px; white-space: nowrap; font-size: clamp(11px, 3cqw, 13px); font-weight: 500; line-height: 1.4; }
 /* Optical anchors on the 841×1870 artwork: (168,126) and (668,123).
    These sit above the sloping shoulders, outside the raised central moon crest. */
 .completion-stat { left: 19.9762%; top: 6.738%; }
 .move-stat { left: 79.4293%; top: 6.5775%; }
-.completion-stat strong, .move-stat strong { font: inherit; font-size: 15px; font-variant-numeric: tabular-nums; }
+.completion-stat strong, .move-stat strong { font: inherit; font-variant-numeric: tabular-nums; }
 .help-button { position: fixed; z-index: 3; top: max(4px, env(safe-area-inset-top)); right: max(4px, env(safe-area-inset-right)); width: 44px; height: 44px; }
 .help-button svg { width: 18px; height: 18px; transform: translate(3.5px, -3.5px); filter: drop-shadow(0 1px 3px #000); }
 .help-modal { width: min(340px, calc(100% - 40px)); padding: 38px 24px 20px; border: 0; border-radius: 12px; background: #17151be8; box-shadow: 0 10px 40px #0003; }
