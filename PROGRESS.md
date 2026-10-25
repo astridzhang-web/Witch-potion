@@ -2,9 +2,19 @@
 
 ## Current milestone
 
-**Milestone 2E Visual Patch — COMPLETE. Stop for visual acceptance.**
+**Milestone 2E Fine Polish — COMPLETE. Stop for visual acceptance.**
 
 The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+
+## Milestone 2E Fine Polish / 粒子与间距微调 (2026-10-25)
+
+- Continued from `2a0dbc2ccda36770f0f45ef781f378dd6e96bfbc`; preserved the unrelated untracked project report. Runtime changes are limited to `PanelMagic.tsx` and three CSS rules.
+- Kept all 36 emitters and their existing distribution, colors, brightness, phases and motion. Circle diameters are **1.65×**, four tiny star shapes **1.6×**, retaining the existing size hierarchy. Brass contour/halo intensity is unchanged (idle opacity **0.94**).
+- HUD inset **17% → 8%** puts whole-group centers at **29% / 71%**. At 390×844 each group moves outward **17.08px**. Help SVG moves **(+3.5, −3.5)px** inside the unchanged 44×44 safe-area target. Side-panel padding **3.5cqw → 4.7cqw** moves content inward **4.55px** per side; text/icon order and gap remain unchanged.
+- Captured before/after 390×844 and 360×640 pages plus HUD/buttons/particle details at matching CSS animation time (27 visible motes in both frames). Added an independent ≈5-second real browser recording. [Visual comparison and animation](docs/screenshots/milestone2e-fine-preview.md). No browser page errors.
+- Existing narrow-stage content test now checks a small outward bias (>0.5px) rather than the superseded >2px spacing; all panel bounds/clearance, game and glow assertions remain. No new test system or runtime dependency.
+- Validation: **71 unit tests passed, 88 browser tests passed**, production build and `git diff --check` passed.
+- Cabinet/bottle coordinates, fonts/licenses, artwork, 650ms wood turn, dust timing, 920ms pour, help, rules, rewards and saves are unchanged. Stop for visual acceptance; physical Safari/iOS remains unverified.
 
 ## Milestone 2E Visual Patch / HUD、按钮与帮助整理 (2026-10-23)
 
@@ -46,7 +56,7 @@ The playable foundation, floating-pour experiment, Milestone 2A integration and 
 - Automatic versioned localStorage saves: current puzzle, board, full undo history, lifetime completion count, current-instance credit, settlement dismissal, crystal balance and base/bonus reward receipt. The loader validates the verified initial arrangement and every history transition.
 - A restart confirmation protects in-progress games; mouse, touch and native keyboard controls; reduced-motion support. Clear feedback when browser storage is unavailable.
 
-## Verification results (latest: Milestone 2E Visual Patch, 2026-10-23)
+## Verification results (latest: Milestone 2E Fine Polish, 2026-10-25)
 
 All final checks passed; **no known blocking gameplay bugs**.
 
@@ -66,7 +76,7 @@ All final checks passed; **no known blocking gameplay bugs**.
 | Development server | Started on 5173; HTTP response and app entry verified; functional tests use the same Vite workflow on isolated 4173 |
 | `git diff --check` | Passed |
 
-Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2E patch production JS ≈246.95 kB (≈78.38 kB gzip), CSS ≈14.45 kB (≈4.36 kB gzip), active tall cabinet WebP ≈303 kB. Local font subsets total 108,016 B (105.5 KiB). No runtime external fonts/assets, backend or API keys.
+Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. Milestone 2E Fine Polish production JS ≈246.98 kB (≈78.40 kB gzip), CSS ≈14.48 kB (≈4.37 kB gzip), active tall cabinet WebP ≈303 kB. Local font subsets total 108,016 B (105.5 KiB). No runtime external fonts/assets, backend or API keys.
 
 ### Resolved setup issues
 
@@ -272,7 +282,7 @@ Paper grain/ornament and amethyst facets are generated adaptations, not a pixel-
 
 ## Exact next task (only after the user asks)
 
-Milestone 2E Visual Patch is complete. Wait for visual acceptance of sustained mixed glow, mirrored buttons, symmetric HUD and simplified help. Color symbols are retired with old saves preserved. Do not automatically begin final bottle art, perspective compensation, animation timing/physics, crystal spending/shop, home, sound, PWA or deployment.
+Milestone 2E Fine Polish is complete. Wait for visual acceptance of larger fine stardust and the small HUD/help/button spacing adjustments. Do not automatically begin final bottle art, perspective compensation, animation timing/physics, crystal spending/shop, home, sound, PWA or deployment.
 
 ## Resume in a fresh Codex session
 

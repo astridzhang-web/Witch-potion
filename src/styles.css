@@ -24,7 +24,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .app-shell { min-height: 100svh; display: flex; align-items: center; justify-content: center; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
 .cabinet-scene { position: relative; isolation: isolate; container-type: inline-size; width: min(100%, 480px, max(280px, calc((100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * .4497326203))); aspect-ratio: 841 / 1870; flex: none; box-shadow: 0 0 65px #07080d66; }
 .cabinet-art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; user-select: none; pointer-events: none; }
-.scene-hud { position: absolute; z-index: 2; top: 1%; left: 17%; right: 17%; min-height: 44px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; color: #f1ddba; text-shadow: 0 1px 5px #000, 0 0 12px #050915; }
+.scene-hud { position: absolute; z-index: 2; top: 1%; left: 8%; right: 8%; min-height: 44px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; color: #f1ddba; text-shadow: 0 1px 5px #000, 0 0 12px #050915; }
 .icon-button { background: transparent; border: 0; padding: 10px; display: grid; place-items: center; color: #e4cea8; width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; }
 .icon-button:hover { color: #fff1ce; }
 .icon-button:disabled { opacity: .45; }
@@ -45,7 +45,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .bottle:focus-visible .bottle-art { filter: drop-shadow(0 0 2px #fff3cd) drop-shadow(0 0 7px #f7d691); }
 .bottle.is-animating .bottle-art { visibility: hidden; }
 @media (hover: hover) { .bottle:hover:not(:disabled) .bottle-halo { background: radial-gradient(ellipse, #f8d78d20, transparent 70%); } }
-.panel-button { position: absolute; transform: translateY(-50%); min-height: 44px; min-width: 44px; pointer-events: auto; display: flex; align-items: center; justify-content: flex-start; padding: 0 3.5cqw; border: 0; border-radius: 18%; background: transparent; color: #f3d59c; font-family: var(--font-display); font-size: clamp(12px, 3.7cqw, 18px); line-height: 1; letter-spacing: 0; text-shadow: 0 1px 3px #180803, 0 0 8px #100704; }
+.panel-button { position: absolute; transform: translateY(-50%); min-height: 44px; min-width: 44px; pointer-events: auto; display: flex; align-items: center; justify-content: flex-start; padding: 0 4.7cqw; border: 0; border-radius: 18%; background: transparent; color: #f3d59c; font-family: var(--font-display); font-size: clamp(12px, 3.7cqw, 18px); line-height: 1; letter-spacing: 0; text-shadow: 0 1px 3px #180803, 0 0 8px #100704; }
 .panel-content { display: inline-flex; flex: none; align-items: center; gap: .3em; }
 .panel-button svg { flex: none; width: clamp(11px, 3.2cqw, 16px); height: clamp(11px, 3.2cqw, 16px); }
 .restart-panel { justify-content: flex-end; }
@@ -87,7 +87,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
 .completion-stat, .move-stat { display: flex; justify-self: center; align-items: center; gap: 6px; white-space: nowrap; font-size: clamp(11px, 3cqw, 13px); font-weight: 500; line-height: 1.4; }
 .completion-stat strong, .move-stat strong { font: inherit; font-size: 15px; font-variant-numeric: tabular-nums; }
 .help-button { position: fixed; z-index: 3; top: max(4px, env(safe-area-inset-top)); right: max(4px, env(safe-area-inset-right)); width: 44px; height: 44px; }
-.help-button svg { width: 18px; height: 18px; filter: drop-shadow(0 1px 3px #000); }
+.help-button svg { width: 18px; height: 18px; transform: translate(3.5px, -3.5px); filter: drop-shadow(0 1px 3px #000); }
 .help-modal { width: min(340px, calc(100% - 40px)); padding: 38px 24px 20px; border: 0; border-radius: 12px; background: #17151be8; box-shadow: 0 10px 40px #0003; }
 .help-modal::backdrop { background: #08090d77; backdrop-filter: blur(5px); }
 .help-modal h2 { font-size: 19px; margin: 12px 0 22px; }

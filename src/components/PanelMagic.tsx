@@ -25,7 +25,7 @@ const particles = Array.from({ length: 36 }, (_, i) => {
   const y = edge.a[1] + (edge.b[1] - edge.a[1]) * t
   const nx = (edge.b[1] - edge.a[1]) / edge.length
   const ny = -(edge.b[0] - edge.a[0]) / edge.length
-  return { x, y, star: i % 9 === 0, radius: .8 + seed * .65, style: {
+  return { x, y, star: i % 9 === 0, radius: (.8 + seed * .65) * 1.65, style: {
     '--drift-x': `${nx * (9 + seed * 12) + (seed - .5) * 7}px`,
     '--drift-y': `${ny * (8 + seed * 12) - 3}px`,
     '--life': `${1.8 + seed * 1.2}s`, '--phase': `${-i * .371}s`,
@@ -43,7 +43,7 @@ export default function PanelMagic() {
     <svg className="panel-stardust" viewBox="0 0 208 138" preserveAspectRatio="none" aria-hidden="true">
       {particles.map((p, i) => <g key={i} transform={`translate(${p.x} ${p.y})`}>
         <g className="magic-mote" style={p.style}>
-          {p.star ? <path d="M0-2.2 .55-.55 2.2 0 .55.55 0 2.2-.55.55-2.2 0-.55-.55Z" /> : <circle r={p.radius} />}
+          {p.star ? <path transform="scale(1.6)" d="M0-2.2 .55-.55 2.2 0 .55.55 0 2.2-.55.55-2.2 0-.55-.55Z" /> : <circle r={p.radius} />}
         </g>
       </g>)}
     </svg>

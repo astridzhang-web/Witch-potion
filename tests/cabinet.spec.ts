@@ -81,10 +81,11 @@ for (const [width, height] of [[390, 844], [360, 640], [320, 568], [1280, 900]])
       within((hit.x + hit.width - stage.x) / scale, region.x)
       within((hit.y - stage.y) / scale, panelY)
       within((hit.y + hit.height - stage.y) / scale, panelY)
-      // The whole content group is biased outward; the mirrored right order is text/arrow.
+      // The content retains a slight outward bias after the inward fine adjustment;
+      // the mirrored right order is text/arrow, including on the smallest stage.
       const content = (await page.locator(`${region.selector} .panel-content`).boundingBox())!
       const offset = content.x + content.width / 2 - hit.x - hit.width / 2
-      expect(region.selector.includes('undo') ? offset : -offset).toBeLessThan(-2)
+      expect(region.selector.includes('undo') ? offset : -offset).toBeLessThan(-.5)
       expect(content.x).toBeGreaterThan(hit.x + 5)
       expect(content.x + content.width).toBeLessThan(hit.x + hit.width - 5)
     }
