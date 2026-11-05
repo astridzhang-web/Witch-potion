@@ -46,7 +46,7 @@ test('liquid comparison only changes rendering; validated saves, HUD, bottle geo
   expect(saved.completion.totalCompleted).toBe(7)
   expect(saved.rewards.balance).toBe(13)
   expect(saved.session.history).toHaveLength(5)
-  for (const [url, finish] of [['/?liquid=legacy', 'legacy'], ['/?liquid=polished', 'polished'], ['/?liquid=unified', 'unified'], ['/?liquid=clean', 'clean'], ['/?liquid=soft-translucent', 'soft-translucent'], ['/?liquid=gem-luster', 'gem-luster'], ['/?liquid=vivid-translucent', 'vivid-translucent'], ['/?liquid=luminous-liquid', 'luminous-liquid'], ['/', 'luminous-liquid']]) {
+  for (const [url, finish] of [['/?liquid=legacy', 'legacy'], ['/?liquid=polished', 'polished'], ['/?liquid=unified', 'unified'], ['/?liquid=clean', 'clean'], ['/?liquid=soft-translucent', 'soft-translucent'], ['/?liquid=gem-luster', 'gem-luster'], ['/?liquid=vivid-translucent', 'vivid-translucent'], ['/?liquid=luminous-liquid', 'luminous-liquid'], ['/?liquid=material-a', 'material-a'], ['/?liquid=material-b', 'material-b'], ['/', 'material-a']]) {
     await page.goto(url)
     await page.evaluate(() => document.fonts.ready)
     expect(await page.locator('.board .bottle-art').evaluateAll(nodes => nodes.map(el => el.getAttribute('data-liquid-finish')))).toEqual(Array(9).fill(finish))
@@ -65,7 +65,7 @@ test('liquid comparison only changes rendering; validated saves, HUD, bottle geo
   }
 })
 
-for (const finish of ['clean', 'soft-translucent', 'gem-luster', 'vivid-translucent', 'luminous-liquid']) test(`${finish} stays consistent in source and receiving sprites, preserves gravity, then undoes and restores`, async ({ page }) => {
+for (const finish of ['clean', 'soft-translucent', 'gem-luster', 'vivid-translucent', 'luminous-liquid', 'material-a', 'material-b']) test(`${finish} stays consistent in source and receiving sprites, preserves gravity, then undoes and restores`, async ({ page }) => {
   await open(page, 0, true)
   await page.goto('/?liquid=' + finish)
   for (let step = 0; step < 2; step++) {
@@ -424,4 +424,102 @@ test('internal-light liquid keeps equal units, suppresses same-color dividers an
   const still = await page.locator('[data-liquid-fixture] .bottle-art').evaluate(el => el.outerHTML)
   await page.clock.runFor(10_000)
   expect(await page.locator('[data-liquid-fixture] .bottle-art').evaluate(el => el.outerHTML)).toBe(still)
+})
+
+test('material A/B preserve equal planes, visible weaker same-color cues and stable covered volume with distinct light', async ({ page }) => {
+  await open(page, 0, true)
+  const saved = await read(page), cases = [[], [1], [1,1], [1,1,1], [1,1,1,1], [1,3,4,0], [1,1,4,4]]
+  const reference: number[][][] = [], shades: number[][] = []
+  for (const mode of ['luminous-liquid', 'material-a', 'material-b']) {
+    await page.goto('/?liquid=' + mode)
+    let fields: unknown
+    for (const [index, liquid] of cases.entries()) {
+      await page.evaluate(async liquid => {
+        const path = '/tests/fixtures/liquidPreview.tsx'
+        const { renderLiquidFixture } = await import(path)
+        renderLiquidFixture(liquid)
+      }, liquid)
+      const art = page.locator('[data-liquid-fixture] .bottle-art')
+      await expect(art.locator('.liquid-layer')).toHaveCount(liquid.length)
+      const planes = await art.locator('.liquid-layer').evaluateAll(nodes => nodes.map(n => [Number(n.getAttribute('data-upper-plane')), Number(n.getAttribute('data-lower-plane'))]))
+      if (mode === 'luminous-liquid') { reference[index] = planes; continue }
+      expect(planes).toEqual(reference[index])
+      // Actual overpaint edges must meet the original logical unit planes.
+      const edges = await art.locator('.liquid-layer').evaluateAll(nodes => nodes.slice(1).map(n => {
+        const r = n.querySelector('rect') as SVGRectElement
+        return [r.y.baseVal.value + r.height.baseVal.value, Number(n.getAttribute('data-lower-plane'))]
+      }))
+      for (const [edge, plane] of edges) expect(edge).toBeCloseTo(plane, 4)
+      if (planes.length === 4) for (const [upper, lower] of planes) expect(lower - upper).toBeCloseTo(planes[0][1] - planes[0][0], 10)
+      const boundaries = await art.locator('.liquid-boundary').evaluateAll(nodes => nodes.map(n => {
+        return { unit: Number(n.getAttribute('data-unit')), type: n.getAttribute('data-boundary'), y: (n as SVGPathElement).getPointAtLength(0).y,
+          width: Number(n.getAttribute('stroke-width')), peak: Number(n.getAttribute('stroke-opacity')) }
+      }))
+      expect(boundaries.map(b => [b.unit, b.type])).toEqual(liquid.slice(1).map((c, i) => [i + 1, c === liquid[i] ? 'unit' : 'color']))
+      // SVG path samples are float32; the unchanged logical planes are doubles.
+      for (const b of boundaries) { expect(b.y).toBeCloseTo(planes[b.unit][1], 4); expect(b.width).toBeLessThan(.8) }
+      const unit = boundaries.find(b => b.type === 'unit'), color = boundaries.find(b => b.type === 'color')
+      if (unit && color) { expect(unit.peak).toBeLessThan(color.peak); expect(unit.peak).toBeGreaterThan(0) }
+      await expect(art.locator('.liquid-surface')).toHaveCount(liquid.length ? 1 : 0)
+      await expect(art.locator('.liquid-lighting')).toHaveCount(liquid.length ? 1 : 0)
+      if (liquid.length) {
+        const current = await art.locator('.liquid-lighting > g').evaluateAll(nodes => nodes.map(n => (n as SVGElement).ownerSVGElement!.querySelector(n.getAttribute('mask')!.slice(4, -1))!.outerHTML))
+        if (fields === undefined) fields = current
+        else expect(current).toEqual(fields)
+      }
+      expect(await read(page)).toEqual(saved)
+    }
+    if (mode === 'luminous-liquid') continue
+    // Raster checks use a same-color full bottle, not just DOM/style assertions.
+    await page.evaluate(async () => {
+      const path = '/tests/fixtures/liquidPreview.tsx'
+      const { renderLiquidFixture } = await import(path)
+      renderLiquidFixture([1,1,1,1])
+    })
+    const art = page.locator('[data-liquid-fixture] .bottle-art')
+    await expect(art.locator('[data-boundary="unit"]')).toHaveCount(3)
+    const probes = await art.evaluate((svg: SVGSVGElement) => {
+      const m = svg.getScreenCTM()!, point = (x: number, y: number) => { const p = new DOMPoint(x, y).matrixTransform(m); return [p.x, p.y] }
+      const planes = [...svg.querySelectorAll('.liquid-layer')].map(n => [Number(n.getAttribute('data-upper-plane')), Number(n.getAttribute('data-lower-plane'))])
+      return { centers: planes.map(([a, b]) => point(50, (a + b) / 2)), seams: planes.slice(1).map(([, b]) => point(50, b)),
+        light: [[33,100],[46,98],[65,100],[50,115]].map(([x,y]) => point(x,y)) }
+    })
+    const pixels = async () => {
+      const png = (await page.screenshot({ scale: 'css' })).toString('base64')
+      return page.evaluate(async ({ png, probes }) => {
+        const image = new Image(); image.src = 'data:image/png;base64,' + png; await image.decode()
+        const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height
+        const ctx = canvas.getContext('2d')!; ctx.drawImage(image, 0, 0)
+        const rgb = ([x, y]: number[]) => [...ctx.getImageData(Math.floor(x), Math.floor(y), 1, 1).data].slice(0, 3)
+        const luma = (x: number, y: number) => rgb([x, y]).reduce((sum, c) => sum + c, 0) / 3
+        return { coverage: [...probes.centers, ...probes.seams].flatMap(rgb), light: probes.light.flatMap(rgb),
+          contrast: probes.seams.map(([x, y]) => Math.max(...[-1,0,1].map(d => {
+            const row = Math.floor(y) + d
+            return (luma(x, row - 2) + luma(x, row + 2)) / 2 - luma(x, row)
+          }))) }
+      }, { png, probes })
+    }
+    const normal = await pixels(); shades.push(normal.light)
+    for (const contrast of normal.contrast) { expect(contrast).toBeGreaterThan(1.5); expect(contrast).toBeLessThan(20) }
+    const backgrounds: number[][] = []
+    for (const fill of ['black', 'white']) {
+      await art.evaluate((svg: SVGSVGElement, fill) => {
+        let rect = svg.querySelector('[data-background-probe]')
+        if (!rect) {
+          rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); rect.setAttribute('data-background-probe', '')
+          for (const [k, v] of Object.entries({x:'-160',y:'-160',width:'420',height:'420'})) rect.setAttribute(k,v)
+          const cavity = svg.querySelector('.liquid-cavity')!; cavity.insertBefore(rect, cavity.firstChild)
+        }
+        rect.setAttribute('fill', fill)
+      }, fill)
+      backgrounds.push((await pixels()).coverage)
+    }
+    expect(Math.max(...backgrounds[0].map((v, i) => Math.abs(v - backgrounds[1][i])))).toBeLessThanOrEqual(5)
+    await art.locator('[data-background-probe]').evaluate(n => n.remove())
+    expect(await read(page)).toEqual(saved)
+    const still = await art.evaluate(n => n.outerHTML)
+    await page.clock.runFor(10_000)
+    expect(await art.evaluate(n => n.outerHTML)).toBe(still)
+  }
+  expect(Math.max(...shades[0].map((v, i) => Math.abs(v - shades[1][i])))).toBeGreaterThan(8)
 })

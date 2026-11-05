@@ -295,3 +295,23 @@ have no visible divider. Preserve exact equal-height capacity/planes, one restra
 surface, gravity/mouth/640–920ms logic, all glass/art/scale/layout/UI/rewards/saves and old
 preview parameters. Deliver matched actual phone pages, requested liquid details and real
 pour recording; run all checks, update progress/docs, commit/push work and stop for review.
+
+## Authorized Milestone 3J: unit hints and two colored-liquid materials
+
+Restore a weaker same-color cue at every internal unit plane, alongside slightly stronger
+different-color gray cues. Never cut transparent gaps; retain continuous coverage under
+antialiased edges. Both cue types are thin, softly blurred and visible at phone scale.
+Keep exact equal-height geometry/capacity and the existing horizontal gravity/lip mapping.
+
+Compare default / `?liquid=material-a` (restrained clarity) and `?liquid=material-b` (stronger
+gem luster), keeping all historical parameters and renderers, including luminous-liquid.
+Use stable high coverage and hue-bearing, shared whole-cavity volume light, gentle curved
+wall depth and one restrained free surface. No wood transmission as the material goal,
+per-layer lighting resets, opaque flat blocks, milky glaze, hard facets or potion particles.
+The default is a review candidate, not a final art decision; choices never enter saves/UI.
+
+Preserve all nine formal glass bottles, scale/contact/layout, ambient glass light, cabinet,
+HUD/help/buttons/settlement/fonts, rules/puzzles/rewards/storage and640/920ms timing.
+Deliver matched A/B actual390×844 pages, one/mono-four/mixed-four/adjacent-color details,
+tilt/source/receiver evidence and real animation, plus a parameter/limits preview document.
+Run all tests/build/diff checks, update progress, commit/push work and stop for acceptance.

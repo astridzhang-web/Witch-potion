@@ -2,9 +2,20 @@
 
 ## Current milestone
 
-**Liquid direction correction after 3I — COMPLETE. Stop for visual acceptance of luminous-liquid internal light and continuous interfaces.**
+**Milestone 3J — COMPLETE. Stop for visual acceptance of material-a/material-b and restored same-color unit hints.**
 
-The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Milestones 3A–3G integrate formal glass, gravity-corrected liquid, nine matching bottles and softer environment-aware reflections;3H compares two continuous liquid materials and3I adds genuine lower-Alpha transmission. The latest authorized correction changes the default to liquid-owned colored light with high coverage and seamless same-color volume, while retaining all historical comparisons. Distinct formal bottle designs and full animation refinement remain deferred. No public deployment has been performed or authorized.
+The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Milestones 3A–3G integrate formal glass, gravity-corrected liquid, nine matching bottles and softer environment-aware reflections;3H compares two continuous liquid materials and3I adds genuine lower-Alpha transmission. The following correction uses internal colored light with high coverage;3J restores weak same-color unit hints and compares restrained versus stronger curved-wall liquid materials. All historical comparisons remain. Distinct formal bottle designs and full animation refinement remain deferred. No public deployment has been performed or authorized.
+
+## Milestone 3J / 单位分界与彩液材质 A/B (2026-11-05)
+
+- Continued existing `work` from `7bc24ec378c4090e86298fed7de8f649665cba7e`, preserving/excluding the unrelated untracked project report. Default / `?liquid=material-a` selects the restrained candidate; `?liquid=material-b` selects stronger gem luster. Previous `luminous-liquid`, vivid,3H A/B, clean and all older modes/components remain intact, unsaved and without playerUI. This is an experiment for visual choice, not final art approval.
+- Added `MaterialLiquid.tsx` with the same seven luminous colors and continuous color underpaint. Coverage **.99** suppresses wood without using a white/milky glaze. Both candidates share a fixed broad hue-bearing volume light and weak vertical depth; curved-wall depth follows the actual cavity using a gently blurred stroke mask. B has stronger/wider wall depth, stronger upper-belly light and an extra broad lower-belly colored reflection. Fields are fixed in cavity coordinates, not normalized per layer/fill; no per-unit lighting resets, emission, facets, particles, new RAF/state loop or dependencies.
+- Restored all internal unit hints: **same color .6 SVG width / .26 stroke opacity**, different color **.7 / .38**, gray `#55515a`, Gaussian softness **.2 SVG** within a4-unit-high local strip. A full mono bottle has3 weaker hints; AABB has2 weak +1 color cue, AABC has1 weak +2 color cues. Early browser raster checking found a subpixel gradient could miss every device-pixel center at certain desktop scales; solid gray coverage plus narrow blur fixes the dropout while keeping the line thin. No transparent gap is cut and no background appears under the interfaces.
+- Logical planes, actual overpaint edges and equal upright heights remain identical to the prior material; `bottleGeometry.ts` is unchanged. Only one shallow free-surface curve is added between the actual cavity intersections (maximum .35 SVG sag in its highlight, not the fill plane). Gravity/lips/stream, selection, receiving and return use the existing mechanism: **640ms commit /920ms lifecycle**.
+- Runtime files: new `MaterialLiquid.tsx`, `Bottle.tsx` dispatch and `liquidAppearance.ts` mode selection. No edits to old liquid components, glass/light/art, nine-bottle size/contact/placement, cabinet/HUD/help/buttons/fonts/parchment, `PourAnimation.tsx` or `src/game/`. Original source assets and reward/save schemas stay untouched.
+- [Actual browser gallery and parameters](docs/screenshots/milestone3j-preview.md): matched old/A/B390×844 and360×640 production pages,10 readonly pattern cases with A/B normal pages andDPR4 details, and legal34-move seven-color completions. Old luminous full frame matches the last committed image pixel-for-pixel; both HUD regions match, and A/B empty-glass details are identical. Fixtures use the existing inert development helper, verify identical save bytes and are never stored as puzzles. A/B source/receiver/tilt/return frames and real MP4/GIF are included. Both recordings contain277 real frames /7.958s, encoded to390×844 MP4 8.067s /GIF8.10s, showing four legal touch pours and final4-move state. No capture page errors; recording samples are not device-FPS benchmarks.
+- Validation: **88 unit tests /130 Playwright cases passed (3.7min)**, production build and `git diff --check` passed. Extended parity/save/layout and source/receiver/undo/reload/reduced-motion checks to both candidates. One new browser scenario checks unchanged geometry/paint edges, every unit cue and relative strengths, stable shared masks, actual visible mono hints, ≤5/255 background-driven RGB change at centers AND interfaces, and A/B pixel differences. Full rules, victory/rewards/storage/locks/keyboard/scene/flip/help regressions pass. SVG sampled-path comparisons account for float32 precision without relaxing logical geometry equality.
+- Limits:2D colored light and edge-depth approximation, not true refraction, optical thickness or fluid dynamics. Regular layered color bands remain for clear equal units; this does not claim to eliminate all2D banding. Physical iOS/Safari and low-end GPU performance remain unverified. Stop for A/B visual acceptance; no other UI/gameplay/art/animation/deployment work.
 
 ## 3I 后续 / 液体内透亮与连续覆色 (2026-11-05)
 
@@ -192,7 +203,7 @@ The playable foundation, floating-pour experiment, Milestone 2A integration and 
 - Automatic versioned localStorage saves: current puzzle, board, full undo history, lifetime completion count, current-instance credit, settlement dismissal, crystal balance and base/bonus reward receipt. The loader validates the verified initial arrangement and every history transition.
 - A restart confirmation protects in-progress games; mouse, touch and native keyboard controls; reduced-motion support. Clear feedback when browser storage is unavailable.
 
-## Verification results (latest: internal-light liquid correction after3I, 2026-11-05)
+## Verification results (latest: Milestone 3J, 2026-11-05)
 
 All final checks passed; **no known blocking gameplay bugs**.
 
@@ -203,13 +214,13 @@ All final checks passed; **no known blocking gameplay bugs**.
 | Preset solvability | All 4 full witnesses replayed; color conservation checked after every move |
 | Puzzle variation | 200 seeded color permutations replayed to victory |
 | `npm run build` | TypeScript and production bundle passed |
-| `npm run test:e2e` | **124 passed**, no skips/failures; desktop Chromium and emulated mobile touch across 10 spec files |
+| `npm run test:e2e` | **130 passed**, no skips/failures; desktop Chromium and emulated mobile touch across 10 spec files |
 | Browser gameplay | Actual taps/clicks to full animated victory; invalid move, undo, restart confirmation, settlement/flip/new puzzle, reload and simple help checked |
 | Storage resilience | Corrupt save recovery and blocked localStorage checked in browser; quota errors checked in unit tests |
 | Layout/accessibility basics | 320×568, 360×640, 390×844, 844×390 and 1280×900; 3 columns, 9 targets ≥44 px, no horizontal overflow; keyboard and reduced motion checked |
 | Typical mobile viewport | Full 390×844 and 360×640 pages saved and visually inspected; whole cabinet, nine bottles and three base panels visible |
-| Production browser capture | Latest build on4192 confirmed against dist/index.html; matched old/new phone pages, completed boards and actual legal-pour recording |
-| Readonly visual fixtures | Developer-only BottleArt renderer on4191; nine cases, new full pages + old/new details, identical save bytes; temporary pixel probe confined to tests |
+| Production browser capture | Latest build on4192 confirmed against dist/index.html; matched old/A/B phone pages, completed boards and actual legal-pour recordings |
+| Readonly visual fixtures | Developer-only BottleArt renderer on4191;10 cases, A/B full pages + details, identical save bytes; temporary pixel probe confined to tests |
 | Development server | Functional tests use the Vite workflow on isolated 4173 |
 | `git diff --check` | Passed |
 
@@ -400,7 +411,7 @@ Paper grain/ornament and amethyst facets are generated adaptations, not a pixel-
 - `src/game/progress.ts`: atomic session/completion/reward transitions, per-instance base/bonus flags, truthful receipt and settlement dismissal.
 - `src/components/CenterPanel.tsx`, `Settlement.tsx`: independent panel flip/input readiness and accessible crystal dialog.
 - `src/App.tsx`: selection, dialogs, status, settings, persistence and a single pending animation transaction. A synchronous ref lock blocks conflicting input before disabled controls render.
-- `src/components/Bottle.tsx`: shared glass art and independent dynamic liquid; `BrightLiquid.tsx` is the current internal-light candidate; `VividLiquid.tsx`, `LuminousLiquid.tsx` and `CleanLiquid.tsx` retain earlier materials. `src/scene/bottlePresentation.ts` selects unified formal art or internal historical comparison. Color symbols have been removed. `src/styles.css`: responsive cabinet stage and reduced-motion CSS.
+- `src/components/Bottle.tsx`: shared glass art and independent dynamic liquid; `MaterialLiquid.tsx` implements current A/B candidates; `BrightLiquid.tsx`, `VividLiquid.tsx`, `LuminousLiquid.tsx` and `CleanLiquid.tsx` retain earlier materials. `src/scene/bottlePresentation.ts` selects unified formal art or internal historical comparison. Color symbols have been removed. `src/styles.css`: responsive cabinet stage and reduced-motion CSS.
 - `src/scene/cabinetLayout.ts`: shared image-space coordinates for bottle contact planes and panel hitboxes. `assets/README.md`: source provenance and reproducible WebP export.
 - `tests/cabinet.spec.ts`: independent artwork landmarks, full portrait framing and panel interaction checks.
 - `src/game/game.test.ts`: rules, state, puzzle and save tests. `tests/game.spec.ts`, `playwright.config.ts`: real-browser regression tests.
@@ -419,7 +430,7 @@ Paper grain/ornament and amethyst facets are generated adaptations, not a pixel-
 
 ## Exact next task (only after the user asks)
 
-The authorized liquid direction correction after3I is complete. Wait for visual acceptance of luminous-liquid against vivid-translucent. Do not automatically begin different formal bottle designs, special liquids, HUD work, animation refinement, crystal spending/shop, home, sound, PWA or deployment.
+Milestone3J is complete. Wait for visual acceptance of material-a/material-b, restored same-color unit hints and shared colored volume lighting. Do not automatically begin different formal bottle designs, special liquids, HUD work, animation refinement, crystal spending/shop, home, sound, PWA or deployment.
 
 ## Resume in a fresh Codex session
 

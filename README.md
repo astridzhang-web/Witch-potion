@@ -1,6 +1,6 @@
 # 月夜魔法药剂室 · Moonlit Alchemy
 
-A quiet, mobile-first potion sorting game. The liquid revision after Milestone3I uses colored internal light and continuous interfaces inside nine matching warm star–moon bottles, retaining softer glass, environment reflections and equal-height units. Includes the solid wooden flip, champagne stardust, local Chinese typography, parchment completion record and basic crystal rewards, built with React, TypeScript and Vite. All gameplay runs locally in the browser.
+A quiet, mobile-first potion sorting game. Milestone3J compares two colored-liquid materials with shared volume light, curved-wall depth and weaker same-color unit hints inside nine matching warm star–moon bottles, retaining softer glass, environment reflections and equal-height units. Includes the solid wooden flip, champagne stardust, local Chinese typography, parchment completion record and basic crystal rewards, built with React, TypeScript and Vite. All gameplay runs locally in the browser.
 
 ## Cloud development
 
@@ -42,14 +42,14 @@ Four fixed presets in `src/game/presets.json` each include a complete legal solu
 - `src/game/puzzles.ts`, `presets.json`: verified puzzle templates and safe variation.
 - `src/game/session.ts`: immutable transactions, history, undo and restart.
 - `src/game/storage.ts`: versioned persistence and legal-history validation.
-- `src/components/Bottle.tsx`, `BrightLiquid.tsx`: shared formal glass and the current internal-light liquid; `VividLiquid.tsx`, `LuminousLiquid.tsx` and `CleanLiquid.tsx` retain earlier materials for comparison.
+- `src/components/Bottle.tsx`, `MaterialLiquid.tsx`: shared formal glass and current A/B liquid candidates; `BrightLiquid.tsx`, `VividLiquid.tsx`, `LuminousLiquid.tsx` and `CleanLiquid.tsx` retain earlier materials for comparison.
 - `src/scene/bottleGeometry.ts`, `bottlePresentation.ts`, `liquidAppearance.ts`: gravity planes, shared art/scale and internal visual comparisons.
 - `src/App.tsx`, `src/styles.css`: Chinese UI, shared portrait scene and controls.
 - `src/scene/cabinetLayout.ts`: source-image coordinates for shelves, bottles and panel hitboxes.
 - `assets/source/shelf-tall.png`, `public/assets/shelf-tall.webp`: active tall cabinet original and optimized local scene (the earlier pair is preserved); see [asset notes](assets/README.md).
 - `src/game/game.test.ts`, `tests/game.spec.ts`: unit and real browser checks.
 
-Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. The internal-light liquid revision stops for visual acceptance before further work. Distinct formal bottle designs, special liquids, animation refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
+Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone3J stops for A/B visual acceptance before further work. Distinct formal bottle designs, special liquids, animation refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
 
 [3F browser gallery, height measurements and real pour MP4/GIF](docs/screenshots/milestone3f-preview.md).
 `?liquid=clean` retains3F/3G equal upright unit heights and soft gray seams. Internal
@@ -66,11 +66,16 @@ ambient light and never enter saves or player settings.
 [3I phone comparison, material details and real pour recording](docs/screenshots/milestone3i-preview.md).
 `?liquid=vivid-translucent` retains brighter chromatic inputs under one continuous
 transmission mask and thinner gray seams;3H A/B and clean remain available. No mode is saved.
-[Current internal-light material, old/new comparison and recordings](docs/screenshots/liquid-luminous-preview.md).
-Default / `?liquid=luminous-liquid` gives liquid its own colored light/depth with high
+[Previous internal-light material, comparison and recordings](docs/screenshots/liquid-luminous-preview.md).
+`?liquid=luminous-liquid` gives liquid its own colored light/depth with high
 coverage; different colors use tiny feathered cues and same-color units join seamlessly.
-All old modes remain available and unsaved. Current checks: **88 unit /124 browser tests**,
-production build and diff checks.
+It remains available unchanged for comparison.
+
+[Current3J A/B gallery, unit hints, parameters and recordings](docs/screenshots/milestone3j-preview.md).
+Default / `?liquid=material-a` is the restrained candidate; `?liquid=material-b` adds stronger
+curved-wall depth and gem luster. Both preserve high coverage, exact equal-height units and
+weaker same-color hints. All old modes remain unsaved. Current checks: **88 unit /130 browser
+tests**, production build and diff checks.
 
 [3G glass comparison, different positions and real MP4/GIF](docs/screenshots/milestone3g-preview.md).
 Default / `?lighting=ambient` uses the reversible soft-glass texture plus cabinet-space

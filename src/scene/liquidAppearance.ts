@@ -1,7 +1,7 @@
 // Internal page-level art comparison; never written to player saves.
 const requested = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('liquid')
-export const LIQUID_FINISH = requested === 'legacy' || requested === 'polished' || requested === 'unified' || requested === 'clean' || requested === 'gem-luster' || requested === 'soft-translucent' || requested === 'vivid-translucent' ? requested : 'luminous-liquid'
-export const EQUAL_HEIGHT_LIQUID = LIQUID_FINISH === 'clean' || LIQUID_FINISH === 'soft-translucent' || LIQUID_FINISH === 'gem-luster' || LIQUID_FINISH === 'vivid-translucent' || LIQUID_FINISH === 'luminous-liquid'
+export const LIQUID_FINISH = requested === 'legacy' || requested === 'polished' || requested === 'unified' || requested === 'clean' || requested === 'gem-luster' || requested === 'soft-translucent' || requested === 'vivid-translucent' || requested === 'luminous-liquid' || requested === 'material-b' ? requested : 'material-a'
+export const EQUAL_HEIGHT_LIQUID = LIQUID_FINISH === 'clean' || LIQUID_FINISH === 'soft-translucent' || LIQUID_FINISH === 'gem-luster' || LIQUID_FINISH === 'vivid-translucent' || LIQUID_FINISH === 'luminous-liquid' || LIQUID_FINISH === 'material-a' || LIQUID_FINISH === 'material-b'
 
 
 export const LEGACY_COLORS = [
@@ -53,4 +53,4 @@ export const LUMINOUS_COLORS = [
   { name: '珊瑚橙', light: '#ffc68f', main: '#ed965e', dark: '#bd683e' },
   { name: '兰花粉', light: '#efa7e7', main: '#d074cf', dark: '#a34eaa' },
 ] as const
-export const COLORS = LIQUID_FINISH === 'legacy' ? LEGACY_COLORS : LIQUID_FINISH === 'luminous-liquid' ? LUMINOUS_COLORS : LIQUID_FINISH === 'vivid-translucent' ? VIVID_COLORS : EQUAL_HEIGHT_LIQUID ? CLEAN_COLORS : POLISHED_COLORS
+export const COLORS = LIQUID_FINISH === 'legacy' ? LEGACY_COLORS : LIQUID_FINISH === 'luminous-liquid' || LIQUID_FINISH === 'material-a' || LIQUID_FINISH === 'material-b' ? LUMINOUS_COLORS : LIQUID_FINISH === 'vivid-translucent' ? VIVID_COLORS : EQUAL_HEIGHT_LIQUID ? CLEAN_COLORS : POLISHED_COLORS
