@@ -250,3 +250,19 @@ rules/rewards/saves and 640/920ms lifecycle. Deliver matched real390×844/360×6
 empty/filled/position comparisons and actual MP4/GIF; explain if material correction has
 more visual impact than ambient light. Run tests/build/diff checks, document, commit/push
 work and stop for visual acceptance. No new bottle art, liquids, UI, gameplay or deployment.
+
+## Authorized Milestone 3H: two continuous liquid materials and quieter seams
+
+Preserve exact clean and historical legacy/polished/unified renderers. Add default /
+`?liquid=soft-translucent` (A) and `?liquid=gem-luster` (B), using unchanged3F colors and
+the same equal-height reference-area model as clean. Separate solid color units from
+one continuous cavity-anchored optical field: A has restrained lateral transmission;
+B adds a broad, low-opacity interior sheen. No per-color gradient restarts, heavy bottom
+shadow, white reflection stripe, emission or particle effects. Both candidates share
+thin soft gray seams (about .65 SVG width and .28 peak opacity) at unchanged boundaries,
+and one horizontal free surface. Keep these fields wet/cavity clipped during tilted
+draining and receiving. Preserve3G glass/ambient light, all art/scale/layout/HUD/controls,
+gameplay/rewards/saves and640/920ms lifecycle. Internal mode choices are unsaved/no UI.
+Deliver matched clean/A/B phone pages, all requested readonly volume/pattern fixtures,
+old/new seam comparisons and real A/B MP4/GIF. Run tests/build/diff checks, document,
+commit/push work, then stop for visual acceptance; no additional features or deployment.

@@ -1,6 +1,6 @@
 import { GLASS_FINISH, MOON_GLASS } from './moonGlass'
 import { STAR_MOON_GLASS } from './starMoonGlass'
-import { LIQUID_FINISH } from './liquidAppearance'
+import { EQUAL_HEIGHT_LIQUID } from './liquidAppearance'
 import { usesFormalBottle } from './bottlePresentation'
 
 /** Presentation geometry only; the four-unit game state remains in game/rules. */
@@ -86,19 +86,19 @@ export const BOTTLE_GEOMETRY: Record<BottleAppearance, Geometry> = {
     : geometry(moonCavity(), 10 + (815 - 52) * MOON_GLASS.scale, 10.3),
 }
 
-/** Clean mode gives equal upright height to each logical unit. Reference areas are
+/** Clean-family modes give equal upright height to each logical unit. Reference areas are
  * measured at those upright planes, then conserved while tilting (not equal physical
  * volume per game unit). Both the plane solve and downhill-lip solve use this mapping. */
 export function liquidArea(kind: BottleAppearance, level: number): number {
   const shape = BOTTLE_GEOMETRY[kind], units = Math.max(0, Math.min(4, level))
-  if (LIQUID_FINISH !== 'clean') return shape.capacityArea * units / 4
+  if (!EQUAL_HEIGHT_LIQUID) return shape.capacityArea * units / 4
   return area(below(shape.polygon, shape.floorY - (shape.floorY - shape.fullY) * units / 4))
 }
 
 /** Horizontal world-space surfaces conserve 2D area as the glass rotates. */
 export function liquidSurfaces(kind: BottleAppearance, angle: number, levels: readonly number[]): number[] {
   const shape = BOTTLE_GEOMETRY[kind]
-  if (LIQUID_FINISH === 'clean' && angle === 0) return levels.map(level => shape.floorY - (shape.floorY - shape.fullY) * Math.max(0, Math.min(4, level)) / 4)
+  if (EQUAL_HEIGHT_LIQUID && angle === 0) return levels.map(level => shape.floorY - (shape.floorY - shape.fullY) * Math.max(0, Math.min(4, level)) / 4)
   const polygon = shape.polygon.map(p => rotate(p, angle))
   const minY = Math.min(...polygon.map(p => p.y)), maxY = Math.max(...polygon.map(p => p.y))
   return levels.map(level => {

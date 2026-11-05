@@ -1,6 +1,7 @@
 // Internal page-level art comparison; never written to player saves.
 const requested = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('liquid')
-export const LIQUID_FINISH = requested === 'legacy' || requested === 'polished' || requested === 'unified' ? requested : 'clean'
+export const LIQUID_FINISH = requested === 'legacy' || requested === 'polished' || requested === 'unified' || requested === 'clean' || requested === 'gem-luster' ? requested : 'soft-translucent'
+export const EQUAL_HEIGHT_LIQUID = LIQUID_FINISH === 'clean' || LIQUID_FINISH === 'soft-translucent' || LIQUID_FINISH === 'gem-luster'
 
 
 export const LEGACY_COLORS = [
@@ -30,4 +31,4 @@ export const CLEAN_COLORS = [
   { name: '珊瑚橙', light: '#f4b98e', main: '#eb915c', dark: '#cd7048' },
   { name: '兰花粉', light: '#e8a2df', main: '#d174cd', dark: '#ad56b0' },
 ] as const
-export const COLORS = LIQUID_FINISH === 'legacy' ? LEGACY_COLORS : LIQUID_FINISH === 'clean' ? CLEAN_COLORS : POLISHED_COLORS
+export const COLORS = LIQUID_FINISH === 'legacy' ? LEGACY_COLORS : EQUAL_HEIGHT_LIQUID ? CLEAN_COLORS : POLISHED_COLORS

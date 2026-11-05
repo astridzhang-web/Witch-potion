@@ -1,6 +1,6 @@
 # 月夜魔法药剂室 · Moonlit Alchemy
 
-A quiet, mobile-first potion sorting game. Milestone 3G: nine matching warm star–moon bottles with softer glass, restrained environment reflections and independent, equal-height SVG liquid in a tall wooden cabinet. Includes the solid wooden flip, champagne stardust, local Chinese typography, parchment completion record and basic crystal rewards, built with React, TypeScript and Vite. All gameplay runs locally in the browser.
+A quiet, mobile-first potion sorting game. Milestone 3H compares soft translucent and gem-luster liquid inside nine matching warm star–moon bottles, retaining softer glass, environment reflections and equal-height units. Includes the solid wooden flip, champagne stardust, local Chinese typography, parchment completion record and basic crystal rewards, built with React, TypeScript and Vite. All gameplay runs locally in the browser.
 
 ## Cloud development
 
@@ -42,20 +42,28 @@ Four fixed presets in `src/game/presets.json` each include a complete legal solu
 - `src/game/puzzles.ts`, `presets.json`: verified puzzle templates and safe variation.
 - `src/game/session.ts`: immutable transactions, history, undo and restart.
 - `src/game/storage.ts`: versioned persistence and legal-history validation.
-- `src/components/Bottle.tsx`, `CleanLiquid.tsx`: shared formal glass artwork and independent liquid layers.
+- `src/components/Bottle.tsx`, `LuminousLiquid.tsx`: shared formal glass and independent candidate materials; `CleanLiquid.tsx` retains the previous liquid.
 - `src/scene/bottleGeometry.ts`, `bottlePresentation.ts`, `liquidAppearance.ts`: gravity planes, shared art/scale and internal visual comparisons.
 - `src/App.tsx`, `src/styles.css`: Chinese UI, shared portrait scene and controls.
 - `src/scene/cabinetLayout.ts`: source-image coordinates for shelves, bottles and panel hitboxes.
 - `assets/source/shelf-tall.png`, `public/assets/shelf-tall.webp`: active tall cabinet original and optimized local scene (the earlier pair is preserved); see [asset notes](assets/README.md).
 - `src/game/game.test.ts`, `tests/game.spec.ts`: unit and real browser checks.
 
-Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 3G is complete; stop for visual acceptance before further work. Distinct formal bottle designs, special liquids, animation refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
+Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 3H stops for visual acceptance before further work. Distinct formal bottle designs, special liquids, animation refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
 
 [Current browser gallery, height measurements and real pour MP4/GIF](docs/screenshots/milestone3f-preview.md).
-The default / `?liquid=clean` uses equal upright unit heights and soft gray seams. Internal
+`?liquid=clean` retains3F/3G equal upright unit heights and soft gray seams. Internal
 `?liquid=unified`, `?liquid=polished` and `?liquid=legacy` retain earlier material/area models;
 add `&bottles=sample` for the former one-formal/eight-prototype comparison. These URL choices
-are not saved and have no player-facing switch. Current checks: **88 unit /110 browser tests**.
+are not saved and have no player-facing switch.
+
+[3H clean/A/B browser comparison and recordings](docs/screenshots/milestone3h-preview.md).
+The default / `?liquid=soft-translucent` (A) uses a continuous restrained transmission
+field; `?liquid=gem-luster` (B) adds a broad subtle sheen. Both retain clean's palette
+and equal-height geometry, with quieter gray seams. They preserve the3G glass and
+ambient light and never enter saves or player settings.
+
+Verified in3H: **88 unit tests,116 browser cases**, production build and diff checks.
 
 [3G glass comparison, different positions and real MP4/GIF](docs/screenshots/milestone3g-preview.md).
 Default / `?lighting=ambient` uses the reversible soft-glass texture plus cabinet-space
