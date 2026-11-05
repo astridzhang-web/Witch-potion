@@ -189,3 +189,15 @@ Keep HUD outer anchors at the current mirrored shoulder positions and shared 7.3
 compare only a 0/1/1.5px visible-content downward offset on the right. Deliver true browser
 full/detail/empty/one/two/four-layer/old-new/light-background evidence and source/receiver
 video, run tests/build, update progress and push `work`, then stop for visual acceptance.
+
+
+## Authorized Milestone 3D: liquid material experiment
+
+Globally refine the seven base colors and independent SVG liquid shading while preserving
+all bottle art/geometry/scale, HUD, cabinet, controls and gameplay. Compare the exact old
+renderer with `?liquid=legacy`; default / `?liquid=polished` uses restrained vertical depth,
+glass-wall shading and a shallow meniscus over the existing world-horizontal volume plane.
+Contiguous same-color units may share one visual gradient without changing capacity.
+Keep gravity, actual-mouth stream, 640/920ms lifecycle, rewards/saves and reduced motion.
+No sparkle/particle/strong-glow effects, new systems or deployment. Deliver matched real
+phone captures, source/receiver MP4/GIF, tests/build and progress, then stop for acceptance.

@@ -2,9 +2,19 @@
 
 ## Current milestone
 
-**Milestone 3C — COMPLETE. Stop for visual acceptance of the new star–moon bottle and 1px HUD correction.**
+**Milestone 3D — COMPLETE. Stop for visual acceptance of the liquid experiment.**
 
 The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+
+## Milestone 3D / 宝石色动态药液材质实验 (2026-11-05)
+
+- Continued from `7cdf97305a8b24699883a8b4c615bb968d95a96e` on `work`; retained/excluded the existing untracked project report. Runtime edits are confined to `Bottle.tsx` plus new `PolishedLiquid.tsx` and `scene/liquidAppearance.ts`. No dependencies or new image assets.
+- Kept exact legacy palette/renderer with internal `?liquid=legacy`; default / `?liquid=polished` uses seven clearer jewel colors with the same IDs/names. Selection is page-level and never persisted; global stream/receiving colors follow the active palette through the existing export.
+- New material adds per-color-band vertical light/depth, a restrained radial volume cue, glass-wall shading clipped to wet volume, and a tiny meniscus below the unchanged horizontal plane. Surface/edge opacity is reduced; fill opacity0.92→0.93. Contiguous identical units share one visual gradient to avoid false monochrome stripes; four-unit state/area stays authoritative. No blur, glow, particles or extra timers/state updates.
+- Bottle PNG/WebPs, all bottle dimensions/coordinates/cavities, 13% index0 scale, 3C HUD correction, cabinet, controls/help/parchment/fonts and all `src/game/` remain unchanged. `PourAnimation.tsx` is unchanged: actual mouth, gravity solve, **640ms commit /920ms return**, input locks, interruption handling and saves/rewards keep their original mechanisms.
+- Actual production comparisons cover 390×844/360×640 legacy+polished, narrow320×568, empty/purple/blue/gold/two/four mixed layers and completed monochrome bottles from valid preset histories. Legacy full frame matches3C baseline pixels; empty formal-glass crop and HUD crop are identical across modes. Recorded **139 real screencast frames over3.933s**, encoded to **4.17s MP4/GIF**, plus source/receiver/return details. No page errors. [Browser comparison and acceptance notes](docs/screenshots/milestone3d-preview.md).
+- Validation: **85 unit tests passed, all 102 Playwright cases passed (2.7min), production build and `git diff --check` passed**. Added two focused Playwright cases (four project runs) for page-mode save/HUD/geometry parity (valid v3 completion7/balance13), empty materials, source/receiver gravity/lip alignment, undo/reload and reduced motion. Independent review found no blocking clipping/transform issue; initial test-only JSON import setup was corrected before the focused cases passed.
+- Limits: stylized 2D material rather than physical refraction, thin draining layers remain mostly color/stream cues, and existing glass highlights can still lighten edge pixels. Physical Safari/iOS and low-end-device performance remain unverified. Stop after acceptance delivery; no bottle expansion, special potion effects, HUD work or deployment.
 
 ## Milestone 3C / 新暖金星月瓶与 HUD 光学校正 (2026-11-05)
 

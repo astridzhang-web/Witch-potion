@@ -3,15 +3,9 @@ import { useId, type CSSProperties } from 'react'
 import { isComplete, type Color, type Bottle as BottleState } from '../game/rules'
 import { BOTTLE_GEOMETRY, bottleAppearance, liquidSurfaces, type BottleAppearance } from '../scene/bottleGeometry'
 
-export const COLORS = [
-  { name: '玫瑰红', light: '#dc8b9d', main: '#c25b79', dark: '#a54d68' },
-  { name: '紫水晶', light: '#b8a0dc', main: '#9774c4', dark: '#795ba3' },
-  { name: '薄荷绿', light: '#9cd4bc', main: '#68b99e', dark: '#48927d' },
-  { name: '天空蓝', light: '#a5cede', main: '#6eafd0', dark: '#548aa9' },
-  { name: '蜂蜜金', light: '#ead39b', main: '#d6b56b', dark: '#b09350' },
-  { name: '珊瑚橙', light: '#edb79a', main: '#df986f', dark: '#b87857' },
-  { name: '兰花粉', light: '#e0b2dd', main: '#ca8bc7', dark: '#a367a2' },
-] as const
+import PolishedLiquid from './PolishedLiquid'
+import { COLORS, LIQUID_FINISH } from '../scene/liquidAppearance'
+export { COLORS } from '../scene/liquidAppearance'
 
 interface Props {
   liquid: BottleState
@@ -54,7 +48,7 @@ export function BottleArt({ liquid, kind = 'round', fillLevel = liquid.length, a
   const level = Math.max(0, Math.min(fillLevel, liquid.length))
   const surfaces = liquidSurfaces(kind, angle, Array.from({ length: liquid.length + 1 }, (_, i) => Math.min(i, level)))
   const topColor = liquid[Math.max(0, Math.ceil(level) - 1)]
-  return <svg className="bottle-art" viewBox="0 0 100 150" aria-hidden="true" data-kind={kind} data-fill-level={level} data-angle={angle}>
+  return <svg className="bottle-art" viewBox="0 0 100 150" aria-hidden="true" data-kind={kind} data-liquid-finish={LIQUID_FINISH} data-fill-level={level} data-angle={angle}>
     <defs>
       <clipPath id={`${id}-cavity`}><path d={shape.clip} /></clipPath>
       <linearGradient id={`${id}-glass`}>
@@ -72,11 +66,13 @@ export function BottleArt({ liquid, kind = 'round', fillLevel = liquid.length, a
     {kind !== 'moon-glass' && <path d={shape.outline} fill={`url(#${id}-glass)`} />}
     <g className="liquid-cavity" clipPath={`url(#${id}-cavity)`}>
       <g className="gravity-liquid" transform={`rotate(${-angle} 50 10)`}>
+        {LIQUID_FINISH === 'polished' ? <PolishedLiquid id={id} liquid={liquid} level={level} surfaces={surfaces} angle={angle} cavity={shape.clip} polygon={shape.polygon} /> : <>
         {liquid.map((color, i) => i < level && <g key={i} className="liquid-layer" data-color={color}>
           <rect x="-160" y={surfaces[i + 1]} width="420" height={Math.max(0, surfaces[i] - surfaces[i + 1]) + .03} fill={`url(#${id}-color-${color})`} fillOpacity=".92" />
           <path className="liquid-boundary" d={`M-160 ${surfaces[i + 1]}H260`} stroke={COLORS[color].light} strokeWidth=".8" opacity=".8" />
         </g>)}
         {level > 0 && <path className="liquid-surface" d={`M-160 ${surfaces.at(-1)}H260`} fill="none" stroke={COLORS[topColor].light} strokeWidth="1.25" opacity=".85" />}
+        </>}
       </g>
       {receivingColor !== undefined && <g>
         <path className="receiving-flow" d={`M50 10V${surfaces.at(-1)}`} stroke={COLORS[receivingColor].light} strokeWidth="1.8" opacity=".6" />
