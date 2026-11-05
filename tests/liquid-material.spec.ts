@@ -46,7 +46,7 @@ test('liquid comparison only changes rendering; validated saves, HUD, bottle geo
   expect(saved.completion.totalCompleted).toBe(7)
   expect(saved.rewards.balance).toBe(13)
   expect(saved.session.history).toHaveLength(5)
-  for (const [url, finish] of [['/?liquid=legacy', 'legacy'], ['/?liquid=polished', 'polished'], ['/?liquid=unified', 'unified'], ['/?liquid=clean', 'clean'], ['/?liquid=soft-translucent', 'soft-translucent'], ['/?liquid=gem-luster', 'gem-luster'], ['/', 'soft-translucent']]) {
+  for (const [url, finish] of [['/?liquid=legacy', 'legacy'], ['/?liquid=polished', 'polished'], ['/?liquid=unified', 'unified'], ['/?liquid=clean', 'clean'], ['/?liquid=soft-translucent', 'soft-translucent'], ['/?liquid=gem-luster', 'gem-luster'], ['/?liquid=vivid-translucent', 'vivid-translucent'], ['/', 'vivid-translucent']]) {
     await page.goto(url)
     await page.evaluate(() => document.fonts.ready)
     expect(await page.locator('.board .bottle-art').evaluateAll(nodes => nodes.map(el => el.getAttribute('data-liquid-finish')))).toEqual(Array(9).fill(finish))
@@ -65,7 +65,7 @@ test('liquid comparison only changes rendering; validated saves, HUD, bottle geo
   }
 })
 
-for (const finish of ['clean', 'soft-translucent', 'gem-luster']) test(`${finish} stays consistent in source and receiving sprites, preserves gravity, then undoes and restores`, async ({ page }) => {
+for (const finish of ['clean', 'soft-translucent', 'gem-luster', 'vivid-translucent']) test(`${finish} stays consistent in source and receiving sprites, preserves gravity, then undoes and restores`, async ({ page }) => {
   await open(page, 0, true)
   await page.goto('/?liquid=' + finish)
   for (let step = 0; step < 2; step++) {
@@ -254,4 +254,74 @@ test('candidate materials share unchanged unit geometry and palette, with one we
     await page.clock.runFor(10_000)
     expect(await page.locator('[data-liquid-fixture] .bottle-art').evaluate(el => el.outerHTML)).toBe(still)
   }
+})
+
+test('vivid keeps unit planes and color identities while transmitting through one fixed field with finer seams', async ({ page }) => {
+  await open(page, 0, true)
+  const saved = await read(page)
+  const colors = ['#f35d93', '#af62ff', '#51dcb6', '#30c3ff', '#ffd04a', '#ffb361', '#f18af8']
+  const names = ['玫瑰红', '紫水晶', '薄荷绿', '天空蓝', '蜂蜜金', '珊瑚橙', '兰花粉']
+  const cases = [[], [1], [1,1], [1,1,1], [1,1,1,1], [1,1,4,4], [1,4,1,4]]
+  const geometry: unknown[] = []
+  let field: unknown
+  for (const finish of ['gem-luster', 'vivid-translucent']) {
+    await page.goto('/?liquid=' + finish)
+    if (finish === 'vivid-translucent') {
+      const palette = await page.locator('.board .liquid-layer').evaluateAll(nodes => Object.fromEntries(nodes.map(n => [n.getAttribute('data-color'), n.querySelector('rect')!.getAttribute('fill')])))
+      expect(palette).toEqual(Object.fromEntries(colors.map((color, i) => [i, color])))
+      for (const name of names) expect((await page.locator('.board').innerHTML()).includes(name)).toBe(true)
+    }
+    for (const [caseIndex, liquid] of cases.entries()) {
+      await page.evaluate(async liquid => {
+        const path = '/tests/fixtures/liquidPreview.tsx'
+        const { renderLiquidFixture } = await import(path)
+        renderLiquidFixture(liquid)
+      }, liquid)
+      const art = page.locator('[data-liquid-fixture] .bottle-art')
+      await expect.poll(() => art.locator('.liquid-layer').evaluateAll(nodes => nodes.map(n => Number(n.getAttribute('data-color'))))).toEqual(liquid)
+      const drawing = await art.evaluate((svg: SVGSVGElement) => ({
+        units: [...svg.querySelectorAll<SVGRectElement>('.liquid-layer > rect')].map(r => [r.y.baseVal.value, r.height.baseVal.value]),
+        seams: [...svg.querySelectorAll<SVGPathElement>('.liquid-boundary')].map(p => p.getAttribute('d')),
+      }))
+      if (finish === 'gem-luster') geometry[caseIndex] = drawing
+      else {
+        expect(drawing).toEqual(geometry[caseIndex])
+        await expect(art.locator('.liquid-surface')).toHaveCount(liquid.length ? 1 : 0)
+        await expect(art.locator('.liquid-transmission')).toHaveCount(liquid.length ? 1 : 0)
+        await expect(art.locator('.liquid-boundary')).toHaveCount(Math.max(0, liquid.length - 1))
+        if (liquid.length) {
+          const optical = await art.evaluate((svg: SVGSVGElement) => {
+            const body = svg.querySelector('.liquid-transmission')!, mask = svg.querySelector(body.getAttribute('mask')!.slice(4, -1))!
+            const path = mask.querySelector('path')!, gradient = svg.querySelector(path.getAttribute('fill')!.slice(4, -1))!
+            return { field: gradient.outerHTML, maskType: (mask as SVGMaskElement).style.maskType,
+              cavity: path.getAttribute('d'), originalCavity: svg.querySelector('clipPath path')!.getAttribute('d'),
+              alpha: [...gradient.children].map(s => Number(s.getAttribute('stop-opacity'))),
+              seams: [...svg.querySelectorAll('.liquid-boundary')].map(p => ({ width: Number(p.getAttribute('stroke-width')),
+                colors: [...svg.querySelector(p.getAttribute('stroke')!.slice(4, -1))!.children].map(s => s.getAttribute('stop-color')),
+                peak: Math.max(...[...svg.querySelector(p.getAttribute('stroke')!.slice(4, -1))!.children].map(s => Number(s.getAttribute('stop-opacity')))) })),
+              colorMasks: svg.querySelectorAll('.liquid-layer[mask]').length }
+          })
+          if (field === undefined) field = optical.field
+          else expect(optical.field).toBe(field)
+          expect(optical.maskType).toBe('alpha')
+          expect(optical.cavity).toBe(optical.originalCavity)
+          expect(Math.max(...optical.alpha)).toBeLessThanOrEqual(.8)
+          expect(Math.min(...optical.alpha)).toBeGreaterThan(.55)
+          expect(Math.min(...optical.alpha)).toBeLessThan(.65)
+          expect(optical.colorMasks).toBe(0)
+          for (const seam of optical.seams) {
+            expect(seam.width).toBeGreaterThan(.3)
+            expect(seam.width).toBeLessThan(.4)
+            expect(seam.peak).toBeGreaterThan(.1)
+            expect(seam.peak).toBeLessThanOrEqual(.2)
+            expect(seam.colors.every(color => color === '#544d47')).toBe(true)
+          }
+        }
+      }
+      expect(await read(page)).toEqual(saved)
+    }
+  }
+  const drawing = await page.locator('[data-liquid-fixture] .bottle-art').evaluate(el => el.outerHTML)
+  await page.clock.runFor(10_000)
+  expect(await page.locator('[data-liquid-fixture] .bottle-art').evaluate(el => el.outerHTML)).toBe(drawing)
 })

@@ -266,3 +266,18 @@ gameplay/rewards/saves and640/920ms lifecycle. Internal mode choices are unsaved
 Deliver matched clean/A/B phone pages, all requested readonly volume/pattern fixtures,
 old/new seam comparisons and real A/B MP4/GIF. Run tests/build/diff checks, document,
 commit/push work, then stop for visual acceptance; no additional features or deployment.
+
+## Authorized Milestone 3I: vivid transparent liquid and finer seams
+
+Add default / `?liquid=vivid-translucent`, retaining exact3H A/B/clean and all historical
+modes as unsaved internal comparisons. Increase actual body transmission using one
+continuous cavity-space Alpha field and brighter/purer input colors while preserving
+seven-color identities/order/names and readability. Avoid opaque underpaint or a milky
+white sheen as a substitute for transparency. Keep whole-volume optics stable across
+units/fill and clipped correctly under rotation. Use substantially finer feathered gray
+seams than3H, with no thick gaps or hard outlines, retaining same-color unit cues and the
+single top free surface. Keep the existing equal-height model and volume mapping exactly;
+preserve bottle art/glass light/scale/placement, cabinet, HUD/help/buttons/settlement/fonts,
+rules/puzzles/rewards/saves and640/920ms pour logic. No new particles/effects, bottles, UI,
+gameplay or deployment. Deliver matched3H A/B/new phone pages and typical color/pattern
+details plus actual MP4/GIF; run all tests/build/diff checks, document and stop for review.

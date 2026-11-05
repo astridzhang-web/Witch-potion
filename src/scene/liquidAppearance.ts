@@ -1,7 +1,7 @@
 // Internal page-level art comparison; never written to player saves.
 const requested = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('liquid')
-export const LIQUID_FINISH = requested === 'legacy' || requested === 'polished' || requested === 'unified' || requested === 'clean' || requested === 'gem-luster' ? requested : 'soft-translucent'
-export const EQUAL_HEIGHT_LIQUID = LIQUID_FINISH === 'clean' || LIQUID_FINISH === 'soft-translucent' || LIQUID_FINISH === 'gem-luster'
+export const LIQUID_FINISH = requested === 'legacy' || requested === 'polished' || requested === 'unified' || requested === 'clean' || requested === 'gem-luster' || requested === 'soft-translucent' ? requested : 'vivid-translucent'
+export const EQUAL_HEIGHT_LIQUID = LIQUID_FINISH === 'clean' || LIQUID_FINISH === 'soft-translucent' || LIQUID_FINISH === 'gem-luster' || LIQUID_FINISH === 'vivid-translucent'
 
 
 export const LEGACY_COLORS = [
@@ -31,4 +31,15 @@ export const CLEAN_COLORS = [
   { name: '珊瑚橙', light: '#f4b98e', main: '#eb915c', dark: '#cd7048' },
   { name: '兰花粉', light: '#e8a2df', main: '#d174cd', dark: '#ad56b0' },
 ] as const
-export const COLORS = LIQUID_FINISH === 'legacy' ? LEGACY_COLORS : EQUAL_HEIGHT_LIQUID ? CLEAN_COLORS : POLISHED_COLORS
+// Brighter chromatic inputs compensate for real background transmission, rather
+// than covering the liquid with an opaque or milky optical underpaint.
+export const VIVID_COLORS = [
+  { name: '玫瑰红', light: '#ff9fbe', main: '#f35d93', dark: '#c13d6b' },
+  { name: '紫水晶', light: '#d1a0ff', main: '#af62ff', dark: '#843cbe' },
+  { name: '薄荷绿', light: '#9aefd3', main: '#51dcb6', dark: '#2caa8e' },
+  { name: '天空蓝', light: '#9adbff', main: '#30c3ff', dark: '#258ecb' },
+  { name: '蜂蜜金', light: '#ffe798', main: '#ffd04a', dark: '#d6a332' },
+  { name: '珊瑚橙', light: '#ffd0a0', main: '#ffb361', dark: '#dc8046' },
+  { name: '兰花粉', light: '#ffc2fb', main: '#f18af8', dark: '#bf5abb' },
+] as const
+export const COLORS = LIQUID_FINISH === 'legacy' ? LEGACY_COLORS : LIQUID_FINISH === 'vivid-translucent' ? VIVID_COLORS : EQUAL_HEIGHT_LIQUID ? CLEAN_COLORS : POLISHED_COLORS
