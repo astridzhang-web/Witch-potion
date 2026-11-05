@@ -201,3 +201,16 @@ Contiguous same-color units may share one visual gradient without changing capac
 Keep gravity, actual-mouth stream, 640/920ms lifecycle, rewards/saves and reduced motion.
 No sparkle/particle/strong-glow effects, new systems or deployment. Deliver matched real
 phone captures, source/receiver MP4/GIF, tests/build and progress, then stop for acceptance.
+
+
+## Authorized Milestone 3E: unified liquid light and three boundary levels
+
+Keep legacy and polished rendering intact, add default / `?liquid=unified` with unchanged
+3D palette IDs/names. Separate flat color volumes from one continuous wet-volume lighting
+field. Paint one soft free surface; single restrained different-color contacts; weaker
+same-color unit cues without changing their base colors. Clip every effect to cavity and
+occupied liquid; retain shared capacity, gravity, actual mouth and 640/920ms lifecycle.
+Use readonly component fixtures for 1–4 same-color units, 2–4 colors and AAB/ABB/AABB/ABAB;
+never turn them into invalid game saves. Preserve all art, geometry/scale, HUD and controls,
+rewards/saves and reduced motion. Deliver matched real phone images and actual pours,
+tests/build, documents and commit/push work; stop for visual acceptance.

@@ -1,5 +1,7 @@
 // Internal page-level art comparison; never written to player saves.
-export const LIQUID_FINISH = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('liquid') === 'legacy' ? 'legacy' : 'polished'
+const requested = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('liquid')
+export const LIQUID_FINISH = requested === 'legacy' || requested === 'polished' ? requested : 'unified'
+
 
 export const LEGACY_COLORS = [
   { name: '玫瑰红', light: '#dc8b9d', main: '#c25b79', dark: '#a54d68' },

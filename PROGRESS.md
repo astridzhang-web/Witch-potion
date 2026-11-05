@@ -2,9 +2,19 @@
 
 ## Current milestone
 
-**Milestone 3D — COMPLETE. Stop for visual acceptance of the liquid experiment.**
+**Milestone 3E — COMPLETE. Stop for visual acceptance of unified light and three boundary levels.**
 
 The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+
+## Milestone 3E / 统一整瓶光照与三级边界 (2026-11-05)
+
+- Continued from `d6ba8041d403da573e82cbf8fd3f1669b8ff6228` on `work`, preserving/excluding the untracked project report. New `UnifiedLiquid.tsx` is selected by default / `?liquid=unified`; exact 3D `polished` and 3C `legacy` branches remain. Both old full frames match baseline pixels exactly; 3D palette values/names/IDs remain unchanged.
+- Solid color bands are independent of a single wet-volume vertical light field and glass-attached wall shading. Colors no longer each restart a top-light/bottom-shadow gradient. One narrow free surface/meniscus is strongest; single different-color contacts are secondary; same-color unit hints are weaker and never alter their neighboring base colors. Internal hints fade near the free plane to avoid thin-fill pops. All effects stay cavity/wet-clipped and use existing world-horizontal volume planes.
+- Game/animation/geometry, 640ms commit/920ms duration, glass assets, 13% scale, HUD/1px correction, cabinet and controls remain untouched. No images baked into bottle art, new dependencies, glow/particle effects or timers. Runtime edits only `Bottle.tsx`, `liquidAppearance.ts`, new `UnifiedLiquid.tsx`.
+- Added browser-only `tests/fixtures/liquidPreview.tsx`, not imported by production. It renders actual BottleArt at index0 for readonly screenshots; no game board or storage mutation, interactions inert until reload. Captured all12 requested cases (empty, purple1–4, different2–4, AAB/ABB/AABB/ABAB) in both polished/unified at390×844 plusDPR4 details. Actual legal-game comparisons/video use the production build; 360×640 and320×568 included. [Detailed acceptance gallery and fixture provenance](docs/screenshots/milestone3e-preview.md).
+- Real recording contains **277 screencast frames /8.004s**, encoded to **8.23s MP4/GIF**: 0→7(two gold), 6→0(orchid), 0→8(two orchid), 7→0(two gold). Source/receiver, multiple colors, continuous units and return all use live legal gameplay; final index0 has three gold units after4 moves. All screenshot/recording pages reported no errors; fixture capture checked identical save bytes before/after rendering.
+- Validation: **85 unit tests and104 Playwright cases passed (2.7min); production build passed**. Updated all3 modes/default save/HUD/geometry/labels checks, added single-light/free-plane and solid-fill/interface-hierarchy checks on valid preset histories. Existing rules, full solve, undo/restart/new puzzle, settlement/rewards, reload, fonts, motion and cabinet regressions pass. Final `git diff --check` passed.
+- Limits: stylized 2D light, not physical refraction. Weak unit cues vary with device pixel density; extremely thin draining/receiving portions intentionally fade their hints. No physical Safari/iOS or low-end GPU verification. Stop after delivery; no additional art, special liquids, HUD changes or deployment.
 
 ## Milestone 3D / 宝石色动态药液材质实验 (2026-11-05)
 
