@@ -113,3 +113,29 @@ not this patch.
 [Patch screenshots and source/receiver recording](../docs/screenshots/milestone3b-patch-preview.md).
 Reflections remain illustrated rather than physically simulated; the pale liquid edge may still
 brighten slightly. Physical Safari/iOS and low-end device performance remain unverified.
+
+## Visual Polish II · reversible candle comparison (2026-11-05)
+
+- `?glass=original` selects the exact 3B Patch treatment; `?glass=candle` or no query selects
+  this experiment. This page-level selection is shared by resting/flying/receiving instances,
+  has no UI and writes no save state. Reload after changing the query.
+- New `public/assets/bottles/moon-glass-candle.webp`: **1086×1448, 667,298 bytes**, lossless.
+  The supplied PNG and `moon-glass-source.webp` remain unchanged. The variant's alpha bytes
+  are also identical to the original. No geometry, size, palette or cavity edits.
+- Reproduce offline with `python scripts/prepare-moon-glass.py` (Pillow and NumPy required).
+  Source-alpha-weighted RGB smoothing (4 source-pixel radius, ≈0.32 CSS px at 390×844)
+  is blended only in the neck/shoulder and foot bands. It preserves the source alpha and
+  protects warm-metal pixels. The mouth and broad belly aren't globally blurred.
+- A restrained champagne luminance mix varies from stronger candle reflection on the left
+  to more retained cool reflection on the right. This is baked only into the separate glass
+  variant, not the liquid. Runtime does not add a blur filter to animated sprites.
+- Runtime cavity/neck masks are `#585858` / `#383838` (original `#606060` / `#444`);
+  the foot fade ends at `#666` instead of `#999`. The original separate warm-gold detail
+  pass still reads the unmodified original texture, preserving star, chain and moon detail.
+- The internal original branch retains its previous mask values, matrix and texture exactly.
+  It is a comparison/rollback option, not a final art selection. Both share the same 13%
+  scale and timing. The additional cached variant costs ~652 KiB; no new runtime library.
+
+[Same-state comparisons, HUD measurements and actual browser recording](../docs/screenshots/milestone3b-polish2-preview.md).
+This changes illustrated highlights, not physical refraction; reflected light still rotates
+with the artwork. Actual Safari/iOS and low-end-device performance remain unverified.

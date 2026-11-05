@@ -2,9 +2,19 @@
 
 ## Current milestone
 
-**Milestone 3B Patch — COMPLETE. Stop for visual acceptance.**
+**Milestone 3B Visual Polish II — COMPLETE. Stop for visual acceptance of the candle experiment.**
 
 The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+
+## Milestone 3B Visual Polish II / HUD 肩部留白与暖烛光对照 (2026-11-05)
+
+- Continued from `d31f73d89115f889b273ddfa5936251728123d72` on `work`; preserved/excluded the unrelated untracked project report. Runtime changes are confined to `MoonGlass.tsx` and HUD positions in `styles.css`.
+- HUD uses mirrored **18% / 82%**, shared **top 7.3%**. At 390×844 whole-group centers are **(73.53125,61.625) / (316.453125,61.625)**, each outward ≈7.59px and down **4.75px** from baseline. Vertical container tops/heights match exactly; horizontal symmetry differs by only 0.0078125px from the cabinet axis due to subpixel rounding. 16.5% initial placement failed existing three-digit shoulder clearance; final placement preserves that assertion. At ≤340px viewport width keep 20% / 80% to avoid the fixed help target. Fonts, group structure, help and all other UI unchanged.
+- Retained the exact previous glass treatment with internal `?glass=original`; default / `?glass=candle` selects the new reversible candle experiment. No player setting or persistence. Added a separately named **1086×1448 / 667,298-byte** WebP with unchanged source alpha, selectively softened glass highlights and a warm-left / restrained cool-right reflection balance. Original PNG/WebP and separate star/chain/moon pass remain. Foot highlights attenuate more strongly; no opaque yellow overlay, runtime blur, new metal or repainted shape. [Asset notes and reproducible offline script](assets/moon-glass.md).
+- **13% size, shelf contact, cavity/volume calculations, horizontal liquid, source lip/stream, 640ms commit and 920ms return are unchanged**. Other eight prototypes, cabinet, palette, rewards/saves, help, parchment and panel/dust remain untouched.
+- True browser comparisons use identical 390×844 viewport/state/time (2200ms), with full-page + DPR4 closeups for empty, 1 gold/purple/blue, two colors and four adjacent color bands from existing legal presets. Original-preview body crop matches baseline pixels exactly; outside the formal-bottle region both finish captures are identical. Small central liquid patches change by ≤1.4/255 per mean RGB channel, while illustrated edge reflections intentionally change. Captured HUD details/measurements, 360×640, 320×568, desktop, source/receiver keyframes and a **139-frame / 3.885s real screencast**, encoded to **4.13s MP4/GIF**. No page errors. [Acceptance gallery](docs/screenshots/milestone3b-polish2-preview.md).
+- Validation: **85 unit tests passed; all 98 Playwright cases passed (2.6min); production build passed**. A small new regression compares finishes without changing saves/liquid/geometry and checks original art continuity in flight; existing warm source/receiver, undo/reload, reduced motion, HUD 1–3 digit shoulder bounds, rewards/saves and game-rule regressions pass. An initial test helper assumed SVGMatrix had DOMMatrix serialization; fixed by converting it explicitly, with no runtime change.
+- Limits: this is an optional art direction awaiting acceptance, not physical glass/refraction. Reflections still rotate with the illustration; Safari/iOS and low-end GPU performance remain unverified. No new bottles, feature work, dependencies or public deployment. Stop after delivery.
 
 ## Milestone 3B Patch / 融合、尺寸与 HUD 校准 (2026-11-05)
 

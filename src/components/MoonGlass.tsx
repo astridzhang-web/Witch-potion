@@ -1,16 +1,21 @@
 import { MOON_GLASS, MOON_TRANSFORM } from '../scene/moonGlass'
 
-/** Original pixels, non-destructive alpha masks; no painted replacement glass. */
+// Internal art comparison only, never saved and never exposed as a player setting.
+// All rest/source/receiver instances read the same page-level finish.
+const finish = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('glass') === 'original' ? 'original' : 'candle'
+
+/** The original two-pass treatment remains selectable with ?glass=original. */
 export default function MoonGlass({ id, cavity }: { id: string; cavity: string }) {
+  const candle = finish === 'candle'
   return <>
     <defs>
       <mask id={`${id}-glass-alpha`} maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="150" style={{ maskType: 'luminance' }}>
         <path d={MOON_GLASS.outline} transform={MOON_TRANSFORM} fill="#b8b8b8" />
-        <path d={cavity} fill="#606060" />
-        <path d={MOON_GLASS.neck} transform={MOON_TRANSFORM} fill="#444" />
+        <path d={cavity} fill={candle ? "#585858" : "#606060"} />
+        <path d={MOON_GLASS.neck} transform={MOON_TRANSFORM} fill={candle ? "#383838" : "#444"} />
       </mask>
       <linearGradient id={`${id}-foot-fade`} gradientUnits="userSpaceOnUse" x1="0" y1="121" x2="0" y2="134">
-        <stop stopColor="white" /><stop offset=".45" stopColor="#c4c4c4" /><stop offset="1" stopColor="#999" />
+        <stop stopColor="white" /><stop offset=".45" stopColor={candle ? "#999" : "#c4c4c4"} /><stop offset="1" stopColor={candle ? "#666" : "#999"} />
       </linearGradient>
       <mask id={`${id}-foot-alpha`} maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="150" style={{ maskType: 'luminance' }}>
         <rect width="100" height="150" fill={`url(#${id}-foot-fade)`} />
@@ -27,9 +32,9 @@ export default function MoonGlass({ id, cavity }: { id: string; cavity: string }
         <feComposite in="SourceGraphic" in2="warm" operator="in" />
       </filter>
     </defs>
-    <g className="moon-glass-art" clipPath={`url(#${id}-art-outline)`} mask={`url(#${id}-foot-alpha)`}>
-      <g mask={`url(#${id}-glass-alpha)`} filter={`url(#${id}-candle-reflection)`}>
-        <image className="moon-glass-texture" href={MOON_GLASS.src} width={MOON_GLASS.width} height={MOON_GLASS.height} transform={MOON_TRANSFORM} preserveAspectRatio="xMidYMid meet" />
+    <g className="moon-glass-art" data-finish={finish} clipPath={`url(#${id}-art-outline)`} mask={`url(#${id}-foot-alpha)`}>
+      <g mask={`url(#${id}-glass-alpha)`} filter={candle ? undefined : `url(#${id}-candle-reflection)`}>
+        <image className="moon-glass-texture" href={candle ? "/assets/bottles/moon-glass-candle.webp" : MOON_GLASS.src} width={MOON_GLASS.width} height={MOON_GLASS.height} transform={MOON_TRANSFORM} preserveAspectRatio="xMidYMid meet" />
       </g>
       <g filter={`url(#${id}-warm-detail)`}>
         <image href={MOON_GLASS.src} width={MOON_GLASS.width} height={MOON_GLASS.height} transform={MOON_TRANSFORM} preserveAspectRatio="xMidYMid meet" />
