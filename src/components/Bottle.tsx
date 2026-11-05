@@ -5,6 +5,7 @@ import { BOTTLE_GEOMETRY, bottleAppearance, liquidSurfaces, type BottleAppearanc
 
 import PolishedLiquid from './PolishedLiquid'
 import UnifiedLiquid from './UnifiedLiquid'
+import CleanLiquid from './CleanLiquid'
 import { COLORS, LIQUID_FINISH } from '../scene/liquidAppearance'
 export { COLORS } from '../scene/liquidAppearance'
 
@@ -67,7 +68,7 @@ export function BottleArt({ liquid, kind = 'round', fillLevel = liquid.length, a
     {kind !== 'moon-glass' && <path d={shape.outline} fill={`url(#${id}-glass)`} />}
     <g className="liquid-cavity" clipPath={`url(#${id}-cavity)`}>
       <g className="gravity-liquid" transform={`rotate(${-angle} 50 10)`}>
-        {LIQUID_FINISH === 'unified' ? <UnifiedLiquid id={id} liquid={liquid} level={level} surfaces={surfaces} angle={angle} cavity={shape.clip} polygon={shape.polygon} /> : LIQUID_FINISH === 'polished' ? <PolishedLiquid id={id} liquid={liquid} level={level} surfaces={surfaces} angle={angle} cavity={shape.clip} polygon={shape.polygon} /> : <>
+        {LIQUID_FINISH === 'clean' ? <CleanLiquid id={id} liquid={liquid} level={level} surfaces={surfaces} angle={angle} cavity={shape.clip} /> : LIQUID_FINISH === 'unified' ? <UnifiedLiquid id={id} liquid={liquid} level={level} surfaces={surfaces} angle={angle} cavity={shape.clip} polygon={shape.polygon} /> : LIQUID_FINISH === 'polished' ? <PolishedLiquid id={id} liquid={liquid} level={level} surfaces={surfaces} angle={angle} cavity={shape.clip} polygon={shape.polygon} /> : <>
         {liquid.map((color, i) => i < level && <g key={i} className="liquid-layer" data-color={color}>
           <rect x="-160" y={surfaces[i + 1]} width="420" height={Math.max(0, surfaces[i] - surfaces[i + 1]) + .03} fill={`url(#${id}-color-${color})`} fillOpacity=".92" />
           <path className="liquid-boundary" d={`M-160 ${surfaces[i + 1]}H260`} stroke={COLORS[color].light} strokeWidth=".8" opacity=".8" />

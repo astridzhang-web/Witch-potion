@@ -1,6 +1,6 @@
 # 月夜魔法药剂室 · Moonlit Alchemy
 
-A quiet, mobile-first potion sorting game. Milestone 2E: a playable tall wooden cabinet scene with a solid wooden flip, champagne stardust, local Chinese typography, parchment completion record and basic crystal rewards built with React, TypeScript, Vite and independent SVG bottles. All gameplay runs locally in the browser.
+A quiet, mobile-first potion sorting game. Milestone 3F: nine matching warm star–moon glass bottles with independent, equal-height SVG liquid in a tall wooden cabinet. Includes the solid wooden flip, champagne stardust, local Chinese typography, parchment completion record and basic crystal rewards, built with React, TypeScript and Vite. All gameplay runs locally in the browser.
 
 ## Cloud development
 
@@ -42,19 +42,26 @@ Four fixed presets in `src/game/presets.json` each include a complete legal solu
 - `src/game/puzzles.ts`, `presets.json`: verified puzzle templates and safe variation.
 - `src/game/session.ts`: immutable transactions, history, undo and restart.
 - `src/game/storage.ts`: versioned persistence and legal-history validation.
-- `src/components/Bottle.tsx`: local SVG placeholder glass and color palette.
+- `src/components/Bottle.tsx`, `CleanLiquid.tsx`: shared formal glass artwork and independent liquid layers.
+- `src/scene/bottleGeometry.ts`, `bottlePresentation.ts`, `liquidAppearance.ts`: gravity planes, shared art/scale and internal visual comparisons.
 - `src/App.tsx`, `src/styles.css`: Chinese UI, shared portrait scene and controls.
 - `src/scene/cabinetLayout.ts`: source-image coordinates for shelves, bottles and panel hitboxes.
 - `assets/source/shelf-tall.png`, `public/assets/shelf-tall.webp`: active tall cabinet original and optimized local scene (the earlier pair is preserved); see [asset notes](assets/README.md).
 - `src/game/game.test.ts`, `tests/game.spec.ts`: unit and real browser checks.
 
-Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 2E and its HUD/help visual patch are complete; stop for visual acceptance before further work. Final bottle art, animation timing/physics refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
+Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 3F is complete; stop for visual acceptance before further work. Distinct formal bottle designs, special liquids, animation refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
+
+[Current browser gallery, height measurements and real pour MP4/GIF](docs/screenshots/milestone3f-preview.md).
+The default / `?liquid=clean` uses equal upright unit heights and soft gray seams. Internal
+`?liquid=unified`, `?liquid=polished` and `?liquid=legacy` retain earlier material/area models;
+add `&bottles=sample` for the former one-formal/eight-prototype comparison. These URL choices
+are not saved and have no player-facing switch. Current checks: **86 unit /106 browser tests**.
 
 ## Small floating-pour prototype
 
 The current `work` branch includes the separately authorized ~0.92-second animation experiment: source lift/travel, inward tilt, matching-color stream, synchronized liquid transfer and return. It reuses the existing game rules and SVGs; controls lock briefly during the flight. Reduced motion performs the transfer immediately. Its timing and implementation are retained in the cabinet scene. No PWA work or public deployment is included.
 
-Run the existing development command and try bottle 1 → empty bottle 8 from a fresh first puzzle, followed by bottle 7 → bottle 1. See [the short animation capture](docs/screenshots/floating-pour-prototype.gif), [downward pour](docs/screenshots/floating-pour-down.png) and [upward pour](docs/screenshots/floating-pour-up.png). The GIF is a 20 fps visual reference; the live renderer uses requestAnimationFrame. Full checks now comprise 68 unit tests and 72 browser tests. Detailed behavior and limitations are recorded in `PROGRESS.md`.
+Run the existing development command and try bottle 1 → empty bottle 8 from a fresh first puzzle, followed by bottle 7 → bottle 1. Historical prototype recordings: [short animation](docs/screenshots/floating-pour-prototype.gif), [downward pour](docs/screenshots/floating-pour-down.png) and [upward pour](docs/screenshots/floating-pour-up.png). The GIF is a 20 fps visual reference; the live renderer uses requestAnimationFrame. Detailed current behavior and limitations are recorded in `PROGRESS.md`.
 
 ## Milestone 2B tall cabinet scene
 
@@ -64,7 +71,7 @@ The redrawn 841×1870 cabinet is now active, using the previously prepared 296 K
 
 The scene preserves the full artwork without stretching or cropping. It fits completely at 390×844 and 360×640 and centers on desktop. At 320×568, the existing 280px minimum scene width gives about 623px of page height, so the remaining artwork and bottom notice are reached by a short vertical scroll. Tests cover artwork contact bands, non-overlapping bottle targets, panel bounds/centering, ≥44px targets, top information visibility and the unchanged gameplay/animation.
 
-Both cabinet source PNGs and WebP exports remain in the repository. The [Milestone 2A screenshot](docs/screenshots/milestone2a-cabinet-mobile.png) is historical. Current bottle art and tilted liquid remain the prototype; physical iOS/Safari and safe-area behavior on actual devices still need verification. Animation refinements, final bottle art, crystal spending/shop, PWA and public deployment remain future work.
+Both cabinet source PNGs and WebP exports remain in the repository. The [Milestone 2A screenshot](docs/screenshots/milestone2a-cabinet-mobile.png) is historical. Current bottles reuse the accepted formal sample; physical iOS/Safari and safe-area behavior on actual devices still need verification. Animation refinements, different formal bottle designs, crystal spending/shop, PWA and public deployment remain future work.
 
 
 The subsequent contact-shadow correction keeps those coordinates and replaces the detached SVG ellipse with a small stationary shadow at the glass base. It dims on selection, hides for the flying source and returns on landing; moving bottle art carries no shelf shadow. See [same-state before/after browser comparisons](docs/screenshots/milestone2b-contact-comparison.md).

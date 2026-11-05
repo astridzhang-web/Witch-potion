@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { bottleVisualScale } from './bottlePresentation'
 
 // Coordinates measured on the unchanged 841 × 1870 tall reference.
 // See assets/cabinet-tall-layout.md for the independently measured artwork bands.
@@ -23,10 +24,10 @@ export function imagePosition(box: Box): CSSProperties {
   }
 }
 export function bottlePosition(index: number): CSSProperties {
-  // Keep the foot at SVG y=134 on the shelf. Only the formal sample grows.
+  // All formal bottles share the accepted scale and fixed SVG y=134 shelf contact.
   // Its taller hit box retains the original width; the glass fits inside that width.
   // Widen the SVG viewport equally, so measured animation sprites inherit uniform scale.
-  const scale = index === 0 ? 1.13 : 1
+  const scale = bottleVisualScale(index)
   const height = BOTTLE_SIZE.height * scale
   return {
     ...imagePosition({
@@ -34,7 +35,7 @@ export function bottlePosition(index: number): CSSProperties {
       y: SHELF_Y[Math.floor(index / 3)] - height * 134 / 150,
       width: BOTTLE_SIZE.width, height,
     }),
-    ...(index === 0 ? {
+    ...(scale !== 1 ? {
       '--bottle-art-width': `${scale * 100}%`,
       '--bottle-art-offset': `${(1 - scale) * 50}%`,
       '--bottle-art-events': 'none',

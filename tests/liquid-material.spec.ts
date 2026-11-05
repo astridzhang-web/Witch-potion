@@ -46,7 +46,7 @@ test('liquid comparison only changes rendering; validated saves, HUD, bottle geo
   expect(saved.completion.totalCompleted).toBe(7)
   expect(saved.rewards.balance).toBe(13)
   expect(saved.session.history).toHaveLength(5)
-  for (const [url, finish] of [['/?liquid=legacy', 'legacy'], ['/?liquid=polished', 'polished'], ['/?liquid=unified', 'unified'], ['/', 'unified']]) {
+  for (const [url, finish] of [['/?liquid=legacy', 'legacy'], ['/?liquid=polished', 'polished'], ['/?liquid=unified', 'unified'], ['/?liquid=clean', 'clean'], ['/', 'clean']]) {
     await page.goto(url)
     await page.evaluate(() => document.fonts.ready)
     expect(await page.locator('.board .bottle-art').evaluateAll(nodes => nodes.map(el => el.getAttribute('data-liquid-finish')))).toEqual(Array(9).fill(finish))
@@ -60,12 +60,12 @@ test('liquid comparison only changes rendering; validated saves, HUD, bottle geo
     await expect(occupied.locator('.liquid-surface')).toHaveCount(1)
     const fills = await occupied.locator('.liquid-layer > rect').evaluateAll(nodes => nodes.map(el => el.getAttribute('fill')!))
     expect(fills.length).toBeGreaterThan(0)
-    expect(fills.every(fill => fill.startsWith('url('))).toBe(finish !== 'unified')
-    await expect(occupied.locator('.liquid-lighting')).toHaveCount(finish === 'unified' ? 1 : 0)
+    expect(fills.every(fill => fill.startsWith('url('))).toBe((finish === 'legacy' || finish === 'polished'))
+    await expect(occupied.locator('.liquid-lighting')).toHaveCount((finish === 'unified' || finish === 'clean') ? 1 : 0)
   }
 })
 
-test('unified liquid stays consistent in source and receiving sprites, preserves gravity, then undoes and restores', async ({ page }) => {
+test('clean liquid stays consistent in source and receiving sprites, preserves gravity, then undoes and restores', async ({ page }) => {
   await open(page, 0, true)
   for (let step = 0; step < 2; step++) {
     const [from, to] = preset.solution[step]
@@ -75,7 +75,7 @@ test('unified liquid stays consistent in source and receiving sprites, preserves
     await page.clock.runFor(430)
     await expect(page.getByTestId('pour-animation')).toHaveAttribute('data-phase', 'pour')
     for (const sprite of ['.flying-bottle', '.receiving-sprite']) {
-      await expect(page.locator(`${sprite} .bottle-art`)).toHaveAttribute('data-liquid-finish', 'unified')
+      await expect(page.locator(`${sprite} .bottle-art`)).toHaveAttribute('data-liquid-finish', 'clean')
     }
     const drawing = await page.evaluate(() => {
       const world = (path: SVGPathElement, end: boolean) => path.getPointAtLength(end ? path.getTotalLength() : 0).matrixTransform(path.getScreenCTM()!)
@@ -105,11 +105,12 @@ test('unified liquid stays consistent in source and receiving sprites, preserves
   expect(saved.session).toEqual(fixture(2).session)
   expect(saved.completion).toEqual(fixture(2).completion)
   expect(saved.rewards).toEqual(fixture(2).rewards)
-  await expect(page.getByTestId('bottle-0').locator('.bottle-art')).toHaveAttribute('data-liquid-finish', 'unified')
+  await expect(page.getByTestId('bottle-0').locator('.bottle-art')).toHaveAttribute('data-liquid-finish', 'clean')
 })
 
 test('unified uses one shared light and free surface, with weaker same-color unit hints than color contacts', async ({ page }) => {
   await open(page, 0)
+  await page.goto('/?liquid=unified')
   const bottle = page.getByTestId('bottle-0')
   // Legal witness states: four units [gold, orchid, gold, gold], then two
   // [gold, orchid], then one [gold]. Expected interfaces come from these fixtures.
@@ -135,4 +136,52 @@ test('unified uses one shared light and free surface, with weaker same-color uni
       expect(Math.max(...strength('color'))).toBeLessThan(Math.min(...strength('surface')))
     }
   }
+})
+
+
+test('clean upright units and soft seams remain equally spaced for one to four units and mixed colors', async ({ page }) => {
+  await open(page, 0)
+  const saved = await read(page)
+  const cases = [[1], [1,1], [1,1,1], [1,1,1,1], [1,4,1,4]]
+  let height = 0, previousTop = 0
+  for (const liquid of cases) {
+    await page.evaluate(async liquid => {
+      const path = '/tests/fixtures/liquidPreview.tsx'
+      const { renderLiquidFixture } = await import(path)
+      renderLiquidFixture(liquid)
+    }, liquid)
+    const art = page.locator('[data-liquid-fixture] .bottle-art')
+    await expect(art).toHaveAttribute('data-fill-level', String(liquid.length))
+    // Wait for the color fixture as well when the final case has the same length.
+    await expect(art.locator('.liquid-layer').last()).toHaveAttribute('data-color', String(liquid.at(-1)))
+    // SVG DOM baseVal values use float32; 1e-4 SVG units is far below a screen pixel.
+    const geometry = await art.evaluate((svg: SVGSVGElement) => {
+      const rects = [...svg.querySelectorAll<SVGRectElement>('.liquid-layer > rect')]
+      const seams = [...svg.querySelectorAll<SVGPathElement>('.liquid-boundary')]
+      return { heights: rects.map(r => r.height.baseVal.value - .03),
+        top: rects.at(-1)!.y.baseVal.value,
+        seams: seams.map(p => ({ y: p.getPointAtLength(0).y, type: p.dataset.boundary, width: p.getAttribute('stroke-width'),
+          stops: [...svg.querySelector(p.getAttribute('stroke')!.slice(4, -1))!.children].map(s => [s.getAttribute('stop-color'), s.getAttribute('stop-opacity')]) })) }
+    })
+    if (liquid.length === 1) height = geometry.heights[0]
+    expect(geometry.heights).toHaveLength(liquid.length)
+    for (const h of geometry.heights) expect(h).toBeCloseTo(height, 4)
+    expect(geometry.seams).toHaveLength(liquid.length - 1)
+    for (let i = 0; i < geometry.seams.length; i++) {
+      expect(geometry.seams[i].y - geometry.top).toBeCloseTo((liquid.length - i - 1) * height, 4)
+      expect(geometry.seams[i].type).toBe('seam')
+      expect(geometry.seams[i].width).toBe('1.2')
+      expect(geometry.seams[i].stops).toEqual(geometry.seams[0].stops)
+      expect(geometry.seams[i].stops.every(([color]) => color === '#544d47')).toBe(true)
+    }
+    if (liquid.length > 1 && liquid.every(c => c === 1)) expect(previousTop - geometry.top).toBeCloseTo(height, 4)
+    previousTop = geometry.top
+    expect(await read(page)).toEqual(saved)
+  }
+  await page.goto('/?bottles=sample&liquid=unified')
+  await expect(page.locator('.board .moon-glass-art')).toHaveCount(1)
+  expect(await page.locator('.board .bottle-art').evaluateAll(nodes => nodes.map(n => n.getAttribute('data-kind')))).toEqual([
+    'moon-glass','pear','faceted','round','pear','faceted','round','pear','faceted',
+  ])
+  expect(await read(page)).toEqual(saved)
 })

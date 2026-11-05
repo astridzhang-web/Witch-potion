@@ -1,5 +1,7 @@
 import { GLASS_FINISH, MOON_GLASS } from './moonGlass'
 import { STAR_MOON_GLASS } from './starMoonGlass'
+import { LIQUID_FINISH } from './liquidAppearance'
+import { usesFormalBottle } from './bottlePresentation'
 
 /** Presentation geometry only; the four-unit game state remains in game/rules. */
 export type BottleKind = 'round' | 'pear' | 'faceted'
@@ -9,8 +11,8 @@ export const MOUTH = { x: 50, y: 10, radius: 7 }
 export const CONTACT = { x: 50, y: 134 }
 const kinds: BottleKind[] = ['round', 'pear', 'faceted']
 export const bottleKind = (index: number) => kinds[index % kinds.length]
-// The sample belongs to slot 0, NOT to every round bottle. Shared by all sprites.
-export const bottleAppearance = (index: number): BottleAppearance => index === 0 ? 'moon-glass' : bottleKind(index)
+// Resting and both flying sprites share this same presentation choice.
+export const bottleAppearance = (index: number): BottleAppearance => usesFormalBottle(index) ? 'moon-glass' : bottleKind(index)
 
 // Curves are sampled once. The same cavity polygon drives clipping AND liquid area.
 function curve(points: Point[], end: Point, a: Point, b: Point) {
@@ -72,10 +74,10 @@ function starMoonCavity(): Point[] {
   return [...left, ...left.slice(0, -1).reverse().map(p => ({ x: 1024 - p.x, y: p.y }))]
     .map(p => ({ x: 50 + (p.x - 512) * STAR_MOON_GLASS.scale, y: 10 + (p.y - 143) * STAR_MOON_GLASS.scale }))
 }
-interface Geometry { outline?: string; polygon: Point[]; clip: string; capacityArea: number; mouthRadius: number }
+interface Geometry { outline?: string; polygon: Point[]; clip: string; capacityArea: number; mouthRadius: number; floorY: number; fullY: number }
 const geometry = (polygon: Point[], fullY: number, mouthRadius: number, outline?: string): Geometry => ({
   outline, polygon, clip: `M${polygon.map(p => `${p.x},${p.y}`).join('L')}Z`,
-  capacityArea: area(below(polygon, fullY)), mouthRadius,
+  capacityArea: area(below(polygon, fullY)), mouthRadius, floorY: Math.max(...polygon.map(p => p.y)), fullY,
 })
 export const BOTTLE_GEOMETRY: Record<BottleAppearance, Geometry> = {
   ...Object.fromEntries(kinds.map(kind => [kind, geometry(cavity(kind), kind === 'faceted' ? 72 : 76, MOUTH.radius, paths[kind])])) as Record<BottleKind, Geometry>,
@@ -84,13 +86,24 @@ export const BOTTLE_GEOMETRY: Record<BottleAppearance, Geometry> = {
     : geometry(moonCavity(), 10 + (815 - 52) * MOON_GLASS.scale, 10.3),
 }
 
+/** Clean mode gives equal upright height to each logical unit. Reference areas are
+ * measured at those upright planes, then conserved while tilting (not equal physical
+ * volume per game unit). Both the plane solve and downhill-lip solve use this mapping. */
+export function liquidArea(kind: BottleAppearance, level: number): number {
+  const shape = BOTTLE_GEOMETRY[kind], units = Math.max(0, Math.min(4, level))
+  if (LIQUID_FINISH !== 'clean') return shape.capacityArea * units / 4
+  return area(below(shape.polygon, shape.floorY - (shape.floorY - shape.fullY) * units / 4))
+}
+
 /** Horizontal world-space surfaces conserve 2D area as the glass rotates. */
 export function liquidSurfaces(kind: BottleAppearance, angle: number, levels: readonly number[]): number[] {
-  const shape = BOTTLE_GEOMETRY[kind], polygon = shape.polygon.map(p => rotate(p, angle))
+  const shape = BOTTLE_GEOMETRY[kind]
+  if (LIQUID_FINISH === 'clean' && angle === 0) return levels.map(level => shape.floorY - (shape.floorY - shape.fullY) * Math.max(0, Math.min(4, level)) / 4)
+  const polygon = shape.polygon.map(p => rotate(p, angle))
   const minY = Math.min(...polygon.map(p => p.y)), maxY = Math.max(...polygon.map(p => p.y))
   return levels.map(level => {
     if (level <= 0) return maxY
-    const wanted = shape.capacityArea * Math.min(4, level) / 4
+    const wanted = liquidArea(kind, level)
     let low = minY, high = maxY
     for (let i = 0; i < 22; i++) {
       const mid = (low + high) / 2
@@ -102,7 +115,7 @@ export function liquidSurfaces(kind: BottleAppearance, angle: number, levels: re
 }
 /** Keep the free surface at the downhill lip while pouring the TOP color. */
 export function pouringAngle(kind: BottleAppearance, level: number): number {
-  const shape = BOTTLE_GEOMETRY[kind], wanted = shape.capacityArea * Math.max(.005, level) / 4
+  const shape = BOTTLE_GEOMETRY[kind], wanted = liquidArea(kind, Math.max(.005, level))
   let low = 65, high = 175
   for (let i = 0; i < 18; i++) {
     const mid = (low + high) / 2, lip = rotate({ x: MOUTH.x + shape.mouthRadius, y: MOUTH.y }, mid)

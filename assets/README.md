@@ -108,3 +108,14 @@ lossless web texture is `public/assets/bottles/moon-glass-source.webp`. Only ind
 this texture, behind reversible SVG alpha/detail treatments and above dynamic liquid.
 See [source analysis and geometry notes](moon-glass.md) and the
 [real-browser acceptance gallery](../docs/screenshots/milestone3b-preview.md).
+
+## Milestone 3F: shared formal bottle art
+
+All nine slots now reuse the existing `public/assets/bottles/star-moon-glass.webp` at the
+accepted 1.13 scale with its measured cavity, mouth and foot. No image assets were changed
+or generated. The original reference, old moon-glass WebPs and star–moon source/export remain;
+see [star-moon-glass.md](star-moon-glass.md) for provenance and coordinates.
+`bottlePresentation.ts` shares selection between resting and animated art; the internal
+`?bottles=sample` option restores the historical index0-only configuration. Existing
+`?glass=original` / `?glass=candle` remain available. These choices do not enter saves.
+[Current real-browser gallery](../docs/screenshots/milestone3f-preview.md).

@@ -13,21 +13,21 @@ async function open(page: Page, step: number, frozen = false) {
   await page.evaluate(async () => { const image = new Image(); image.src = '/assets/bottles/star-moon-glass.webp'; await image.decode() })
 }
 
-test('only index zero has the supplied texture; native aspect, mouth and shelf contact align at phone sizes', async ({ page }) => {
+test('all nine share the supplied texture, scale, native aspect, mouth and shelf contacts', async ({ page }) => {
   await open(page, 5)
   await expect(page.getByTestId('bottle-0')).toHaveAttribute('data-liquid', '')
-  await expect(page.locator('.board .moon-glass-art')).toHaveCount(1)
-  await expect(page.locator('.board .moon-glass-art')).toHaveAttribute('data-finish', 'star-moon')
-  await expect(page.locator('.board .moon-glass-art image')).toHaveCount(1)
-  await expect(page.locator('.board .moon-glass-art')).not.toHaveAttribute('filter')
-  await expect(page.locator('.board .moon-glass-art')).not.toHaveAttribute('mask')
-  for (let index = 1; index < 9; index++) {
-    await expect(page.getByTestId(`bottle-${index}`).locator('image')).toHaveCount(0)
-    await expect(page.getByTestId(`bottle-${index}`).locator('.bottle-art')).toHaveAttribute('data-kind', ['round', 'pear', 'faceted'][index % 3])
+  await expect(page.locator('.board .moon-glass-art')).toHaveCount(9)
+  await expect(page.getByTestId('bottle-0').locator('.moon-glass-art')).toHaveAttribute('data-finish', 'star-moon')
+  await expect(page.locator('.board .moon-glass-art image')).toHaveCount(9)
+  await expect(page.getByTestId('bottle-0').locator('.moon-glass-art')).not.toHaveAttribute('filter')
+  await expect(page.getByTestId('bottle-0').locator('.moon-glass-art')).not.toHaveAttribute('mask')
+  for (let index = 0; index < 9; index++) {
+    await expect(page.getByTestId(`bottle-${index}`).locator('image')).toHaveCount(1)
+    await expect(page.getByTestId(`bottle-${index}`).locator('.bottle-art')).toHaveAttribute('data-kind', 'moon-glass')
   }
   for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }, { width: 320, height: 568 }]) {
     await page.setViewportSize(viewport)
-    const result = await page.locator('.moon-glass-texture').evaluate((el: SVGImageElement) => {
+    const result = await page.getByTestId('bottle-0').locator('.moon-glass-texture').evaluate((el: SVGImageElement) => {
       const m = el.getScreenCTM()!, s = el.ownerSVGElement!.getScreenCTM()!
       const point = (x: number, y: number, matrix: DOMMatrix) => new DOMPoint(x, y).matrixTransform(matrix)
       const rim = point(512, 143, m), expectedRim = point(50, 10, s)
@@ -46,8 +46,8 @@ test('only index zero has the supplied texture; native aspect, mouth and shelf c
       })
       return { scales, hits }
     })
-    // Requested 13% growth, independently compared against all unchanged prototypes.
-    expect(sizing.scales[0] / sizing.scales[1]).toBeCloseTo(1.13, 3)
+    // The same accepted formal size is shared by every slot.
+    expect(sizing.scales[0] / sizing.scales[1]).toBeCloseTo(1, 5)
     for (const scale of sizing.scales.slice(1)) expect(scale).toBeCloseTo(sizing.scales[1], 5)
     expect(sizing.hits).toEqual(['bottle-0', 'bottle-0'])
     expect(result.ratio).toBeCloseTo(2 / 3, 8)

@@ -31,7 +31,7 @@ async function begin(page: Page, step: number) {
   return { from, to }
 }
 
-for (const [name, step] of [['upper to lower', 0], ['lower to upper', 1], ['faceted source to lower shelf', 2], ['adjacent same row, tilt left', 10], ['adjacent same row, tilt right', 12]] as const) {
+for (const [name, step] of [['upper to lower', 0], ['lower to upper', 1], ['upper shelf source to lower shelf', 2], ['adjacent same row, tilt left', 10], ['adjacent same row, tilt right', 12]] as const) {
   test(`floating pour: ${name}`, async ({ page }) => {
     await open(page, step)
     const source = page.getByTestId(`bottle-${preset.solution[step][0]}`).locator('svg')
@@ -67,9 +67,8 @@ for (const [name, step] of [['upper to lower', 0], ['lower to upper', 1], ['face
     })
     expect(geometry.gap).toBeLessThan(.2)
     for (const slope of geometry.slopes) expect(slope).toBeLessThan(.1)
-    const kinds = ['round', 'pear', 'faceted']
-    await expect(page.locator('.flying-bottle .bottle-art')).toHaveAttribute('data-kind', from === 0 ? 'moon-glass' : kinds[from % 3])
-    await expect(page.locator('.receiving-sprite .bottle-art')).toHaveAttribute('data-kind', to === 0 ? 'moon-glass' : kinds[to % 3])
+    await expect(page.locator('.flying-bottle .bottle-art')).toHaveAttribute('data-kind', 'moon-glass')
+    await expect(page.locator('.receiving-sprite .bottle-art')).toHaveAttribute('data-kind', 'moon-glass')
     const receivingY = await page.locator('.receiving-sprite .liquid-surface').evaluate((el: SVGPathElement) => el.getPointAtLength(0).matrixTransform(el.getScreenCTM()!).y)
     await page.clock.runFor(80)
     expect(await page.locator('.receiving-sprite .liquid-surface').evaluate((el: SVGPathElement) => el.getPointAtLength(0).matrixTransform(el.getScreenCTM()!).y)).toBeLessThan(receivingY)

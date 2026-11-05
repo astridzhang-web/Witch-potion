@@ -214,3 +214,22 @@ Use readonly component fixtures for 1–4 same-color units, 2–4 colors and AAB
 never turn them into invalid game saves. Preserve all art, geometry/scale, HUD and controls,
 rewards/saves and reduced motion. Deliver matched real phone images and actual pours,
 tests/build, documents and commit/push work; stop for visual acceptance.
+
+## Authorized Milestone 3F: matching formal bottles and equal-height clean liquid
+
+Use the existing warm star–bead–crescent–bead–star glass art at all nine slots, sharing the
+accepted 1.13 scale, cavity, mouth and sprite selection without new art or cabinet changes.
+Replace default equal-area units with exactly equal upright floor-to-full-line heights;
+map each cumulative level to its upright reference area and use that same area for tilted
+horizontal planes and lip-contact calculation. Keep fractional transfer smooth, actual-mouth
+streams, 640ms commit and 920ms duration. All internal boundaries use one thin, low-contrast,
+soft gray seam, irrespective of neighboring colors. Simplify material to solid, slightly
+richer seven-color fills, a restrained overall reflection and one free-surface highlight;
+no per-layer shadow stacks, blue-gray bottom shade, special liquid effects or extra systems.
+Default / `?liquid=clean` is the new experiment; retain legacy/polished/unified renderers,
+palettes and their previous equal-area mapping. Internal `?bottles=sample` restores the old
+one-formal/eight-prototype presentation; old glass choices remain. No UI switch or save fields.
+Preserve game rules/history/rewards, HUD anchors/1px correction, controls/dust, help, parchment,
+fonts, artwork and reduced motion. Deliver actual mobile/desktop pages, readonly volume/pattern
+fixtures, equal-height measurements/guide, matched 3E comparison and real MP4/GIF pours.
+Run all tests/build/diff checks, update progress, commit/push work and stop for visual acceptance.
