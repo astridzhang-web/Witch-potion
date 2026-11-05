@@ -1,7 +1,7 @@
 // Internal page-level art comparison; never written to player saves.
 const requested = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('liquid')
-export const LIQUID_FINISH = requested === 'legacy' || requested === 'polished' || requested === 'unified' || requested === 'clean' || requested === 'gem-luster' || requested === 'soft-translucent' ? requested : 'vivid-translucent'
-export const EQUAL_HEIGHT_LIQUID = LIQUID_FINISH === 'clean' || LIQUID_FINISH === 'soft-translucent' || LIQUID_FINISH === 'gem-luster' || LIQUID_FINISH === 'vivid-translucent'
+export const LIQUID_FINISH = requested === 'legacy' || requested === 'polished' || requested === 'unified' || requested === 'clean' || requested === 'gem-luster' || requested === 'soft-translucent' || requested === 'vivid-translucent' ? requested : 'luminous-liquid'
+export const EQUAL_HEIGHT_LIQUID = LIQUID_FINISH === 'clean' || LIQUID_FINISH === 'soft-translucent' || LIQUID_FINISH === 'gem-luster' || LIQUID_FINISH === 'vivid-translucent' || LIQUID_FINISH === 'luminous-liquid'
 
 
 export const LEGACY_COLORS = [
@@ -42,4 +42,15 @@ export const VIVID_COLORS = [
   { name: '珊瑚橙', light: '#ffd0a0', main: '#ffb361', dark: '#dc8046' },
   { name: '兰花粉', light: '#ffc2fb', main: '#f18af8', dark: '#bf5abb' },
 ] as const
-export const COLORS = LIQUID_FINISH === 'legacy' ? LEGACY_COLORS : LIQUID_FINISH === 'vivid-translucent' ? VIVID_COLORS : EQUAL_HEIGHT_LIQUID ? CLEAN_COLORS : POLISHED_COLORS
+// Color-bearing light and depth tones: brightness comes from the liquid, without
+// needing the high-energy inputs used to compensate for the old background leak.
+export const LUMINOUS_COLORS = [
+  { name: '玫瑰红', light: '#f592b6', main: '#d74e83', dark: '#a93664' },
+  { name: '紫水晶', light: '#c78cf5', main: '#9d57dc', dark: '#733bad' },
+  { name: '薄荷绿', light: '#8adfc3', main: '#3fb998', dark: '#27876f' },
+  { name: '天空蓝', light: '#83d3f6', main: '#359fdb', dark: '#236ca5' },
+  { name: '蜂蜜金', light: '#fadb82', main: '#e1a93c', dark: '#b47e27' },
+  { name: '珊瑚橙', light: '#ffc68f', main: '#ed965e', dark: '#bd683e' },
+  { name: '兰花粉', light: '#efa7e7', main: '#d074cf', dark: '#a34eaa' },
+] as const
+export const COLORS = LIQUID_FINISH === 'legacy' ? LEGACY_COLORS : LIQUID_FINISH === 'luminous-liquid' ? LUMINOUS_COLORS : LIQUID_FINISH === 'vivid-translucent' ? VIVID_COLORS : EQUAL_HEIGHT_LIQUID ? CLEAN_COLORS : POLISHED_COLORS

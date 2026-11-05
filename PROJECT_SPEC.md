@@ -281,3 +281,17 @@ preserve bottle art/glass light/scale/placement, cabinet, HUD/help/buttons/settl
 rules/puzzles/rewards/saves and640/920ms pour logic. No new particles/effects, bottles, UI,
 gameplay or deployment. Deliver matched3H A/B/new phone pages and typical color/pattern
 details plus actual MP4/GIF; run all tests/build/diff checks, document and stop for review.
+
+## Authorized liquid direction correction after 3I: internal colored light
+
+Supersede the background-transmission goal for the new default `?liquid=luminous-liquid`.
+Keep the old vivid/A/B/clean/historical modes intact. Give liquid high, slightly translucent
+coverage so cabinet grain does not show through; express luminous clarity with hue-bearing
+light and depth tones driven by shared, fixed cavity-space fields. No per-layer lighting
+resets, milky/white glare, hard facets, glow or special potion particles. Paint continuous
+color coverage at internal planes to prevent antialiased rectangles leaking background.
+Use a finer feathered gray cue only between different colors; continuous same-color units
+have no visible divider. Preserve exact equal-height capacity/planes, one restrained free
+surface, gravity/mouth/640–920ms logic, all glass/art/scale/layout/UI/rewards/saves and old
+preview parameters. Deliver matched actual phone pages, requested liquid details and real
+pour recording; run all checks, update progress/docs, commit/push work and stop for review.
