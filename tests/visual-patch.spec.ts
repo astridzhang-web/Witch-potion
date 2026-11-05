@@ -38,6 +38,10 @@ test('HUD groups stay inside the artwork shoulder spaces with 1–3 digits; help
         expect((box.y - stage.y) / stage.height * 1870).toBeGreaterThan(80)
         expect((box.y + box.height - stage.y) / stage.height * 1870).toBeLessThan(165)
       }
+      expect(left.y).toBeCloseTo(right.y, 2)
+      expect(left.y + left.height / 2).toBeCloseTo(right.y + right.height / 2, 2)
+      // Chromium quantizes CSS positions to 1/64px; allow one subpixel, not a visible offset.
+      expect(Math.abs((left.x + left.width / 2 + right.x + right.width / 2) / 2 - (stage.x + stage.width / 2))).toBeLessThanOrEqual(1 / 64)
       const help = (await page.locator('.help-button').boundingBox())!
       expect(help.x >= right.x + right.width || help.y + help.height <= right.y).toBe(true)
       expect(viewport.width - help.x - help.width).toBeCloseTo(4, 0)

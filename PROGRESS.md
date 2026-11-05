@@ -2,9 +2,19 @@
 
 ## Current milestone
 
-**Milestone 3B index-0 art/liquid sample — COMPLETE. Stop for visual acceptance.**
+**Milestone 3B Patch — COMPLETE. Stop for visual acceptance.**
 
 The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Final bottle art and full animation refinement remain deferred. No public deployment has been performed or authorized.
+
+## Milestone 3B Patch / 融合、尺寸与 HUD 校准 (2026-11-05)
+
+- Continued from `6c89df17d551a510abcffa0036712ed6b27fb76d` on `work`; kept the unrelated untracked `docs/PROJECT_REPORT.md` unchanged and excluded. Only `MoonGlass.tsx`, `cabinetLayout.ts` and `styles.css` change runtime behavior.
+- Enlarged **only index 0 by 13%**, uniformly around the existing shelf contact. Its hit box grows upward but retains its width, preventing adjacent hit-box overlap. Glass and liquid share the enlarged SVG viewport; existing animation measurement automatically carries the actual scale into source/receiver sprites. No changes to the cavity, palette, lip calculation or **920ms** timeline.
+- Reduced cold-white glass opacity, applied a restrained candle-color matrix to the glass pass and faded the brightest bottom ring. Original gold/moon detail remains separate; liquid is not tinted. Original PNG and WebP hashes are unchanged. [Asset/rendering notes](assets/moon-glass.md).
+- Mirrored whole HUD groups at x20% / 80%, both y6.738%, retaining shoulder clearance. At 390×844 their actual center heights are both **56.875px** (x81.125 / 308.859375; only subpixel rounding from exact symmetry). Font, wording, help and all other UI unchanged.
+- Actual production browser evidence includes matched before/after full pages; empty, 1-unit pale gold/purple, 2-color, and 4-layer states; HUD and glass closeups; 360×640 framing; source/receiver pours and return frames. **140 real screencast frames**, 3.86s capture span, encoded to **4.13s MP4/GIF** including final hold. No browser page errors. [Visual acceptance gallery](docs/screenshots/milestone3b-patch-preview.md).
+- Validation: **85 unit tests passed, all 96 Playwright cases passed (2.4 min), production build and `git diff --check` passed**. Updated row alignment to validate three shelf-contact heights rather than equal top edges after the requested growth; HUD mirror assertion permits Chromium's 1/64px layout quantization. An occasional selected-lift test sampled before the CSS compositor transition started; it now polls for the same upward displacement instead of reading once after advancing only JS timers. Original rules/reward/save checks remain intact.
+- Limits: original illustrated reflections still rotate with the bottle, pale liquid edges remain lightly brightened, and physical Safari/iOS is unverified. No new art, other bottle replacement, deployment or next-stage development. Stop for visual acceptance after delivery.
 
 ## Milestone 3B / 第一只月影玻璃美术样板 (2026-10-25)
 

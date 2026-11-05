@@ -33,6 +33,19 @@ test('only index zero has the supplied texture; native aspect, mouth and shelf c
         footError: Math.hypot(foot.x - expectedFoot.x, foot.y - expectedFoot.y),
         ratio: el.width.baseVal.value / el.height.baseVal.value }
     })
+    const sizing = await page.locator('.board .bottle-art').evaluateAll(nodes => {
+      const scales = nodes.map(el => (el as SVGSVGElement).getScreenCTM()!.a)
+      const svg = nodes[0] as SVGSVGElement
+      const hits = [[50, 14], [50, 100]].map(([x, y]) => {
+        const p = new DOMPoint(x, y).matrixTransform(svg.getScreenCTM()!)
+        return document.elementFromPoint(p.x, p.y)?.closest('button')?.getAttribute('data-testid')
+      })
+      return { scales, hits }
+    })
+    // Requested 13% growth, independently compared against all unchanged prototypes.
+    expect(sizing.scales[0] / sizing.scales[1]).toBeCloseTo(1.13, 3)
+    for (const scale of sizing.scales.slice(1)) expect(scale).toBeCloseTo(sizing.scales[1], 5)
+    expect(sizing.hits).toEqual(['bottle-0', 'bottle-0'])
     expect(result.ratio).toBe(.75)
     expect(result.scaleX).toBeCloseTo(result.scaleY, 6)
     expect(result.mouthError).toBeLessThan(.1)

@@ -15,7 +15,7 @@
   `image.save(output, lossless=True, method=6, exact=True)` with a `.webp` destination.
   Pillow is an offline asset tool, not a runtime dependency.
 
-## Alpha inspection and non-destructive treatment
+## Original 3B alpha inspection and non-destructive treatment
 
 The original contains **976,336 alpha-zero**, **596,132 partially transparent** and **60 fully opaque** pixels.
 Its nonzero-alpha bounding box is `(66,2)–(1063,1448)`, including detached low-alpha residue;
@@ -86,3 +86,30 @@ empty slots 7/8 and HUD pixels are identical. No other bottle geometry/art was c
 [Real browser gallery and recording](../docs/screenshots/milestone3b-preview.md).
 Physical iOS/Safari and low-end device filter performance remain unverified. Stop after
 this single sample; do not distribute the formal art to additional slots automatically.
+
+## 3B Patch · 2026-11-05
+
+The original PNG and lossless WebP remain byte-for-byte unchanged. The following overrides
+apply to the original treatment documented above; its alpha sample figures describe 3B,
+not this patch.
+
+- `MoonGlass.tsx`: outer mask `#ddd → #b8b8b8`, cavity `#707070 → #606060`;
+  neck attenuation remains `#444`. A mild sRGB color matrix shifts the existing cool-white
+  reflection toward candlelight, leaving the liquid and separate original gold detail untinted.
+- A shared luminance gradient over SVG y121–134 attenuates both texture passes at the foot
+  from 100% to 60%, preventing the gold-detail pass from restoring the brightest bottom ring.
+  It does not affect liquid capacity or color. There is no new glow, opaque tint or painted art.
+- `cabinetLayout.ts` enlarges only index 0 by **1.13×**, about the original shelf foot y134.
+  Its hit box keeps source width170 and grows height255→288.15. The SVG viewport is centered
+  at width113% (192.1 source units), preserving uniform scale and the natural image ratio.
+  Visible glass remains inside the original-width target; enlarged empty SVG margins have
+  pointer events disabled so adjacent controls cannot be intercepted. Other targets stay unchanged.
+- `styles.css` applies the scoped SVG viewport variables. The existing animation measures its
+  actual screen transform, so source/receiver overlays and the lip/stream inherit the new scale.
+  No changes to geometry, liquid math, selection lift, timeline or atomic game-state commits.
+- HUD whole-group anchors are mirrored at x20% / 80%, both at y6.738%. The existing shoulder
+  clearance remains; fonts, text, help button and all other controls are unchanged.
+
+[Patch screenshots and source/receiver recording](../docs/screenshots/milestone3b-patch-preview.md).
+Reflections remain illustrated rather than physically simulated; the pale liquid edge may still
+brighten slightly. Physical Safari/iOS and low-end device performance remain unverified.

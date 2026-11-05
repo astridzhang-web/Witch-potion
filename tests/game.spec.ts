@@ -115,11 +115,14 @@ test('narrow and wide layouts keep nine usable targets in three columns', async 
     await page.setViewportSize(viewport)
     const layout = await page.locator('[data-liquid]').evaluateAll((nodes) => nodes.map((node) => {
       const r = node.getBoundingClientRect()
-      return { x: Math.round(r.x), y: Math.round(r.y), width: r.width, height: r.height }
+      const svg = node.querySelector('svg.bottle-art') as SVGSVGElement
+      const foot = new DOMPoint(50, 134).matrixTransform(svg.getScreenCTM()!)
+      return { x: Math.round(r.x), footY: Math.round(foot.y), width: r.width, height: r.height }
     }))
     expect(layout).toHaveLength(9)
     expect(new Set(layout.map((b) => b.x)).size).toBe(3)
-    expect(new Set(layout.map((b) => b.y)).size).toBe(3)
+    // Different-height bottles share three shelf contacts, not three top edges.
+    expect(new Set(layout.map((b) => b.footY)).size).toBe(3)
     expect(layout.every((b) => b.width >= 44 && b.height >= 44)).toBe(true)
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
     if (viewport.width === 390) {

@@ -23,12 +23,23 @@ export function imagePosition(box: Box): CSSProperties {
   }
 }
 export function bottlePosition(index: number): CSSProperties {
-  // The glass's contact point is y=134 in the existing 100×150 SVG viewBox.
-  return imagePosition({
-    x: BOTTLE_X[index % 3] - BOTTLE_SIZE.width / 2,
-    y: SHELF_Y[Math.floor(index / 3)] - BOTTLE_SIZE.height * 134 / 150,
-    ...BOTTLE_SIZE,
-  })
+  // Keep the foot at SVG y=134 on the shelf. Only the formal sample grows.
+  // Its taller hit box retains the original width; the glass fits inside that width.
+  // Widen the SVG viewport equally, so measured animation sprites inherit uniform scale.
+  const scale = index === 0 ? 1.13 : 1
+  const height = BOTTLE_SIZE.height * scale
+  return {
+    ...imagePosition({
+      x: BOTTLE_X[index % 3] - BOTTLE_SIZE.width / 2,
+      y: SHELF_Y[Math.floor(index / 3)] - height * 134 / 150,
+      width: BOTTLE_SIZE.width, height,
+    }),
+    ...(index === 0 ? {
+      '--bottle-art-width': `${scale * 100}%`,
+      '--bottle-art-offset': `${(1 - scale) * 50}%`,
+      '--bottle-art-events': 'none',
+    } : {}),
+  } as CSSProperties
 }
 
 export function panelPosition(name: keyof typeof PANELS): CSSProperties {

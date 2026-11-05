@@ -169,7 +169,8 @@ test('contact shadow stays on the shelf, fades on lift, and never travels with t
   const originalOpacity = Number(await shadow.evaluate(node => getComputedStyle(node).opacity))
   await source.dispatchEvent('click')
   await page.clock.runFor(200)
-  expect((await source.locator('svg').boundingBox())!.y).toBeLessThan(originalArt.y)
+  // CSS transitions use the compositor clock, independently of page.clock's JS timers.
+  await expect.poll(async () => (await source.locator('svg').boundingBox())!.y).toBeLessThan(originalArt.y)
   expect(await shadow.boundingBox()).toEqual(originalShadow)
   expect(Number(await shadow.evaluate(node => getComputedStyle(node).opacity))).toBeLessThan(originalOpacity)
   await source.dispatchEvent('click')
