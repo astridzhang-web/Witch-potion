@@ -1,6 +1,6 @@
 # 月夜魔法药剂室 · Moonlit Alchemy
 
-A quiet, mobile-first potion sorting game. Milestone 3F: nine matching warm star–moon glass bottles with independent, equal-height SVG liquid in a tall wooden cabinet. Includes the solid wooden flip, champagne stardust, local Chinese typography, parchment completion record and basic crystal rewards, built with React, TypeScript and Vite. All gameplay runs locally in the browser.
+A quiet, mobile-first potion sorting game. Milestone 3G: nine matching warm star–moon bottles with softer glass, restrained environment reflections and independent, equal-height SVG liquid in a tall wooden cabinet. Includes the solid wooden flip, champagne stardust, local Chinese typography, parchment completion record and basic crystal rewards, built with React, TypeScript and Vite. All gameplay runs locally in the browser.
 
 ## Cloud development
 
@@ -49,13 +49,19 @@ Four fixed presets in `src/game/presets.json` each include a complete legal solu
 - `assets/source/shelf-tall.png`, `public/assets/shelf-tall.webp`: active tall cabinet original and optimized local scene (the earlier pair is preserved); see [asset notes](assets/README.md).
 - `src/game/game.test.ts`, `tests/game.spec.ts`: unit and real browser checks.
 
-Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 3F is complete; stop for visual acceptance before further work. Distinct formal bottle designs, special liquids, animation refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
+Read [PROJECT_SPEC.md](PROJECT_SPEC.md) and [PROGRESS.md](PROGRESS.md) before resuming. Milestone 3G is complete; stop for visual acceptance before further work. Distinct formal bottle designs, special liquids, animation refinements and installable/offline PWA behavior remain deferred. No service worker or installability is claimed in this version.
 
 [Current browser gallery, height measurements and real pour MP4/GIF](docs/screenshots/milestone3f-preview.md).
 The default / `?liquid=clean` uses equal upright unit heights and soft gray seams. Internal
 `?liquid=unified`, `?liquid=polished` and `?liquid=legacy` retain earlier material/area models;
 add `&bottles=sample` for the former one-formal/eight-prototype comparison. These URL choices
-are not saved and have no player-facing switch. Current checks: **86 unit /106 browser tests**.
+are not saved and have no player-facing switch. Current checks: **88 unit /110 browser tests**.
+
+[3G glass comparison, different positions and real MP4/GIF](docs/screenshots/milestone3g-preview.md).
+Default / `?lighting=ambient` uses the reversible soft-glass texture plus cabinet-space
+environment reflections; `?lighting=soft` isolates material correction and `?lighting=flat`
+restores exact3F. These independent URL parameters are never persisted. Original assets remain;
+see [reproducible processing and lighting coordinates](assets/glass-lighting.md).
 
 ## Small floating-pour prototype
 

@@ -1,9 +1,10 @@
 import StarMoonGlass from './StarMoonGlass'
 import { GLASS_FINISH, MOON_GLASS, MOON_TRANSFORM } from '../scene/moonGlass'
+import type { GlassPose } from '../scene/glassLighting'
 
 /** The original two-pass treatment remains selectable with ?glass=original. */
-export default function MoonGlass({ id, cavity }: { id: string; cavity: string }) {
-  if (GLASS_FINISH === 'star-moon') return <StarMoonGlass />
+export default function MoonGlass({ id, cavity, pose }: { id: string; cavity: string; pose: GlassPose }) {
+  if (GLASS_FINISH === 'star-moon') return <StarMoonGlass id={id} pose={pose} />
   const candle = GLASS_FINISH === 'candle'
   return <>
     <defs>

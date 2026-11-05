@@ -7,6 +7,8 @@ import PolishedLiquid from './PolishedLiquid'
 import UnifiedLiquid from './UnifiedLiquid'
 import CleanLiquid from './CleanLiquid'
 import { COLORS, LIQUID_FINISH } from '../scene/liquidAppearance'
+import { restGlassPose, type GlassPose } from '../scene/glassLighting'
+import { CABINET } from '../scene/cabinetLayout'
 export { COLORS } from '../scene/liquidAppearance'
 
 interface Props {
@@ -22,6 +24,13 @@ interface Props {
 }
 export default function Bottle({ liquid, index, selected, won, busy, animating, receiving, style, onClick }: Props) {
   const complete = isComplete(liquid)
+  const glassPose = restGlassPose(index)
+  // The existing 5px selected lift is screen-space, not cabinet-space. It needs
+  // only an event-time adjustment; resting glass has no animation loop/state.
+  if (selected && typeof document !== 'undefined') {
+    const scene = document.querySelector('.cabinet-scene')?.getBoundingClientRect()
+    if (scene?.width) glassPose.y -= 5 * CABINET.width / scene.width
+  }
   const contents = liquid.length ? `从上到下：${[...liquid].reverse().map((c) => COLORS[c].name).join('、')}` : '空瓶'
   return <button
     className={`bottle ${selected ? 'is-selected' : ''} ${complete ? 'is-complete' : ''} ${animating ? 'is-animating' : ''} ${receiving ? 'is-receiving' : ''}`}
@@ -36,14 +45,14 @@ export default function Bottle({ liquid, index, selected, won, busy, animating, 
   >
     <span className="bottle-halo" />
     <span className="bottle-contact-shadow" aria-hidden="true" />
-    <BottleArt liquid={liquid} kind={bottleAppearance(index)} />
+    <BottleArt liquid={liquid} kind={bottleAppearance(index)} glassPose={glassPose} />
     <span className="bottle-number">{complete ? <span aria-hidden="true">✓</span> : String(index + 1).padStart(2, '0')}{liquid.length === 0 && <span className="empty-label">空瓶</span>}</span>
   </button>
 }
 
 /** Glass and liquid stay independent; only the liquid counter-rotates against gravity. */
-export function BottleArt({ liquid, kind = 'round', fillLevel = liquid.length, angle = 0, pouring = false, receivingColor }: {
-  liquid: BottleState; kind?: BottleAppearance; fillLevel?: number; angle?: number; pouring?: boolean; receivingColor?: Color
+export function BottleArt({ liquid, kind = 'round', fillLevel = liquid.length, angle = 0, pouring = false, receivingColor, glassPose = restGlassPose(0) }: {
+  liquid: BottleState; kind?: BottleAppearance; fillLevel?: number; angle?: number; pouring?: boolean; receivingColor?: Color; glassPose?: GlassPose
 }) {
   const id = useId().replace(/:/g, '')
   const shape = BOTTLE_GEOMETRY[kind]
@@ -81,7 +90,7 @@ export function BottleArt({ liquid, kind = 'round', fillLevel = liquid.length, a
         <ellipse cx="50" cy={surfaces.at(-1)} rx="12" ry="1.3" fill="none" stroke={COLORS[receivingColor].light} strokeWidth=".9" opacity=".65" />
       </g>}
     </g>
-    {kind === 'moon-glass' ? <MoonGlass id={id} cavity={shape.clip} /> : <>
+    {kind === 'moon-glass' ? <MoonGlass id={id} cavity={shape.clip} pose={glassPose} /> : <>
     <path d={shape.outline} fill="none" stroke="#c8d8df" strokeOpacity=".6" strokeWidth="1" />
     <path d="M45 15V44M55 15V43" fill="none" stroke="#eef4ee" strokeOpacity=".38" strokeWidth="1.1" />
     {kind === 'round' && <path d="M29 77Q18 94 24 111M77 88Q82 107 71 119" fill="none" stroke="#edf1e8" strokeOpacity=".24" strokeWidth="1.8" strokeLinecap="round" />}

@@ -119,3 +119,14 @@ see [star-moon-glass.md](star-moon-glass.md) for provenance and coordinates.
 `?bottles=sample` option restores the historical index0-only configuration. Existing
 `?glass=original` / `?glass=candle` remain available. These choices do not enter saves.
 [Current real-browser gallery](../docs/screenshots/milestone3f-preview.md).
+
+## Milestone 3G: soft glass and world-space response
+
+The 3F WebP and all reference art remain unchanged. Two separately named local textures,
+`star-moon-glass-soft.webp` (521,026B) and `star-moon-glass-response.webp` (155,866B),
+are reproducibly prepared by `scripts/prepare-soft-star-glass.py`. The first selectively
+reduces neutral white reflections; the second masks environment light to existing glass
+reflection pixels, excluding the protected gold ornaments and transparent center.
+No new shape, blurred image, opaque belly or regenerated art.
+See [analysis, hashes, light positions and transform model](glass-lighting.md) and
+[true browser flat/soft/ambient comparisons](../docs/screenshots/milestone3g-preview.md).

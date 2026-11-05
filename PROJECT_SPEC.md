@@ -233,3 +233,20 @@ Preserve game rules/history/rewards, HUD anchors/1px correction, controls/dust, 
 fonts, artwork and reduced motion. Deliver actual mobile/desktop pages, readonly volume/pattern
 fixtures, equal-height measurements/guide, matched 3E comparison and real MP4/GIF pours.
 Run all tests/build/diff checks, update progress, commit/push work and stop for visual acceptance.
+
+## Authorized Milestone 3G: softer glass and restrained world-space environment light
+
+Retain all 3F art and sources; non-destructively prepare a separately named glass variant
+that reduces neutral silver-white rim/neck/belly/foot reflections while protecting the
+star–bead–crescent–bead–star ornaments and clear center. Provide a reproducible offline
+script. Only after this material correction, add a lightweight cabinet-coordinate light
+field based on visible candles/lamps and weak window moonlight. Apply it through a glass-only
+response mask, using current source/receiver transforms and inverse rotation to keep lights
+fixed in the cabinet. No extra frame state loop, broad liquid tint or expensive filters.
+Default / `?lighting=ambient` adds environment light; retain `flat` for exact3F and `soft`
+for material-only comparison, independent of existing glass/liquid/bottles parameters and
+never saved. Preserve all3F palette/material/seams/geometry/scale/placement, HUD/controls,
+rules/rewards/saves and 640/920ms lifecycle. Deliver matched real390×844/360×640 views,
+empty/filled/position comparisons and actual MP4/GIF; explain if material correction has
+more visual impact than ambient light. Run tests/build/diff checks, document, commit/push
+work and stop for visual acceptance. No new bottle art, liquids, UI, gameplay or deployment.

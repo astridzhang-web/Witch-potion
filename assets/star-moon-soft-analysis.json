@@ -1,0 +1,82 @@
+{
+  "source_sha256": "9cb5396789d4d8b512d9ca25a19312a8411f129a0f7de248401306b0ab643134",
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "ornament_rgba_identical": true,
+  "alpha_never_increased": true,
+  "response_inside_source": true,
+  "regions": {
+    "mouth": {
+      "bounds": [
+        350,
+        112,
+        675,
+        185
+      ],
+      "before_energy": 105.07830001747143,
+      "soft_energy": 75.81198438668568,
+      "before_alpha": 146.16071654373025,
+      "soft_alpha": 122.26537407797682
+    },
+    "neck": {
+      "bounds": [
+        400,
+        205,
+        625,
+        650
+      ],
+      "before_energy": 59.06218299269442,
+      "soft_energy": 39.011898350943675,
+      "before_alpha": 74.19259925093633,
+      "soft_alpha": 58.32318601747815
+    },
+    "belly_center": {
+      "bounds": [
+        440,
+        1000,
+        580,
+        1190
+      ],
+      "before_energy": 0.0,
+      "soft_energy": 0.0,
+      "before_alpha": 0.0,
+      "soft_alpha": 0.0
+    },
+    "belly_edge": {
+      "bounds": [
+        150,
+        920,
+        305,
+        1230
+      ],
+      "before_energy": 46.00559946364693,
+      "soft_energy": 27.44354224563465,
+      "before_alpha": 53.858959417273674,
+      "soft_alpha": 39.40634755463059
+    },
+    "foot": {
+      "bounds": [
+        280,
+        1345,
+        740,
+        1447
+      ],
+      "before_energy": 110.69368534224296,
+      "soft_energy": 67.69676736452534,
+      "before_alpha": 151.84688832054562,
+      "soft_alpha": 114.04303069053708
+    }
+  },
+  "exports": {
+    "soft": {
+      "bytes": 521026,
+      "sha256": "21bc7003c3ea607060e2938d53134d7c11f9999ac1f146941a51a7d145a743f8"
+    },
+    "response": {
+      "bytes": 155866,
+      "sha256": "df1ec5ec8332f912ed1183bcadb65a0d37873bce7ad63c59660527edba08b46f"
+    }
+  }
+}

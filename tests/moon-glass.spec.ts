@@ -18,11 +18,11 @@ test('all nine share the supplied texture, scale, native aspect, mouth and shelf
   await expect(page.getByTestId('bottle-0')).toHaveAttribute('data-liquid', '')
   await expect(page.locator('.board .moon-glass-art')).toHaveCount(9)
   await expect(page.getByTestId('bottle-0').locator('.moon-glass-art')).toHaveAttribute('data-finish', 'star-moon')
-  await expect(page.locator('.board .moon-glass-art image')).toHaveCount(9)
+  await expect(page.locator('.board .moon-glass-texture')).toHaveCount(9)
   await expect(page.getByTestId('bottle-0').locator('.moon-glass-art')).not.toHaveAttribute('filter')
   await expect(page.getByTestId('bottle-0').locator('.moon-glass-art')).not.toHaveAttribute('mask')
   for (let index = 0; index < 9; index++) {
-    await expect(page.getByTestId(`bottle-${index}`).locator('image')).toHaveCount(1)
+    await expect(page.getByTestId(`bottle-${index}`).locator('.moon-glass-texture')).toHaveCount(1)
     await expect(page.getByTestId(`bottle-${index}`).locator('.bottle-art')).toHaveAttribute('data-kind', 'moon-glass')
   }
   for (const viewport of [{ width: 390, height: 844 }, { width: 360, height: 640 }, { width: 320, height: 568 }]) {
@@ -67,7 +67,7 @@ for (const [role, step] of [['source', 0], ['receiver', 1]] as const) test(`form
   await page.getByTestId(`bottle-${to}`).dispatchEvent('click')
   await page.clock.runFor(430)
   const sprite = page.locator(role === 'source' ? '.flying-bottle' : '.receiving-sprite')
-  await expect(sprite.locator('.moon-glass-texture')).toHaveAttribute('href', '/assets/bottles/star-moon-glass.webp')
+  await expect(sprite.locator('.moon-glass-texture')).toHaveAttribute('href', '/assets/bottles/star-moon-glass-soft.webp')
   await expect(sprite.locator('.bottle-art')).toHaveAttribute('data-kind', 'moon-glass')
   const pose = await sprite.locator('.moon-glass-texture').evaluate((el: SVGImageElement) => {
     const art = el.getScreenCTM()!, glass = el.ownerSVGElement!.getScreenCTM()!
@@ -127,6 +127,6 @@ test('internal original/candle comparison preserves saved state, geometry and li
   expect(await state()).toBe(saved)
   await page.goto('/')
   await expect(bottle.locator('.moon-glass-art')).toHaveAttribute('data-finish', 'star-moon')
-  await expect(bottle.locator('.moon-glass-texture')).toHaveAttribute('href', '/assets/bottles/star-moon-glass.webp')
+  await expect(bottle.locator('.moon-glass-texture')).toHaveAttribute('href', '/assets/bottles/star-moon-glass-soft.webp')
   expect(await state()).toBe(saved)
 })

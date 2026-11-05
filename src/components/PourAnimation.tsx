@@ -4,6 +4,7 @@ import { BottleArt, COLORS } from './Bottle'
 import type { Pour } from '../game/rules'
 import type { Session } from '../game/session'
 import { BOTTLE_GEOMETRY, MOUTH, bottleAppearance, liquidSurfaces, pouringAngle, rotate } from '../scene/bottleGeometry'
+import { screenGlassPose } from '../scene/glassLighting'
 
 interface ArtBox { x: number; y: number; width: number; height: number; restY: number }
 export interface Flight {
@@ -37,6 +38,8 @@ export default function PourAnimation({ flight, onCommit, onFinish }: {
 }) {
   const id = useId().replace(/:/g, '')
   const [elapsed, setElapsed] = useState(0)
+  // Snapshot once: existing resize/scroll interruption already ends a stale flight.
+  const [scene] = useState(() => document.querySelector('.cabinet-scene')!.getBoundingClientRect())
   const committed = useRef(false)
   const { pour, source, target } = flight
 
@@ -111,10 +114,10 @@ export default function PourAnimation({ flight, onCommit, onFinish }: {
 
   return createPortal(<div className="pour-overlay" data-testid="pour-animation" data-phase={phase} data-from={pour.from} data-to={pour.to} aria-hidden="true">
     <div className="receiving-sprite" style={{ left: target.x, top: target.y, width: target.width, height: target.height }}>
-      <BottleArt liquid={pour.after[pour.to]} kind={targetKind} fillLevel={targetLevel} receivingColor={targetKind === 'moon-glass' && phase === 'pour' ? pour.color : undefined} />
+      <BottleArt liquid={pour.after[pour.to]} kind={targetKind} fillLevel={targetLevel} receivingColor={targetKind === 'moon-glass' && phase === 'pour' ? pour.color : undefined} glassPose={screenGlassPose(target.x, target.y, target.width, 0, scene)} />
     </div>
     <div className="flying-bottle" style={{ width: source.width, height: source.height, transform: `translate3d(${x}px, ${y}px, 0) rotate(${angle}deg)` }}>
-      <BottleArt liquid={pour.before[pour.from]} kind={sourceKind} fillLevel={sourceLevel} angle={angle} pouring={phase === 'pour'} />
+      <BottleArt liquid={pour.before[pour.from]} kind={sourceKind} fillLevel={sourceLevel} angle={angle} pouring={phase === 'pour'} glassPose={screenGlassPose(x, y, source.width, angle, scene)} />
     </div>
     {phase === 'pour' && <svg className="potion-stream" width="100%" height="100%" data-color={pour.color}>
       <path d={`M${tip.x} ${tip.y} Q${mouth.x} ${tip.y + 3} ${mouth.x} ${mouth.y + 4}`} stroke={color.main} strokeWidth={Math.min(3.2, targetScale * 4)} opacity=".92" fill="none" strokeLinecap="round" />

@@ -2,9 +2,20 @@
 
 ## Current milestone
 
-**Milestone 3F — COMPLETE. Stop for visual acceptance of nine matching formal bottles, equal-height units and soft gray seams.**
+**Milestone 3G — COMPLETE. Stop for visual acceptance of softer glass and restrained dynamic environment light.**
 
-The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Milestones 3A–3F integrate formal glass, dynamic gravity-corrected liquid and nine matching bottles. Distinct formal bottle designs and full animation refinement remain deferred. No public deployment has been performed or authorized.
+The playable foundation, floating-pour experiment, Milestone 2A integration and authorized Milestone 2B tall-cabinet replacement/contact correction are implemented. Milestone 2C adds the compact cumulative HUD, persisted completion flow, crystal settlement and central wooden flip. Milestone 2D adds the parchment record, independent amethyst art, per-instance base/bonus rewards and brass-edge button feedback. Milestone 2E refines the wooden mechanism, champagne glow, independent stardust and locally hosted Chinese typography. Milestones 3A–3G integrate formal glass, gravity-corrected liquid, nine matching bottles and softer environment-aware reflections. Distinct formal bottle designs and full animation refinement remain deferred. No public deployment has been performed or authorized.
+
+## Milestone 3G / 柔和玻璃高光与动态环境受光 (2026-11-05)
+
+- Continued from `85d5a5a0aa33d02cb800dc3d66bbcd57250abe4a` on existing `work`; preserved/excluded the untracked project report. All nine share the same new soft-glass variant; original reference and 3F WebP remain unchanged. Reproducible `scripts/prepare-soft-star-glass.py` targets bright neutral reflection RGB/Alpha by region, preserving the entire gold ornament box byte-for-byte. No blur, repaint, shape change, global opacity reduction or uniform yellow tint. Exported soft WebP **521,026B** and glass-only response mask **155,866B**; [material report and light coordinates](assets/glass-lighting.md).
+- Premultiplied reflected brightness energy is reduced about **28% mouth /34% neck /40% belly edge /39% foot**. The transparent center remains zero Alpha; output Alpha never increases, and the response mask is zero outside original art and on the protected ornaments. Actual full-page review shows less white neck/foot/side glare without losing the rim or glass contact.
+- Default / `?lighting=ambient` layers a weak warm-brown base, five soft candle/lamp fields and a weaker moon field through that glass-only response mask. Positions were observed from flame/lamp/window landmarks on the unchanged 841×1870 artwork. Inverse current-pose projection keeps fields fixed in cabinet space while glass moves/rotates; source and receiver share the same code. Existing animation pose/RAF is reused, with one scene-rectangle snapshot per flight and no new animation loop/state updates. Static glass never ticks. Selection uses the existing 5px lift endpoint as a negligible 180ms approximation; flight uses actual per-frame pose.
+- `?lighting=flat` restores the exact3F image; `?lighting=soft` isolates material correction. Both remain available independently of liquid/bottles parameters; older glass choices bypass3G and retain their existing implementation. No player setting or save field. Main visual improvement is the material preparation; ambient adds subtle variation, not a dramatic or physically accurate lighting simulation. Both choices are retained for user judgment.
+- `PourAnimation.tsx` changes only the added glass-pose props and one scene snapshot. **640ms commit /920ms return, trajectories, tilt/stream/receiver logic are unchanged**. No changes to liquid components/palette/seams/height model, cavity/mouth/capacity, nine bottle positions/scale, cabinet art, HUD/1px correction, buttons/dust/help/settlement/fonts or any `src/game/` logic.
+- [Real browser gallery](docs/screenshots/milestone3g-preview.md): flat/soft/ambient full390×844 and360×640, 320×568/desktop ambient, empty/blue1/purple1/purple4/mixed4 triples and readonly all-nine same-blue-level position comparisons. Main pages use production; component fixtures are developer-only and verify unchanged storage. Final3F flat capture is pixel-identical to the prior committed full page; new HUD pixels also match. Real video contains **277 frames /7.961s**, encoded to **8.20s MP4/GIF**, showing four legal pours and official material through lift/travel/tilt/receive/return. No page errors.
+- Validation: **88 unit tests /110 Playwright cases passed (2.8min)**, production build passed, `git diff --check` passed. Added two geometry units and two browser scenarios (both projects) for inverse world projection, shared scale/contact, lighting-only mode/save/liquid parity, old parameters, ten-second static stability and source/receiver world landmarks (<.15px error). Initial selected-pose test sampled before the CSS compositor lift finished; it now waits for the same positional tolerance, without weakening the assertion. All original rule/save/reward/full-solve/animation/motion/layout checks pass.
+- Limits: 2D glass response, not physical refraction/normals; original fine reflections still rotate with art. Ambient improvement over soft is deliberately subtle; static selection's short lift uses an endpoint approximation. Tiny ornament/edge appearance varies by DPR; physical Safari/iOS and low-end GPU remain unverified. Stop for visual acceptance; no new bottles, special liquids, gameplay, UI redesign or deployment.
 
 ## Milestone 3F / 九瓶统一美术、等高单位与暗灰细缝 (2026-11-05)
 
@@ -147,28 +158,28 @@ The playable foundation, floating-pour experiment, Milestone 2A integration and 
 - Automatic versioned localStorage saves: current puzzle, board, full undo history, lifetime completion count, current-instance credit, settlement dismissal, crystal balance and base/bonus reward receipt. The loader validates the verified initial arrangement and every history transition.
 - A restart confirmation protects in-progress games; mouse, touch and native keyboard controls; reduced-motion support. Clear feedback when browser storage is unavailable.
 
-## Verification results (latest: Milestone 3F, 2026-11-05)
+## Verification results (latest: Milestone 3G, 2026-11-05)
 
 All final checks passed; **no known blocking gameplay bugs**.
 
 | Check | Result |
 | --- | --- |
-| `npm ci --cache /workspace/.npm-cache` | Previously reproduced; lockfile/dependencies unchanged in 3F |
-| `npm test` | **86 passed**, no skips/failures |
+| `npm ci --cache /workspace/.npm-cache` | Previously reproduced; lockfile/dependencies unchanged in 3G |
+| `npm test` | **88 passed**, no skips/failures |
 | Preset solvability | All 4 full witnesses replayed; color conservation checked after every move |
 | Puzzle variation | 200 seeded color permutations replayed to victory |
 | `npm run build` | TypeScript and production bundle passed |
-| `npm run test:e2e` | **106 passed**, no skips/failures; desktop Chromium and emulated mobile touch across 9 spec files |
+| `npm run test:e2e` | **110 passed**, no skips/failures; desktop Chromium and emulated mobile touch across 10 spec files |
 | Browser gameplay | Actual taps/clicks to full animated victory; invalid move, undo, restart confirmation, settlement/flip/new puzzle, reload and simple help checked |
 | Storage resilience | Corrupt save recovery and blocked localStorage checked in browser; quota errors checked in unit tests |
 | Layout/accessibility basics | 320×568, 360×640, 390×844, 844×390 and 1280×900; 3 columns, 9 targets ≥44 px, no horizontal overflow; keyboard and reduced motion checked |
 | Typical mobile viewport | Full 390×844 and 360×640 pages saved and visually inspected; whole cabinet, nine bottles and three base panels visible |
-| Production browser capture | Latest build on 4192 confirmed against dist/index.html; matched old/new nine-bottle pages, responsive captures and actual legal-pour video with no page errors |
-| Readonly visual fixtures | Existing developer-only BottleArt renderer on 4191; 12 cases, identical save bytes before/after; exact height/seam measurements plus browser-only guide |
+| Production browser capture | Latest build on 4192 confirmed against dist/index.html; matched flat/soft/ambient pages and actual legal-pour video with no page errors |
+| Readonly visual fixtures | Developer-only BottleArt renderer on 4191; empty/blue/purple/full/mixed and same-level positions, identical save bytes before/after; 3F height/seam guide retained |
 | Development server | Functional tests use the Vite workflow on isolated 4173 |
 | `git diff --check` | Passed |
 
-Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. All scene/glass/font assets remain local and unchanged in 3F; nine bottles reuse one glass texture rather than nine image files. Local font subsets total 108,016 B (105.5 KiB). No runtime external fonts/assets, backend or API keys.
+Validated on Node 24.19.0 / npm 11.9.0 / Linux Chromium 154. All original scene/glass/font assets remain local and retained; nine bottles share the new glass texture and response mask. Local font subsets total 108,016 B (105.5 KiB). No runtime external fonts/assets, backend or API keys.
 
 ### Resolved setup issues
 
@@ -374,7 +385,7 @@ Paper grain/ornament and amethyst facets are generated adaptations, not a pixel-
 
 ## Exact next task (only after the user asks)
 
-Milestone 3F is complete. Wait for visual acceptance of nine matching formal bottles, equal-height units, gray seams and the simpler color material. Do not automatically begin different formal bottle designs, special liquids, HUD work, animation refinement, crystal spending/shop, home, sound, PWA or deployment.
+Milestone 3G is complete. Wait for visual acceptance of flat/soft/ambient glass comparisons and dynamic light. Do not automatically begin different formal bottle designs, special liquids, HUD work, animation refinement, crystal spending/shop, home, sound, PWA or deployment.
 
 ## Resume in a fresh Codex session
 
