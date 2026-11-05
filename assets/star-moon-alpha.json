@@ -1,0 +1,68 @@
+{
+  "dimensions": [
+    1024,
+    1536
+  ],
+  "source_alpha_zero_partial_opaque": [
+    973783,
+    599081,
+    0
+  ],
+  "source_nonzero_bounds": [
+    0,
+    7,
+    1014,
+    1536
+  ],
+  "web_nonzero_bounds": [
+    132,
+    112,
+    892,
+    1447
+  ],
+  "connected_components_above_8": 46,
+  "visible_rgb_identical": true,
+  "regions": {
+    "belly_center": {
+      "bounds": [
+        440,
+        1000,
+        580,
+        1190
+      ],
+      "source_mean_alpha_255": 0.37718045112781956,
+      "web_mean_alpha_255": 0.0
+    },
+    "neck": {
+      "bounds": [
+        455,
+        240,
+        565,
+        580
+      ],
+      "source_mean_alpha_255": 153.40179144385027,
+      "web_mean_alpha_255": 27.053743315508022
+    },
+    "shoulder": {
+      "bounds": [
+        430,
+        790,
+        590,
+        880
+      ],
+      "source_mean_alpha_255": 98.68944444444445,
+      "web_mean_alpha_255": 16.78625
+    },
+    "belly_inner_edge": {
+      "bounds": [
+        200,
+        1000,
+        300,
+        1180
+      ],
+      "source_mean_alpha_255": 97.24622222222222,
+      "web_mean_alpha_255": 17.157666666666668
+    }
+  },
+  "web_bytes": 545660
+}

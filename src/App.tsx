@@ -118,7 +118,7 @@ export default function App() {
       <img className="cabinet-art" src="/assets/shelf-tall.webp" width="841" height="1870" alt="" fetchPriority="high" draggable={false} />
       <header className="scene-hud">
         <div className="completion-stat"><span>已完成</span><strong data-testid="total-completed">{game.completion.totalCompleted}</strong></div>
-        <div className="move-stat"><span>步数</span><strong data-testid="moves">{session.history.length}</strong></div>
+        <div className="move-stat"><span className="move-content"><span>步数</span><strong data-testid="moves">{session.history.length}</strong></span></div>
       </header>
       <div className="board" role="group" aria-label="九只药瓶，三行三列" aria-busy={busy}>
         {session.board.map((liquid, index) => <Bottle key={index} liquid={liquid} index={index} style={bottlePosition(index)} selected={selected === index} won={won} busy={busy} animating={flight?.pour.from === index || flight?.pour.to === index} receiving={flight?.pour.to === index} onClick={() => selectBottle(index)} />)}

@@ -1,0 +1,38 @@
+{
+  "0": {
+    "left": {
+      "ink_top_css": 56.25,
+      "ink_bottom_css": 67.0,
+      "weighted_y_css": 61.940163351357484
+    },
+    "right": {
+      "ink_top_css": 56.25,
+      "ink_bottom_css": 67.0,
+      "weighted_y_css": 61.40545996679676
+    }
+  },
+  "1": {
+    "left": {
+      "ink_top_css": 56.25,
+      "ink_bottom_css": 67.0,
+      "weighted_y_css": 61.940163351357484
+    },
+    "right": {
+      "ink_top_css": 57.25,
+      "ink_bottom_css": 68.0,
+      "weighted_y_css": 62.37792625069769
+    }
+  },
+  "1.5": {
+    "left": {
+      "ink_top_css": 56.25,
+      "ink_bottom_css": 67.0,
+      "weighted_y_css": 61.940163351357484
+    },
+    "right": {
+      "ink_top_css": 57.75,
+      "ink_bottom_css": 68.5,
+      "weighted_y_css": 62.86178037702171
+    }
+  }
+}

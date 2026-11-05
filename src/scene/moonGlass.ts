@@ -1,3 +1,7 @@
+// One internal page-level choice is shared by art and geometry; never persisted.
+const requested = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('glass')
+export const GLASS_FINISH = requested === 'original' || requested === 'candle' ? requested : 'star-moon'
+
 // User artwork coordinates; preserve its natural 1086:1448 ratio and original pixels.
 export const MOON_GLASS = {
   src: '/assets/bottles/moon-glass-source.webp',

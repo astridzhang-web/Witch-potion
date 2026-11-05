@@ -1,12 +1,10 @@
-import { MOON_GLASS, MOON_TRANSFORM } from '../scene/moonGlass'
-
-// Internal art comparison only, never saved and never exposed as a player setting.
-// All rest/source/receiver instances read the same page-level finish.
-const finish = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('glass') === 'original' ? 'original' : 'candle'
+import StarMoonGlass from './StarMoonGlass'
+import { GLASS_FINISH, MOON_GLASS, MOON_TRANSFORM } from '../scene/moonGlass'
 
 /** The original two-pass treatment remains selectable with ?glass=original. */
 export default function MoonGlass({ id, cavity }: { id: string; cavity: string }) {
-  const candle = finish === 'candle'
+  if (GLASS_FINISH === 'star-moon') return <StarMoonGlass />
+  const candle = GLASS_FINISH === 'candle'
   return <>
     <defs>
       <mask id={`${id}-glass-alpha`} maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="150" style={{ maskType: 'luminance' }}>
@@ -32,7 +30,7 @@ export default function MoonGlass({ id, cavity }: { id: string; cavity: string }
         <feComposite in="SourceGraphic" in2="warm" operator="in" />
       </filter>
     </defs>
-    <g className="moon-glass-art" data-finish={finish} clipPath={`url(#${id}-art-outline)`} mask={`url(#${id}-foot-alpha)`}>
+    <g className="moon-glass-art" data-finish={GLASS_FINISH} clipPath={`url(#${id}-art-outline)`} mask={`url(#${id}-foot-alpha)`}>
       <g mask={`url(#${id}-glass-alpha)`} filter={candle ? undefined : `url(#${id}-candle-reflection)`}>
         <image className="moon-glass-texture" href={candle ? "/assets/bottles/moon-glass-candle.webp" : MOON_GLASS.src} width={MOON_GLASS.width} height={MOON_GLASS.height} transform={MOON_TRANSFORM} preserveAspectRatio="xMidYMid meet" />
       </g>

@@ -12,7 +12,7 @@ for (const kind of ['round', 'pear', 'faceted', 'moon-glass'] as BottleAppearanc
   const shape = BOTTLE_GEOMETRY[kind]
   it('keeps four legible layers below the long neck, including empty and fractional fills', () => {
     const surfaces = liquidSurfaces(kind, 0, [0, 1, 2, 3, 4])
-    if (kind === 'moon-glass') expect(surfaces[0]).toBeCloseTo(126.51, 1)
+    if (kind === 'moon-glass') expect(surfaces[0]).toBeCloseTo(123.96, 1)
     else expect(surfaces[0]).toBe(131)
     expect(surfaces[4]).toBeGreaterThan(65)
     for (let i = 0; i < 4; i++) expect(surfaces[i] - surfaces[i + 1]).toBeGreaterThan(8)

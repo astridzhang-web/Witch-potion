@@ -10,13 +10,17 @@ async function open(page: Page, step: number, frozen = false) {
   if (frozen) { await page.clock.install(); await page.clock.pauseAt(new Date(Date.now() + 1000)) }
   await page.addInitScript(({ key, session }) => { if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({ version: 1, session })) }, { key, session })
   await page.goto('/')
-  await page.evaluate(async () => { const image = new Image(); image.src = '/assets/bottles/moon-glass-candle.webp'; await image.decode() })
+  await page.evaluate(async () => { const image = new Image(); image.src = '/assets/bottles/star-moon-glass.webp'; await image.decode() })
 }
 
 test('only index zero has the supplied texture; native aspect, mouth and shelf contact align at phone sizes', async ({ page }) => {
   await open(page, 5)
   await expect(page.getByTestId('bottle-0')).toHaveAttribute('data-liquid', '')
   await expect(page.locator('.board .moon-glass-art')).toHaveCount(1)
+  await expect(page.locator('.board .moon-glass-art')).toHaveAttribute('data-finish', 'star-moon')
+  await expect(page.locator('.board .moon-glass-art image')).toHaveCount(1)
+  await expect(page.locator('.board .moon-glass-art')).not.toHaveAttribute('filter')
+  await expect(page.locator('.board .moon-glass-art')).not.toHaveAttribute('mask')
   for (let index = 1; index < 9; index++) {
     await expect(page.getByTestId(`bottle-${index}`).locator('image')).toHaveCount(0)
     await expect(page.getByTestId(`bottle-${index}`).locator('.bottle-art')).toHaveAttribute('data-kind', ['round', 'pear', 'faceted'][index % 3])
@@ -26,8 +30,8 @@ test('only index zero has the supplied texture; native aspect, mouth and shelf c
     const result = await page.locator('.moon-glass-texture').evaluate((el: SVGImageElement) => {
       const m = el.getScreenCTM()!, s = el.ownerSVGElement!.getScreenCTM()!
       const point = (x: number, y: number, matrix: DOMMatrix) => new DOMPoint(x, y).matrixTransform(matrix)
-      const rim = point(543, 52, m), expectedRim = point(50, 10, s)
-      const foot = point(543, 1410, m), expectedFoot = point(50, 134, s)
+      const rim = point(512, 143, m), expectedRim = point(50, 10, s)
+      const foot = point(512, 1440, m), expectedFoot = point(50, 134, s)
       return { scaleX: Math.hypot(m.a, m.b), scaleY: Math.hypot(m.c, m.d),
         mouthError: Math.hypot(rim.x - expectedRim.x, rim.y - expectedRim.y),
         footError: Math.hypot(foot.x - expectedFoot.x, foot.y - expectedFoot.y),
@@ -46,7 +50,7 @@ test('only index zero has the supplied texture; native aspect, mouth and shelf c
     expect(sizing.scales[0] / sizing.scales[1]).toBeCloseTo(1.13, 3)
     for (const scale of sizing.scales.slice(1)) expect(scale).toBeCloseTo(sizing.scales[1], 5)
     expect(sizing.hits).toEqual(['bottle-0', 'bottle-0'])
-    expect(result.ratio).toBe(.75)
+    expect(result.ratio).toBeCloseTo(2 / 3, 8)
     expect(result.scaleX).toBeCloseTo(result.scaleY, 6)
     expect(result.mouthError).toBeLessThan(.1)
     expect(result.footError).toBeLessThan(.1)
@@ -63,11 +67,11 @@ for (const [role, step] of [['source', 0], ['receiver', 1]] as const) test(`form
   await page.getByTestId(`bottle-${to}`).dispatchEvent('click')
   await page.clock.runFor(430)
   const sprite = page.locator(role === 'source' ? '.flying-bottle' : '.receiving-sprite')
-  await expect(sprite.locator('.moon-glass-texture')).toHaveAttribute('href', '/assets/bottles/moon-glass-candle.webp')
+  await expect(sprite.locator('.moon-glass-texture')).toHaveAttribute('href', '/assets/bottles/star-moon-glass.webp')
   await expect(sprite.locator('.bottle-art')).toHaveAttribute('data-kind', 'moon-glass')
   const pose = await sprite.locator('.moon-glass-texture').evaluate((el: SVGImageElement) => {
     const art = el.getScreenCTM()!, glass = el.ownerSVGElement!.getScreenCTM()!
-    const mouth = new DOMPoint(543, 52).matrixTransform(art), expected = new DOMPoint(50, 10).matrixTransform(glass)
+    const mouth = new DOMPoint(512, 143).matrixTransform(art), expected = new DOMPoint(50, 10).matrixTransform(glass)
     return { distance: Math.hypot(mouth.x - expected.x, mouth.y - expected.y), skew: Math.abs(Math.hypot(art.a, art.b) - Math.hypot(art.c, art.d)) }
   })
   expect(pose.distance).toBeLessThan(.1)
@@ -92,6 +96,7 @@ for (const [role, step] of [['source', 0], ['receiver', 1]] as const) test(`form
 
 test('internal original/candle comparison preserves saved state, geometry and liquid; original remains consistent in flight', async ({ page }) => {
   await open(page, 0, true)
+  await page.goto('/?glass=candle')
   const bottle = page.getByTestId('bottle-0')
   const state = () => page.evaluate(key => localStorage.getItem(key), key)
   const drawing = () => bottle.locator('.bottle-art').evaluate((svg: SVGSVGElement) => ({
@@ -119,5 +124,9 @@ test('internal original/candle comparison preserves saved state, geometry and li
   await expect(bottle.locator('.moon-glass-art')).toHaveAttribute('data-finish', 'candle')
   expect(await drawing()).toEqual(candle)
   // Undo retains the existing persisted game and reward bookkeeping.
+  expect(await state()).toBe(saved)
+  await page.goto('/')
+  await expect(bottle.locator('.moon-glass-art')).toHaveAttribute('data-finish', 'star-moon')
+  await expect(bottle.locator('.moon-glass-texture')).toHaveAttribute('href', '/assets/bottles/star-moon-glass.webp')
   expect(await state()).toBe(saved)
 })

@@ -1,4 +1,5 @@
-import { MOON_GLASS } from './moonGlass'
+import { GLASS_FINISH, MOON_GLASS } from './moonGlass'
+import { STAR_MOON_GLASS } from './starMoonGlass'
 
 /** Presentation geometry only; the four-unit game state remains in game/rules. */
 export type BottleKind = 'round' | 'pear' | 'faceted'
@@ -62,6 +63,15 @@ function moonCavity(): Point[] {
   return [...left, ...left.slice(0, -1).reverse().map(p => ({ x: 1086 - p.x, y: p.y }))]
     .map(p => ({ x: 50 + (p.x - 543) * MOON_GLASS.scale, y: 10 + (p.y - 52) * MOON_GLASS.scale }))
 }
+function starMoonCavity(): Point[] {
+  const left = [{ x: 374, y: 143 }, { x: 432, y: 215 }, { x: 439, y: 300 }, { x: 439, y: 560 }]
+  curve(left, { x: 355, y: 775 }, { x: 435, y: 700 }, { x: 410, y: 731 })
+  curve(left, { x: 171, y: 1077 }, { x: 228, y: 847 }, { x: 171, y: 969 })
+  curve(left, { x: 308, y: 1305 }, { x: 171, y: 1174 }, { x: 235, y: 1270 })
+  curve(left, { x: 512, y: 1335 }, { x: 365, y: 1333 }, { x: 443, y: 1335 })
+  return [...left, ...left.slice(0, -1).reverse().map(p => ({ x: 1024 - p.x, y: p.y }))]
+    .map(p => ({ x: 50 + (p.x - 512) * STAR_MOON_GLASS.scale, y: 10 + (p.y - 143) * STAR_MOON_GLASS.scale }))
+}
 interface Geometry { outline?: string; polygon: Point[]; clip: string; capacityArea: number; mouthRadius: number }
 const geometry = (polygon: Point[], fullY: number, mouthRadius: number, outline?: string): Geometry => ({
   outline, polygon, clip: `M${polygon.map(p => `${p.x},${p.y}`).join('L')}Z`,
@@ -69,7 +79,9 @@ const geometry = (polygon: Point[], fullY: number, mouthRadius: number, outline?
 })
 export const BOTTLE_GEOMETRY: Record<BottleAppearance, Geometry> = {
   ...Object.fromEntries(kinds.map(kind => [kind, geometry(cavity(kind), kind === 'faceted' ? 72 : 76, MOUTH.radius, paths[kind])])) as Record<BottleKind, Geometry>,
-  'moon-glass': geometry(moonCavity(), 10 + (815 - 52) * MOON_GLASS.scale, 10.3),
+  'moon-glass': GLASS_FINISH === 'star-moon'
+    ? geometry(starMoonCavity(), 10 + (STAR_MOON_GLASS.fullY - 143) * STAR_MOON_GLASS.scale, STAR_MOON_GLASS.mouthRadius)
+    : geometry(moonCavity(), 10 + (815 - 52) * MOON_GLASS.scale, 10.3),
 }
 
 /** Horizontal world-space surfaces conserve 2D area as the glass rotates. */

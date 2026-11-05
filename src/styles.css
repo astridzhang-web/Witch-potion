@@ -94,6 +94,8 @@ button:focus-visible, input:focus-visible { outline: 2px solid #f0d6a6; outline-
   .completion-stat { left: 20%; }
   .move-stat { left: 80%; }
 }
+/* Optical ink correction only: the outer mirrored anchor and baseline layout stay fixed. */
+.move-content { display: inline-flex; align-items: baseline; gap: inherit; transform: translateY(var(--move-optical-offset, 1px)); }
 .completion-stat strong, .move-stat strong { font: inherit; font-variant-numeric: tabular-nums; }
 .help-button { position: fixed; z-index: 3; top: max(4px, env(safe-area-inset-top)); right: max(4px, env(safe-area-inset-right)); width: 44px; height: 44px; }
 .help-button svg { width: 18px; height: 18px; transform: translate(3.5px, -3.5px); filter: drop-shadow(0 1px 3px #000); }

@@ -40,11 +40,11 @@ test('compact HUD, silent save and inert star panel before completion', async ({
   expect((await stored(page)).session.puzzle.presetId).toBe(preset.id)
   for (const viewport of [{ width: 320, height: 568 }, { width: 360, height: 640 }, { width: 390, height: 844 }, { width: 1280, height: 900 }]) {
     await page.setViewportSize(viewport)
-    const label = (await page.locator('.move-stat > span').boundingBox())!
+    const label = (await page.locator('.move-content > span').boundingBox())!
     const number = (await page.getByTestId('moves').boundingBox())!
     expect(number.x).toBeGreaterThan(label.x + label.width)
     for (const group of ['.completion-stat', '.move-stat']) {
-      const typography = await page.locator(group).evaluate(el => [...el.children].map(child => {
+      const typography = await page.locator(group).evaluate(el => [...(el.querySelector('.move-content') ?? el).children].map(child => {
         const style = getComputedStyle(child)
         return [style.fontSize, style.fontWeight, style.fontFamily, style.lineHeight]
       }))

@@ -174,3 +174,18 @@ Use one explicit appearance selector for rest/source/receiver/return; the other 
 keep 3A art. Preserve the 920ms timeline, HUD, cabinet positions, palette, rewards and saves.
 Deliver real wood-background empty/one/two/four-unit captures plus source/receiver recordings,
 run tests/build, update progress, commit/push `work`, then stop for visual acceptance.
+
+
+## Authorized Milestone 3C: supplied warm star–moon sample and optical HUD
+
+Replace only index 0 with the supplied regular star–bead–crescent–bead–star ring bottle.
+Keep source PNG and all older art; prepare a separate transparent web asset, preserving
+native RGB and geometry while cleaning matte/opacity where needed. Measure its own mouth,
+inner cavity, capacity line and shelf contact; retain the existing approximately 13% visual
+scale and 640/920ms animation lifecycle. New and old materials share an internal, unsaved
+URL choice, and rest/source/receiver/return must use matching art and geometry. Keep other
+eight prototypes, palette, rules, rewards, saves, cabinet, panel effects and fonts unchanged.
+Keep HUD outer anchors at the current mirrored shoulder positions and shared 7.3% height;
+compare only a 0/1/1.5px visible-content downward offset on the right. Deliver true browser
+full/detail/empty/one/two/four-layer/old-new/light-background evidence and source/receiver
+video, run tests/build, update progress and push `work`, then stop for visual acceptance.

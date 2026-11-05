@@ -1,5 +1,8 @@
 # Milestone 3B · index 0 moon-glass sample
 
+Historical 3B treatments are retained through `?glass=original` / `?glass=candle`.
+The default 3C artwork and measured cavity are documented in [star-moon-glass.md](star-moon-glass.md).
+
 ## Source and web asset
 
 - User upload: `透明玻璃月影药瓶.zip` → `透明玻璃月影药瓶.png`.
